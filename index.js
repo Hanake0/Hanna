@@ -10,12 +10,10 @@ const client = new CommandoClient({
 client.registry
 	.registerDefaultTypes()
 	.registerGroups([
-	  ['basicos', 'Comandos padrões do Commando'],
-		['utilidades', 'Ainda em testes'],
+		['utilidades', 'Utilidades'],
+		['basicos', 'Base']
 	])
-	.registerDefaultGroups({
-	  util: false,
-	})
+	.registerDefaultGroups()
 	.registerDefaultCommands()
 	.registerCommandsIn(path.join(__dirname, 'Comandos'));
 
@@ -26,4 +24,4 @@ client.once('ready', () => {
 
 client.on('error', console.error);
 
-client.login('process.env.AUTH_TOKEN');
+client.login(process.env.AUTH_TOKEN);
