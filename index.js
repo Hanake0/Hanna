@@ -1,4 +1,4 @@
-const { CommandoClient } = require('discord.js-commando');
+const { CommandoClient } = require('Discord.js-Commando2');
 const path = require('path');
 
 const client = new CommandoClient({
