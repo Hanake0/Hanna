@@ -21,7 +21,7 @@ client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
 	setInterval(async () => {
     let users = 0;
-    for (let g of client.guilds.cache.array()) users += (g.members.size - 1);
+    for (let g of client.guilds.array()) users += (g.members.size - 1);
 
     await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''}`, {type: 'WATCHING'})
     .catch(err => console.error());
