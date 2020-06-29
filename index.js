@@ -19,7 +19,13 @@ client.registry
 
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-	client.user.setActivity('with Commando');
+	setInterval(async () => {
+    let users = 0;
+    for (let g of client.guilds.array()) users += (g.members.size - 1);
+
+    await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''}`, {type: 'WATCHING'})
+    .catch(err => console.error());
+  }, 15000);
 });
 
 client.on('error', console.error);

@@ -19,7 +19,7 @@ module.exports = class SayCommand extends Command {
 	}
 
 	async run(message, { mensagem }) {
-		await msg.delete(5)
-		msg.say (mensagem);
+		await message.delete(5);
+		message.say (mensagem);
 	}
 };
