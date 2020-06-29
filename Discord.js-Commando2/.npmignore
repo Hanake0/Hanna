@@ -1,0 +1,9 @@
+/.vscode
+/node_modules
+/deploy
+/docs
+/test
+package-lock.json
+npm-debug.log
+yarn.lock
+yarn-error.log
