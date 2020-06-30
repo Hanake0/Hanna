@@ -6,9 +6,9 @@ module.exports = class HelpCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'ajuda',
-			aliases: ['help', 'comandos', 'commands'],
 			group: 'util',
 			memberName: 'ajuda',
+			aliases: ['help', 'comandos', 'commands'],
 			description: 'Mostra uma lista de comandos disponíveis, ou informações detalhadas sobre um comando',
 			details: oneLine`
 				O comando tem de ser uma parte do nome do comando, ou o nome completo.
