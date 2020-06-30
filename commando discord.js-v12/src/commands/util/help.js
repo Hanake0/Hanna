@@ -5,22 +5,22 @@ const { disambiguation } = require('../../util');
 module.exports = class HelpCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'help',
+			name: 'ajuda',
+			aliases: ['help', 'comandos', 'commands'],
 			group: 'util',
-			memberName: 'help',
-			aliases: ['commands'],
-			description: 'Displays a list of available commands, or detailed information for a specified command.',
+			memberName: 'ajuda',
+			description: 'Mostra uma lista de comandos disponíveis, ou informações detalhadas sobre um comando',
 			details: oneLine`
-				The command may be part of a command name or a whole command name.
-				If it isn't specified, all available commands will be listed.
+				O comando tem de ser uma parte do nome do comando, ou o nome completo.
+				Se o nome não for especificado, uma lista de todos os comandos disponíveis para o usuário enviada.
 			`,
-			examples: ['help', 'help prefix'],
+			examples: ['ajuda', 'ajuda prefixo'],
 			guarded: true,
 
 			args: [
 				{
-					key: 'command',
-					prompt: 'Which command would you like to view the help for?',
+					key: 'comando',
+					prompt: 'Gostaria de saber sobre qual comando ou grupo de comandos?',
 					type: 'string',
 					default: ''
 				}
@@ -31,43 +31,43 @@ module.exports = class HelpCommand extends Command {
 	async run(msg, args) { // eslint-disable-line complexity
 		const groups = this.client.registry.groups;
 		const commands = this.client.registry.findCommands(args.command, false, msg);
-		const showAll = args.command && args.command.toLowerCase() === 'all';
+		const showAll = args.command && args.command.toLowerCase() === 'todos';
 		if(args.command && !showAll) {
 			if(commands.length === 1) {
 				let help = stripIndents`
 					${oneLine`
-						__Command **${commands[0].name}**:__ ${commands[0].description}
-						${commands[0].guildOnly ? ' (Usable only in servers)' : ''}
+						__Comando **${commands[0].name}**:__ ${commands[0].description}
+						${commands[0].guildOnly ? ' (Utilizável apenas em servidores)' : ''}
 						${commands[0].nsfw ? ' (NSFW)' : ''}
 					`}
 
-					**Format:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}
+					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}
 				`;
-				if(commands[0].aliases.length > 0) help += `\n**Aliases:** ${commands[0].aliases.join(', ')}`;
+				if(commands[0].aliases.length > 0) help += `\n**Outros nomes:** ${commands[0].aliases.join(', ')}`;
 				help += `\n${oneLine`
-					**Group:** ${commands[0].group.name}
+					**Grupo:** ${commands[0].group.name}
 					(\`${commands[0].groupID}:${commands[0].memberName}\`)
 				`}`;
-				if(commands[0].details) help += `\n**Details:** ${commands[0].details}`;
-				if(commands[0].examples) help += `\n**Examples:**\n${commands[0].examples.join('\n')}`;
+				if(commands[0].details) help += `\n**Detalhes:** ${commands[0].details}`;
+				if(commands[0].examples) help += `\n**Exemplos de uso:**\n${commands[0].examples.join('\n')}`;
 
 				const messages = [];
 				try {
 					messages.push(await msg.direct(help));
-					if(msg.channel.type !== 'dm') messages.push(await msg.reply('Sent you a DM with information.'));
+					if(msg.channel.type !== 'dm') messages.push(await msg.reply('Te mandei as informações no privado.'));
 				} catch(err) {
-					messages.push(await msg.reply('Unable to send you the help DM. You probably have DMs disabled.'));
+					messages.push(await msg.reply('Não consegui te mandar as informações no privado. Você provavelmente desativou essa configuração.'));
 				}
 				return messages;
 			} else if(commands.length > 15) {
-				return msg.reply('Multiple commands found. Please be more specific.');
+				return msg.reply('Muitos comandos foram encontrados. Por favor, seja mais específico.');
 			} else if(commands.length > 1) {
-				return msg.reply(disambiguation(commands, 'commands'));
+				return msg.reply(disambiguation(commands, 'comando'));
 			} else {
 				return msg.reply(
-					`Unable to identify command. Use ${msg.usage(
+					`Não foi possível identificar o comando. Utilize ${msg.usage(
 						null, msg.channel.type === 'dm' ? null : undefined, msg.channel.type === 'dm' ? null : undefined
-					)} to view the list of all commands.`
+					)} para ver a lista completa de comandos.`
 				);
 			}
 		} else {
@@ -75,16 +75,16 @@ module.exports = class HelpCommand extends Command {
 			try {
 				messages.push(await msg.direct(stripIndents`
 					${oneLine`
-						To run a command in ${msg.guild ? msg.guild.name : 'any server'},
-						use ${Command.usage('command', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
-						For example, ${Command.usage('prefix', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
+						Para utilizar um comando em ${msg.guild ? msg.guild.name : 'qualquer servidor'},
+						utilize ${Command.usage('comando', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
+						Por exemplo, ${Command.usage('prefixo', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
 					`}
-					To run a command in this DM, simply use ${Command.usage('command', null, null)} with no prefix.
+					Para usar um comando no privado, simplesmente utilize ${Command.usage('comando', null, null)} sem prefixo.
 
-					Use ${this.usage('<command>', null, null)} to view detailed information about a specific command.
-					Use ${this.usage('all', null, null)} to view a list of *all* commands, not just available ones.
+					Utilize ${this.usage('<comando>', null, null)} para ver informação específica detalhada sobre um comando.
+					Utilize ${this.usage('todos', null, null)} para ver uma lista de *todos* os comandos, não apenas os disponíveis.
 
-					__**${showAll ? 'All commands' : `Available commands in ${msg.guild || 'this DM'}`}**__
+					__**${showAll ? 'Todos os comandos' : `Comandos disponíveis em ${msg.guild || 'privado'}`}**__
 
 					${(showAll ? groups : groups.filter(grp => grp.commands.some(cmd => cmd.isUsable(msg))))
 						.map(grp => stripIndents`
@@ -95,9 +95,9 @@ module.exports = class HelpCommand extends Command {
 						`).join('\n\n')
 					}
 				`, { split: true }));
-				if(msg.channel.type !== 'dm') messages.push(await msg.reply('Sent you a DM with information.'));
+				if(msg.channel.type !== 'dm') messages.push(await msg.reply('Te mandei as informações no privado.'));
 			} catch(err) {
-				messages.push(await msg.reply('Unable to send you the help DM. You probably have DMs disabled.'));
+				messages.push(await msg.reply('Não consegui te mandar as informações no privado. Você provavelmente desativou essa configuração.'));
 			}
 			return messages;
 		}

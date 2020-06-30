@@ -5,21 +5,22 @@ module.exports = class PrefixCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'prefixo',
+			aliases: ['prefix'],
 			group: 'util',
 			memberName: 'prefixo',
 			description: 'Mostra ou define o prefixo',
-			format: '[prefix/"padrão"/"nenhum"]',
+			format: '[prefixo/"padrão"/"nenhum"]',
 			details: oneLine`
-				If no prefix is provided, the current prefix will be shown.
-				If the prefix is "default", the prefix will be reset to the bot's default prefix.
-				If the prefix is "none", the prefix will be removed entirely, only allowing mentions to run commands.
-				Only administrators may change the prefix.
+				Se nenhum prefixo for provido, o prefixo atual será mostrado.
+				Se o prefixo for "padrão", o prefixo vai ser mudado para o prefixo padrão do bot.
+				Se o prefixo for "nenhum", o prefixo vai ser completamente removido, apenas menções vão ser utilizadas para comandos.
+				Apenas Administradores podem mudar o prefixo.
 			`,
-			examples: ['prefixo', 'prefixo -', 'prefixo omg!', 'prefixo padrão', 'prefixo nenhum'],
+			examples: ['prefixo', 'prefixo -', 'prefixo h.', 'prefixo padrão', 'prefixo nenhum'],
 
 			args: [
 				{
-					key: 'prefix',
+					key: 'prefixo',
 					prompt: 'O que você quer que seja o prefixo?',
 					type: 'string',
 					max: 15,
@@ -31,11 +32,11 @@ module.exports = class PrefixCommand extends Command {
 
 	async run(msg, args) {
 		// Just output the prefix
-		if(!args.prefix) {
-			const prefix = msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix;
+		if(!args.prefixo) {
+			const prefixo = msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix;
 			return msg.reply(stripIndents`
-				${prefix ? `O prefixo é \`${prefix}\`.` : 'Não a prefixo'}
-				Para utilizar comandos, use ${msg.anyUsage('command')}.
+				${prefixo ? `O prefixo é \`${prefixo}\`.` : 'Não há prefixo'}
+				Para utilizar comandos, use ${msg.anyUsage('comando')}.
 			`);
 		}
 
@@ -49,19 +50,19 @@ module.exports = class PrefixCommand extends Command {
 		}
 
 		// Save the prefix
-		const lowercase = args.prefix.toLowerCase();
-		const prefix = lowercase === 'nenhum' ? '' : args.prefix;
+		const lowercase = args.prefixo.toLowerCase();
+		const prefixo = lowercase === 'nenhum' ? '' : args.prefixo;
 		let response;
 		if(lowercase === 'padrão') {
 			if(msg.guild) msg.guild.commandPrefix = null; else this.client.commandPrefix = null;
 			const current = this.client.commandPrefix ? `\`${this.client.commandPrefix}\`` : 'sem prefixo';
 			response = `Prefixo resetado para o padrão (atualmente: ${current}).`;
 		} else {
-			if(msg.guild) msg.guild.commandPrefix = prefix; else this.client.commandPrefix = prefix;
-			response = prefix ? `Prefixo mudado para \`${args.prefix}\`.` : 'Prefixo removido completamente';
+			if(msg.guild) msg.guild.commandPrefix = prefixo; else this.client.commandPrefix = prefixo;
+			response = prefixo ? `Prefixo mudado para \`${args.prefixo}\`.` : 'Prefixo removido completamente';
 		}
 
-		await msg.reply(`${response} Para utilizar comando, use ${msg.anyUsage('command')}.`);
+		await msg.reply(`${response} Para utilizar comandos, use ${msg.anyUsage('comando')}.`);
 		return null;
 	}
 };
