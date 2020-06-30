@@ -2,19 +2,6 @@ const Commando = require('./commando discord.js-v12/src/index.js')
 const { CommandoClient, SQLiteProvider } = require('./commando discord.js-v12/src/index.js');
 const path = require('path');
 const sqlite = require('sqlite');
-const express = require('express');
-const server = express();
-
-
-//site para dar ping
-server.all('/', (req, res)=>{
-  res.send('Nenhum problema com o host, deve estar funcionando!');
-});
-function keepAlive(){
-  server.listen(3000, ()=>{console.log("Servidor pronto!")});
-}
-keepAlive();
-//site para dar ping
 
 
 const client = new CommandoClient({
