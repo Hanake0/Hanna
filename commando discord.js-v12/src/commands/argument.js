@@ -127,7 +127,7 @@ class Argument {
 		 * How long to wait for input (in seconds)
 		 * @type {number}
 		 */
-		this.wait = typeof info.wait !== 'undefined' ? info.wait : 30;
+		this.wait = typeof info.wait !== 'undefined' ? info.wait : 20;
 	}
 
 	/**
@@ -179,10 +179,10 @@ class Argument {
 
 			// Prompt the user for a new value
 			prompts.push(await msg.reply(stripIndents`
-				${empty ? this.prompt : valid ? valid : `You provided an invalid ${this.label}. Please try again.`}
+				${empty ? this.prompt : valid ? valid : `Você respondeu com um(a) ${this.label} invalido(a). Por favor, tente novamente.`}
 				${oneLine`
-					Respond with \`cancel\` to cancel the command.
-					${wait ? `The command will automatically be cancelled in ${this.wait} seconds.` : ''}
+					Responda com \`cancelar\` para cancelar o comando.
+					${wait ? `O comando vai ser cancelado automaticamemte em ${this.wait} segundos.` : ''}
 				`}
 			`));
 
@@ -206,7 +206,7 @@ class Argument {
 			}
 
 			// See if they want to cancel
-			if(value.toLowerCase() === 'cancel') {
+			if(value.toLowerCase() === 'cancelar') {
 				return {
 					value: null,
 					cancelled: 'user',
@@ -265,21 +265,21 @@ class Argument {
 					const escaped = escapeMarkdown(value).replace(/@/g, '@\u200b');
 					prompts.push(await msg.reply(stripIndents`
 						${valid ? valid : oneLine`
-							You provided an invalid ${this.label},
-							"${escaped.length < 1850 ? escaped : '[too long to show]'}".
-							Please try again.
+							Você respondeu com um(a) ${this.label} invalido(a),
+							"${escaped.length < 1850 ? escaped : '[muito grande para mostrar]'}".
+							Por favor, tente novamente.
 						`}
 						${oneLine`
-							Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.
-							${wait ? `The command will automatically be cancelled in ${this.wait} seconds.` : ''}
+							Responda com \`cancelar\` para cancelar o comando, ou \`terminar\` para terminar a resposta.
+							${wait ? `O comando vai ser automaticamente cancelado em ${this.wait} segundos.` : ''}
 						`}
 					`));
 				} else if(results.length === 0) {
 					prompts.push(await msg.reply(stripIndents`
 						${this.prompt}
 						${oneLine`
-							Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry.
-							${wait ? `The command will automatically be cancelled in ${this.wait} seconds, unless you respond.` : ''}
+							Responda com \`cancelar\` para cancelar o comando, ou \`terminar\` para terminar a resposta.
+							${wait ? `O comando vai ser cancelado em ${this.wait} segundos, a não ser que você responda.` : ''}
 						`}
 					`));
 				}
@@ -305,7 +305,7 @@ class Argument {
 
 				// See if they want to finish or cancel
 				const lc = value.toLowerCase();
-				if(lc === 'finish') {
+				if(lc === 'terminar') {
 					return {
 						value: results.length > 0 ? results : null,
 						cancelled: results.length > 0 ? null : 'user',
@@ -313,7 +313,7 @@ class Argument {
 						answers
 					};
 				}
-				if(lc === 'cancel') {
+				if(lc === 'cancelar') {
 					return {
 						value: null,
 						cancelled: 'user',
