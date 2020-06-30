@@ -1,5 +1,7 @@
-const { CommandoClient } = require('./commando discord.js-v12/src/index.js');
+const Commando = require('./commando discord.js-v12/src/index.js')
+const { CommandoClient, SQLiteProvider } = require('./commando discord.js-v12/src/index.js');
 const path = require('path');
+const sqlite = require('sqlite');
 const express = require('express');
 const server = express();
 
@@ -29,7 +31,10 @@ client.registry
 	])
 	.registerDefaultGroups()
 	.registerDefaultCommands()
-	.registerCommandsIn(path.join(__dirname, 'Comandos'));
+	.registerCommandsIn(path.join(__dirname, 'Comandos'))
+	client.setProvider(
+	sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
+).catch(console.error);
 
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
