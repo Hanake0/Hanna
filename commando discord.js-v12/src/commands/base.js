@@ -233,17 +233,17 @@ class Command {
 		if(ownerOverride && this.client.isOwner(message.author)) return true;
 
 		if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {
-			return `The \`${this.name}\` command can only be used by the bot owner.`;
+			return `O comando \`${this.name}\` pode ser usado apenas pelo(s) dono(s) do bot`;
 		}
 
 		if(message.channel.type === 'text' && this.userPermissions) {
 			const missing = message.channel.permissionsFor(message.author).missing(this.userPermissions);
 			if(missing.length > 0) {
 				if(missing.length === 1) {
-					return `The \`${this.name}\` command requires you to have the "${permissions[missing[0]]}" permission.`;
+					return `O comando \`${this.name}\` precisa que você tenha a permissão "${permissions[missing[0]]}".`;
 				}
 				return oneLine`
-					The \`${this.name}\` command requires you to have the following permissions:
+					O comando \`${this.name}\` precisa que você tenha as seguintes permissões:
 					${missing.map(perm => permissions[perm]).join(', ')}
 				`;
 			}
@@ -367,7 +367,7 @@ class Command {
 				newCmd = require(cmdPath);
 			} catch(err2) {
 				if(cached) require.cache[cmdPath] = cached;
-				if(err2.message.includes('Cannot find module')) throw err; else throw err2;
+				if(err2.message.includes('Não foi possível encontrar o módulo')) throw err; else throw err2;
 			}
 		}
 
@@ -379,7 +379,7 @@ class Command {
 	 */
 	unload() {
 		const cmdPath = this.client.registry.resolveCommandPath(this.groupID, this.memberName);
-		if(!require.cache[cmdPath]) throw new Error('Command cannot be unloaded.');
+		if(!require.cache[cmdPath]) throw new Error('Comando não pode ser descarregado.');
 		delete require.cache[cmdPath];
 		this.client.registry.unregisterCommand(this);
 	}
