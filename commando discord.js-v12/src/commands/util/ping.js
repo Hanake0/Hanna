@@ -7,7 +7,7 @@ module.exports = class PingCommand extends Command {
 			name: 'ping',
 			group: 'util',
 			memberName: 'ping',
-			description: 'Checks the bot\'s ping to the Discord server.',
+			description: 'Checa o ping do bot em relação ao servidor',
 			throttling: {
 				usages: 5,
 				duration: 10
@@ -17,17 +17,17 @@ module.exports = class PingCommand extends Command {
 
 	async run(msg) {
 		if(!msg.editable) {
-			const pingMsg = await msg.reply('Pinging...');
+			const pingMsg = await msg.reply('Calculando...');
 			return pingMsg.edit(oneLine`
 				${msg.channel.type !== 'dm' ? `${msg.author},` : ''}
-				Pong! The message round-trip took ${pingMsg.createdTimestamp - msg.createdTimestamp}ms.
-				${this.client.ping ? `The heartbeat ping is ${Math.round(this.client.ping)}ms.` : ''}
+				Pong! O tempo de resposta da mensagem no servidor foi de ${pingMsg.createdTimestamp - msg.createdTimestamp}ms.
+				${this.client.ping ? `O tempo de resposta interno foi de  ${Math.round(this.client.ping)}ms.` : ''}
 			`);
 		} else {
-			await msg.edit('Pinging...');
+			await msg.edit('Calculando...');
 			return msg.edit(oneLine`
-				Pong! The message round-trip took ${msg.editedTimestamp - msg.createdTimestamp}ms.
-				${this.client.ping ? `The heartbeat ping is ${Math.round(this.client.ping)}ms.` : ''}
+				Pong! O tempo de resposta da mensagem no servidor foi de ${msg.editedTimestamp - msg.createdTimestamp}ms.
+				${this.client.ping ? `O tempo de resposta interno foi de ${Math.round(this.client.ping)}ms.` : ''}
 			`);
 		}
 	}

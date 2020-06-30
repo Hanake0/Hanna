@@ -13,14 +13,14 @@ module.exports = class EvalCommand extends Command {
 			name: 'eval',
 			group: 'util',
 			memberName: 'eval',
-			description: 'Executes JavaScript code.',
-			details: 'Only the bot owner(s) may use this command.',
+			description: 'Executa um código JavaScript.',
+			details: 'Apenas o(s) dono(s) do bot podem usar esse comando',
 			ownerOnly: true,
 
 			args: [
 				{
 					key: 'script',
-					prompt: 'What code would you like to evaluate?',
+					prompt: 'Que código você gostaria de testar?',
 					type: 'string'
 				}
 			]
@@ -61,7 +61,7 @@ module.exports = class EvalCommand extends Command {
 			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
-			return msg.reply(`Error while evaluating: \`${err}\``);
+			return msg.reply(`Erro ao executar: \`${err}\``);
 		}
 
 		// Prepare for callback time and respond
@@ -100,14 +100,14 @@ module.exports = class EvalCommand extends Command {
 					${input}
 					\`\`\`` :
 				''}
-				*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
+				*Executado em ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
 				\`\`\`
 			`, 1900, '\n', prepend, append);
 		} else {
 			return discord.splitMessage(tags.stripIndents`
-				*Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
+				*Callback executada em ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
 				\`\`\`
