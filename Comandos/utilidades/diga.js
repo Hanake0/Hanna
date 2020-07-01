@@ -12,6 +12,7 @@ module.exports = class SayCommand extends Command {
 			args: [
 			  {
 			    key: 'canal',
+			    prompt: 'em que canal você quer que o bot fale?',
 			    type: 'channel',
 			    default: '',
 			  },
@@ -21,6 +22,7 @@ module.exports = class SayCommand extends Command {
 					type: 'string',
 				},
 			],
+			argsPromptLimit: 0
 		});
 	}
 
@@ -31,7 +33,7 @@ module.exports = class SayCommand extends Command {
 	  }
 	  else {
 	    await message.delete(5);
-	    canal.send(mensagem);
+	    canal.s(mensagem);
 	  }
 	}
 };
