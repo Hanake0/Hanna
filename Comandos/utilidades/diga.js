@@ -34,7 +34,7 @@ module.exports = class SayCommand extends Command {
 	  }
 	  else {
 	    await message.delete(5);
-	    canal.s(mensagem);
+	    canal.say(mensagem);
 	  }
 	}
 };
