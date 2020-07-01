@@ -25,7 +25,7 @@ module.exports = class SayCommand extends Command {
 		});
 	}
 
-	async run(message, { mensagem }) {
+	async run(message, { canal, mensagem }) {
 	  if (canal === '') {
   	  await message.delete(5);
 	  	message.say(mensagem);
