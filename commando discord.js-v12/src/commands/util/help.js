@@ -31,8 +31,8 @@ module.exports = class HelpCommand extends Command {
 	async run(msg, args) { // eslint-disable-line complexity
 		const groups = this.client.registry.groups;
 		const commands = this.client.registry.findCommands(args.command, false, msg);
-		const showAll = args.command && args.command.toLowerCase() === 'todos';
-		if(args.command && !showAll) {
+		const showAll = args.comando && args.comando.toLowerCase() === 'todos';
+		if(args.comando && !showAll) {
 			if(commands.length === 1) {
 				let help = stripIndents`
 					${oneLine`
