@@ -242,7 +242,7 @@ class CommandMessage {
 				const invite = this.client.options.invite;
 				return this.reply(stripIndents`
 					errrr... parece que houve um erro no comando: \`${err.name}: ${err.message}\`
-					You shouldn't ever receive an error like this.
+					Você não deveria receber esse tipo de erro.
 					Por favor, fale com  ${ownerList || 'O dono do bot'}${invite ? ` neste servidor: ${invite}` : '.'}
 				`);
 			}
