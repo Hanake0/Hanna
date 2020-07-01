@@ -27,7 +27,7 @@ module.exports = class AnunciarCommand extends Command {
 	}
 
 	async run(message, { canal, mensagem }) {
-	  if (clientPermissions.has("SEND_MESSAGES")) {
+	  if (message.guild.me.permissionsIn(canal).has("SEND_MESSAGES")) {
 	    await message.delete(5);
 	    canal.send(mensagem);
 	  } else {
