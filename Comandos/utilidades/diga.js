@@ -7,6 +7,7 @@ module.exports = class SayCommand extends Command {
 			aliases: ['say', 'echo'],
 			group: 'utilidades',
 			memberName: 'diga',
+			pattern: [`${canal} ${mensagem}`, `${mensagem}`],
 			clientPermissions: ['MANAGE_MESSAGES'],
 			description: 'Responde com a mensagem designada e apaga a mensagem original.',
 			args: [
