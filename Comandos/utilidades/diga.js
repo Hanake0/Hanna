@@ -7,7 +7,7 @@ module.exports = class SayCommand extends Command {
 			aliases: ['say', 'echo'],
 			group: 'utilidades',
 			memberName: 'diga',
-			ClientPermissions: 'MANAGE_MESSAGES',
+			clientPermissions: ['MANAGE_MESSAGES'],
 			description: 'Responde com a mensagem designada e apaga a mensagem original.',
 			args: [
 				{
@@ -20,12 +20,7 @@ module.exports = class SayCommand extends Command {
 	}
 
 	async run(message, { mensagem }) {
-	  if (ClientPermissions.has('MANAGE_MESSAGES')) {
   	  await message.delete(5);
 	  	message.say (mensagem);
-	  }
-	  else {
-	    message.say(mensagem);
-	  }
 	}
 };
