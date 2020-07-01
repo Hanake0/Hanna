@@ -20,7 +20,12 @@ module.exports = class SayCommand extends Command {
 	}
 
 	async run(message, { mensagem }) {
-		await message.delete(5);
-		message.say (mensagem);
+	  if (ClientPermissions.has('MANAGE_MESSAGES')) {
+  	  await message.delete(5);
+	  	message.say (mensagem);
+	  }
+	  else {
+	    message.say(mensagem);
+	  }
 	}
 };
