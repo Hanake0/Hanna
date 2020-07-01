@@ -12,7 +12,6 @@ module.exports = class SayCommand extends Command {
 			args: [
 			  {
 			    key: 'canal',
-			    prompt: 'em que canal você quer que o bot fale?',
 			    type: 'channel',
 			    default: '',
 			  },
