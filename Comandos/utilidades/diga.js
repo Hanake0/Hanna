@@ -23,7 +23,7 @@ module.exports = class SayCommand extends Command {
 				},
 			],
 			argsPromptLimit: 0,
-			pattern: [`${canal} ${mensagem}`, `${mensagem}`],
+			pattern: [`canal mensagem`, `mensagem`],
 		});
 	}
 
