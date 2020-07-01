@@ -30,7 +30,7 @@ module.exports = class HelpCommand extends Command {
 
 	async run(msg, args) { // eslint-disable-line complexity
 		const groups = this.client.registry.groups;
-		const commands = this.client.registry.findCommands(args.command, false, msg);
+		const commands = this.client.registry.findCommands(args.comando, false, msg);
 		const showAll = args.comando && args.comando.toLowerCase() === 'todos';
 		if(args.comando && !showAll) {
 			if(commands.length === 1) {
