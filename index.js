@@ -34,7 +34,7 @@ client.once('ready', () => {
     let users = 0;
     for (let g of client.guilds.array()) users += (g.members.size - 1);
 
-    await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''}`, {type: 'WATCHING'})
+    await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''} online`, {type: 'WATCHING'})
     .catch(err => console.error());
   }, 15000);
 });
