@@ -4,7 +4,7 @@ module.exports = class DigaCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'diga',
-      aliases: ['echo', 'anonimo'],
+      aliases: ['say', 'anonimo'],
       group: 'utilidades',
       memberName: 'diga',
       clientPermissions: ['MANAGE_MESSAGES'],
