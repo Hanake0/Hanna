@@ -21,7 +21,7 @@ module.exports = class DenunciarCommand extends Command {
   }
   
   async run(message, { denunciado }) {
-    const mencao = `${denunciado.username}  ${denunciado.discriminator}`
+    const mencao = `${denunciado.username}  ${denunciado.id}`
     const canal = {
       name: mencao,
       type: "text",
@@ -33,6 +33,6 @@ module.exports = class DenunciarCommand extends Command {
     }
     
     await message.guild.createChannel(mencao, canal, "canal de denuncia");
-    message.say(`Canal de denúncia criado com sucesso.\n${canal.name}`);
+    message.say(`Canal de denúncia criado com sucesso.`);
   }
 };
