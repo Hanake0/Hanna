@@ -7,6 +7,7 @@ module.exports = class AnunciarCommand extends Command {
 			aliases: ['digacanal', 'repita'],
 			group: 'utilidades',
 			memberName: 'anunciar',
+			guildOnly: true,
 			clientPermissions: ['MANAGE_MESSAGES'],
 			description: 'Responde com a mensagem designada no canal designado e apaga a mensagem original.',
 			args: [
