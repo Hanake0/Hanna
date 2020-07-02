@@ -4,6 +4,10 @@ const path = require('path');
 const sqlite = require('sqlite');
 
 
+process.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
+});
+
 const client = new CommandoClient({
 	commandPrefix: 'h',
 	owner: '380512056413257729',
