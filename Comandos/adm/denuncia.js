@@ -5,7 +5,7 @@ module.exports = class DenunciarCommand extends Command {
     super(client, {
       name: 'denunciar',
       aliases: ['denuncia', 'punir'],
-      group: 'Administrativos',
+      group: 'adm',
       memberName: 'denunciar',
       clientPermissions: ['ADMINISTRATOR'],
       description: 'Abre um inquérito sobre determinado usuário em um canal privado onde mais informações podem ser providas.',
