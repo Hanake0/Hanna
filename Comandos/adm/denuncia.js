@@ -29,7 +29,7 @@ module.exports = class DenunciarCommand extends Command {
       },
       id: `${message.author.id}`,
     }
-    const menção = `${denunciado.username}#${denunciado.discriminator}`
+    const menção = `${denunciado.username}  ${denunciado.discriminator}`
     
     await message.guild.createChannel(menção, [canal], "canal de denuncia");
     message.say("Canal de denúncia criado com sucesso.");
