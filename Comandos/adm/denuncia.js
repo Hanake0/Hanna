@@ -26,9 +26,7 @@ module.exports = class DenunciarCommand extends Command {
       name: mencao,
       type: "text",
       parent: '728074741792899123',
-      permissionOverwrites: {
-        allow: ['READ_MESSAGES', 'SEND_MESSAGES', 'ATACH_FILES'],
-      },
+      permissionOverwrites: ['READ_MESSAGES', 'SEND_MESSAGES', 'ATACH_FILES'],
       id: `${message.author.id}`,
     }
     
