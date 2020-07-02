@@ -28,7 +28,7 @@ module.exports = class DenunciarCommand extends Command {
       parent: '728074741792899123',
       permissionOverwrites: [{
         id: message.author.id,
-        allow: '100352',
+        allow: ['READ_MESSAGES', 'SEND_MESSAGES'],
       }],
     }
     
