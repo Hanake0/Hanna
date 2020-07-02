@@ -21,7 +21,9 @@ module.exports = class DenunciarCommand extends Command {
   }
   
   async run(message, { denunciado }) {
+    const mencao = `${denunciado.username}  ${denunciado.discriminator}`
     const canal = {
+      name: mencao,
       type: "text",
       parent: '728074741792899123',
       permissionOverwrites: {
@@ -29,9 +31,8 @@ module.exports = class DenunciarCommand extends Command {
       },
       id: `${message.author.id}`,
     }
-    const menção = `${denunciado.username}  ${denunciado.discriminator}`
     
-    await message.guild.createChannel(menção, [canal], "canal de denuncia");
-    message.say("Canal de denúncia criado com sucesso.");
+    await message.guild.createChannel(mencaoo, canal, "canal de denuncia");
+    message.say(`Canal de denúncia criado com sucesso.\n${canal.name}`);
   }
 };
