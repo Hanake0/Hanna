@@ -26,10 +26,7 @@ module.exports = class DenunciarCommand extends Command {
       name: mencao,
       type: "text",
       parent: '728074741792899123',
-      permissionOverwrites: {
-        allow: ['READ_MESSAGES', 'SEND_MESSAGES', 'ATACH_FILES'],
-        id: `${message.author.id}`,
-      }
+      permissionOverwrites: [['READ_MESSAGES', id: message.author.id], ['SEND_MESSAGES', id: message.author.id], ['ATACH_FILES', id: message.author.id]]
     }
     
     await message.guild.createChannel(mencao, canal, "canal de denuncia");
