@@ -33,7 +33,7 @@ module.exports = class DenunciarCommand extends Command {
     }
     
     const canalDenuncia = await message.guild.createChannel(mencao, canal, "canal de denuncia");
-    canalDenuncia.send(`Canal de denúncia criado com sucesso.\nA denúncia foi feita contra o usuário: ${denunciado.username}#${denunciado.discriminator}\nID: ${denunciado.id}\nQuem denunciou foi: ${message.author.username}#${message.author.discriminator}\nID: ${message.author.id}`);
+    canalDenuncia.send(`Canal de denúncia criado com sucesso ${message.author}.\nA denúncia foi feita contra o usuário: ${denunciado.username}#${denunciado.discriminator}\nID: ${denunciado.id}\nQuem denunciou foi: ${message.author.username}#${message.author.discriminator}\nID: ${message.author.id}`);
     canalDenuncia.send('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.\nPrints e a sua opinião sobre a ação do membro denunciado são bem vindos.')
   }
 };
