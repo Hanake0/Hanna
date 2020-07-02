@@ -7,10 +7,12 @@ const sqlite = require('sqlite');
 process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 });
-
+const donos = new Set()
+  donos.add('380512056413257729');
+  donos.add('348664615175192577');
 const client = new CommandoClient({
 	commandPrefix: 'h',
-	owner: '380512056413257729',
+	owner: donos,
 	unknownCommandResponse: false,
 });
 
