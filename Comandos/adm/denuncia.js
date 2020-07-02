@@ -32,7 +32,7 @@ module.exports = class DenunciarCommand extends Command {
       id: `${message.author.id}`,
     }
     
-    await message.guild.createChannel(mencaoo, canal, "canal de denuncia");
+    await message.guild.createChannel(mencao, canal, "canal de denuncia");
     message.say(`Canal de denúncia criado com sucesso.\n${canal.name}`);
   }
 };
