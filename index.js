@@ -14,7 +14,8 @@ client.registry
 	.registerDefaultTypes()
 	.registerGroups([
 		['utilidades', 'Utilidades'],
-		['basicos', 'Base']
+		['basicos', 'Base'],
+		['adm', 'Administrativos'],
 	])
 	.registerDefaultGroups()
 	.registerDefaultCommands()
