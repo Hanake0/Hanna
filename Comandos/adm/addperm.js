@@ -37,7 +37,7 @@ module.exports = class AddPermCommand extends Command {
     
     if (addRem === 'remover' && perm === '') {
       message.channel.permissionOverwrites.get(usuário.id).delete();
-    };
+    } return;
     
     const permsT = {};
     for (const p of perm.split(/ +/)) {
@@ -60,7 +60,7 @@ module.exports = class AddPermCommand extends Command {
     if (addRem === 'add') {
       message.channel.overwritePermissions(usuário.id, permsT);
     } else {
-      message.channel.overwritePermisssions(usuário.id, permsF);
+      message.channel.overwritePermissions(usuário.id, permsF);
     }
   }
 };
