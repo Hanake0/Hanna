@@ -1,5 +1,5 @@
 const { Command } = require('../../commando discord.js-v12/src/index.js');
-const Discord = require(discord.js)
+const Discord = require('discord.js');
 
 module.exports = class AddPermCommand extends Command {
   constructor(client) {

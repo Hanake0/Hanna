@@ -3,7 +3,6 @@ const { CommandoClient, SQLiteProvider } = require('./commando discord.js-v12/sr
 const path = require('path');
 const sqlite = require('sqlite');
 
-
 process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 });
