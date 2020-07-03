@@ -37,7 +37,8 @@ module.exports = class AddPermCommand extends Command {
     
     if (addRem === 'remover' && perm === '') {
       message.channel.permissionOverwrites.get(usuário.id).delete();
-    } return message.say(`Todas as permissões específicas de ${usuário.username}`);
+      return message.say(`Todas as permissões específicas de ${usuário.username} foram removidas.`);
+    };
     
     const permsT = {};
     for (const p of perm.split(/ +/)) {
