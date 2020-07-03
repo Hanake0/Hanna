@@ -21,7 +21,11 @@ module.exports = class DigaCommand extends Command {
   }
 
   async run(message, { mensagem }) {
-    await message.delete(5);
-    message.say(mensagem);
+    if (message.channel.type === 'dm') {
+      message.say(mensagem);
+    } else {
+      await message.delete(5);
+      message.say(mensagem);
+    }
   }
 };
