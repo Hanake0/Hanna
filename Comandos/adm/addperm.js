@@ -41,7 +41,7 @@ module.exports = class AddPermCommand extends Command {
     
     const permsT = {};
     for (const p of perm.split(/ +/)) {
-      Object.defineProperty(perms, p, {
+      Object.defineProperty(permsT, p, {
         value: true,
         writable: true,
         enumerable: true,
@@ -50,19 +50,17 @@ module.exports = class AddPermCommand extends Command {
     };
     const permsF = {};
     for (const p of perm.split(/ +/)) {
-      Object.defineProperty(perms, p, {
+      Object.defineProperty(permsF, p, {
         value: false,
         writable: true,
         enumerable: true,
         configurable: true
       });
     };
-    for (const p of perms) {
-      if (addRem === 'add') {
-        message.channel.permissionOverwrites(usuário.id, permsT);
-      } else {
-        message.channel.permissionOverwrites(usuário.id, permsF);
-      }
+    if (addRem === 'add') {
+      message.channel.permissionOverwrites(usuário.id, permsT);
+    } else {
+      message.channel.permissionOverwrites(usuário.id, permsF);
     }
   }
 };
