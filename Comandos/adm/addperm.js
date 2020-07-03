@@ -36,7 +36,7 @@ module.exports = class AddPermCommand extends Command {
   async run(message, { addRem, usuário, perm }) {
     
     if (addRem === 'remover' && perm === '') {
-      message.channel.permissionOverwrites.get(message.author.id).delete();
+      message.channel.permissionOverwrites.get(usuário.id).delete();
     };
     
     const permsT = {};
