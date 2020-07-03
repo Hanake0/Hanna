@@ -58,9 +58,9 @@ module.exports = class AddPermCommand extends Command {
       });
     };
     if (addRem === 'add') {
-      message.channel.permissionOverwrites(usuário.id, permsT);
+      message.channel.overwritePermissions(usuário.id, permsT);
     } else {
-      message.channel.permissionOverwrites(usuário.id, permsF);
+      message.channel.overwritePermisssions(usuário.id, permsF);
     }
   }
 };
