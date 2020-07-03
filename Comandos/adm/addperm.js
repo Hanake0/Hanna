@@ -7,8 +7,8 @@ module.exports = class AddPermCommand extends Command {
       aliases: ['permissao', 'regras'],
       group: 'adm',
       memberName: 'perm',
-      clientPermissions: ['MANAGE_CHANNEL'],
-      userPermissions: ['MANAGE_CHANNEL'],
+      clientPermissions: ['MANAGE_CHANNELS'],
+      userPermissions: ['MANAGE_CHANNELS'],
       guildOnly: true,
       description: 'Adiciona a(s) permiss(ão/ões) para o usuário no canal.',
       args: [
