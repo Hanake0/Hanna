@@ -58,7 +58,7 @@ module.exports = class AddPermCommand extends Command {
         configurable: true
       });
     };
-    message.say(`${permsF}`);
+    console.log(`${permsF}`);
     if (addRem === 'add') {
       message.channel.overwritePermissions(usuário.id, permsT);
       message.say(`Permissões adicionadas com sucesso para o usuário ${usuário.username}`);
