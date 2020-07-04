@@ -43,7 +43,7 @@ module.exports = class AddPermCommand extends Command {
     const array = perm.split(/ +/);
     const perms = new Permissions(array);
     
-    message.say(`${perms}}`);
+    message.say(`${array}}`);
     
     if (addRem === 'add') {
       message.channel.overwritePermissions([
