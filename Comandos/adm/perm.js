@@ -37,11 +37,11 @@ module.exports = class AddPermCommand extends Command {
 
     if (addRem === 'remover' && perm === '') {
       message.channel.permissionOverwrites.get(usuário.id).delete();
-    return;
+    return message.say(`Todas as permissões específicas de ${usuário.username} foram removidas.`);
     }
 
     const permsT = {};
-    for (const p of perm.split(/ +/)) {
+    for (const p of perm.toUpperCase.split(/ +/)) {
       Object.defineProperty(permsT, p, {
         value: true,
         writable: true,
@@ -50,7 +50,7 @@ module.exports = class AddPermCommand extends Command {
       });
     };
     const permsF = {};
-    for (const p of perm.split(/ +/)) {
+    for (const p of perm.toUpperCase.split(/ +/)) {
       Object.defineProperty(permsF, p, {
         value: false,
         writable: true,
@@ -60,8 +60,10 @@ module.exports = class AddPermCommand extends Command {
     };
     if (addRem === 'add') {
       message.channel.overwritePermissions(usuário.id, permsT);
+      message.say(`Permissões adicionadas com sucesso para o usuário ${usuário.username}`);
     } else {
       message.channel.overwritePermissions(usuário.id, permsF);
+      message.say(`Permissões removidas com sucesso para o usuário ${usuário.username}`);
     }
   }
 };
