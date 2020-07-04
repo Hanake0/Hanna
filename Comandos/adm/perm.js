@@ -41,7 +41,7 @@ module.exports = class AddPermCommand extends Command {
     }
 
     const permsT = {};
-    for (const p of perm.toUpperCase.split(/ +/)) {
+    for (const p of perm.toUpperCase().split(/ +/)) {
       Object.defineProperty(permsT, p, {
         value: true,
         writable: true,
@@ -50,7 +50,7 @@ module.exports = class AddPermCommand extends Command {
       });
     };
     const permsF = {};
-    for (const p of perm.toUpperCase.split(/ +/)) {
+    for (const p of perm.toUpperCase().split(/ +/)) {
       Object.defineProperty(permsF, p, {
         value: false,
         writable: true,
