@@ -3,6 +3,7 @@ const discord = require('discord.js');
 const tags = require('common-tags');
 const escapeRegex = require('escape-string-regexp');
 const Command = require('../base');
+const { Permissions } = require('discord.js');
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');
