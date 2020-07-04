@@ -1,5 +1,4 @@
 const { Command } = require('../../commando discord.js-v12/src/index.js');
-const { Permissions } = require('discord.js');
 
 module.exports = class AddPermCommand extends Command {
   constructor(client) {
@@ -24,37 +23,45 @@ module.exports = class AddPermCommand extends Command {
           prompt: 'Que usuário você gostaria que as permissões fossem alteradas?',
           type: 'user',
 				},
-				{
-				  key: 'perm',
-				  prompt: 'Qua(l/is) permiss(ão/ões) você gostaria de add/remover ?',
-				  type: 'string',
-				  default: '',
+        {
+          key: 'perm',
+          prompt: 'Qua(l/is) permiss(ão/ões) você gostaria de add/remover ?',
+          type: 'string',
+          default: '',
 				}
 			],
     });
   }
-  
+
   async run(message, { addRem, usuário, perm }) {
-    
+
     if (addRem === 'remover' && perm === '') {
       message.channel.permissionOverwrites.get(usuário.id).delete();
-      return message.say(`Todas as permissões específicas de ${usuário.username} foram removidas.`);
+    return;
+    }
+
+    const permsT = {};
+    for (const p of perm.split(/ +/)) {
+      Object.defineProperty(permsT, p, {
+        value: true,
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
     };
-    const array = perm.split(/ +/);
-    const perms = new Permissions(array);
-    
-    message.say(`${array}}`);
-    
+    const permsF = {};
+    for (const p of perm.split(/ +/)) {
+      Object.defineProperty(permsF, p, {
+        value: false,
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+    };
     if (addRem === 'add') {
-      message.channel.overwritePermissions([
-        {
-          id: usuário.id,
-          allow: perms.bitfield,
-        }]);
-      message.say(`Permissões adicionadas com sucesso para o usuário ${usuário.username}`);
+      message.channel.overwritePermissions(usuário.id, permsT);
     } else {
-      message.channel.overwritePermissions(usuário.id, perms.bitfield);
-      message.say(`Permissões removidas com sucesso para o usuário ${usuário.username}`);
+      message.channel.overwritePermissions(usuário.id, permsF);
     }
   }
 };
