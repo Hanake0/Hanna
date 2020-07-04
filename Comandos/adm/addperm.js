@@ -46,10 +46,10 @@ module.exports = class AddPermCommand extends Command {
     message.say(`${perms}}`);
     
     if (addRem === 'add') {
-      message.channel.overwritePermissions(usuário.id, perms);
+      message.channel.overwritePermissions(usuário.id, perms.bitfield);
       message.say(`Permissões adicionadas com sucesso para o usuário ${usuário.username}`);
     } else {
-      message.channel.overwritePermissions(usuário.id, perms);
+      message.channel.overwritePermissions(usuário.id, perms.bitfield);
       message.say(`Permissões removidas com sucesso para o usuário ${usuário.username}`);
     }
   }
