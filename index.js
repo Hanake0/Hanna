@@ -9,6 +9,7 @@ process.on('unhandledRejection', error => {
 const donos = new Set()
   donos.add('380512056413257729');
   donos.add('348664615175192577');
+  donos.add('597037623281975326');
 const client = new CommandoClient({
 	commandPrefix: 'h',
 	owner: donos,
