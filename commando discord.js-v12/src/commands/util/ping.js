@@ -24,7 +24,7 @@ module.exports = class PingCommand extends Command {
 			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`)
 		if(!msg.editable) {
 			const pingMsg = await msg.say('Calculando.**.**.');
-			return pingMsg.edit(embed);
+			return msg.say(embed);
 		} else {
 			await msg.edit('Calculando.**.**.');
 			return msg.edit(embed);
