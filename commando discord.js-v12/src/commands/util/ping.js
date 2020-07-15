@@ -22,7 +22,9 @@ module.exports = class PingCommand extends Command {
 		const embed = new Discord.RichEmbed()
 			.setTitle(':ping_pong:  Pong!')
 			.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
-			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`);
+			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`)
+			.setTimestamp()
+			.setFooter(`${msg.author}`, `${message.author.avatarURL}`);
 		
 		if(!pingMsg.editable) {
 			return msg.say(embed);
