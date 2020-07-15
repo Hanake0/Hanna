@@ -22,10 +22,10 @@ module.exports = class PingCommand extends Command {
 			.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
 			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`)
 		if(!msg.editable) {
-			const pingMsg = await msg.say('Calculando...');
+			const pingMsg = await msg.say('Calculando.**.**.');
 			return pingMsg.edit(embed);
 		} else {
-			await msg.edit('Calculando...');
+			await msg.edit('Calculando.**.**.');
 			return msg.edit(embed);
 		}
 	}
