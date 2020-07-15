@@ -20,10 +20,10 @@ module.exports = class PingCommand extends Command {
 	async run(msg) {
 		const embed = new Discord.RichEmbed()
 			.setTitle(':ping_pong:  Pong!')
-			.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
 			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`)
 		if(!msg.editable) {
-			await msg.say('Calculando.**.**.');
+			const pingMsg = await msg.say('Calculando.**.**.');
+			embed.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
 			return msg.edit(embed);
 		} else {
 			await msg.edit('Calculando.**.**.');
