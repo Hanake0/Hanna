@@ -10,26 +10,23 @@ module.exports = class PingCommand extends Command {
 			memberName: 'ping',
 			description: 'Checa o ping do bot em relação ao servidor',
 			throttling: {
-				usages: 5,
+				usages: 2,
 				duration: 10
 			}
 		});
 	}
 
 	async run(msg) {
+		const embed = new Discord.RichEmbed()
+			.setTitle(':ping_pong:  Pong!')
+			.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
+			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`)
 		if(!msg.editable) {
-			const pingMsg = await msg.reply('Calculando...');
-			return pingMsg.edit(oneLine`
-				${msg.channel.type !== 'dm' ? `${msg.author},` : ''}
-				Pong! O tempo de resposta da mensagem no servidor foi de ${pingMsg.createdTimestamp - msg.createdTimestamp}ms.
-				${this.client.ping ? `O tempo de resposta interno foi de  ${Math.round(this.client.ping)}ms.` : ''}
-			`);
+			const pingMsg = await msg.say('Calculando...');
+			return pingMsg.edit(embed);
 		} else {
 			await msg.edit('Calculando...');
-			return msg.edit(oneLine`
-				Pong! O tempo de resposta da mensagem no servidor foi de ${msg.editedTimestamp - msg.createdTimestamp}ms.
-				${this.client.ping ? `O tempo de resposta interno foi de ${Math.round(this.client.ping)}ms.` : ''}
-			`);
+			return msg.edit(embed);
 		}
 	}
 };
