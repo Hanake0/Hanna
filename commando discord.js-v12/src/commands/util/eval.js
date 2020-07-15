@@ -30,7 +30,7 @@ module.exports = class EvalCommand extends Command {
 		this.lastResult = null;
 	}
 
-	run(msg, args) {
+	async run(msg, args) {
 		// Make a bunch of helpers
 		/* eslint-disable no-unused-vars */
 		const message = msg;
