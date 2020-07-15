@@ -26,7 +26,7 @@ module.exports = class PingCommand extends Command {
 			embed.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
 			return msg.edit(embed);
 		} else {
-			await msg.edit('Calculando.**.**.');
+			const pingMsg = await msg.say('Calculando.**.**.');
 			return msg.edit(embed);
 		}
 	}
