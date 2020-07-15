@@ -18,12 +18,12 @@ module.exports = class PingCommand extends Command {
 	}
 
 	async run(msg) {
+		const pingMsg = await msg.say('Calculando.**.**.');
 		const embed = new Discord.RichEmbed()
 			.setTitle(':ping_pong:  Pong!')
 			.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
 			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`);
 		
-		const pingMsg = await msg.say('Calculando.**.**.');
 		if(!pingMsg.editable) {
 			return msg.say(embed);
 		} else {
