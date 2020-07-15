@@ -24,7 +24,7 @@ module.exports = class PingCommand extends Command {
 			.addField('Resposta no servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
 			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`)
 			.setTimestamp()
-			.setFooter(`${msg.author}`, `${message.author.avatarURL}`);
+			.setFooter(`${msg.author}`, `${msg.author.avatarURL}`);
 		
 		if(!pingMsg.editable) {
 			return msg.say(embed);
