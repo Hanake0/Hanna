@@ -25,7 +25,13 @@ module.exports = class PingCommand extends Command {
 			.addField('Resposta interna:', `${Math.round(this.client.ping)}ms`)
 			.setTimestamp()
 			.setFooter(`${msg.author.username}`, `${msg.author.avatarURL}`);
-		
+		if (pingMsg.createdTimestamp - msg.createdTimestamp < 150) {
+			embed.setColor('#38b833');
+		} else if (pingMsg.createdTimestamp - msg.createdTimestamp < 250) {
+			embed.setColor('#ffa41c');
+		} else {
+			embed.setColor('#ff2b1c');
+		}
 		if(!pingMsg.editable) {
 			return msg.say(embed);
 		} else {
