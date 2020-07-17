@@ -21,8 +21,8 @@ module.exports = class PingCommand extends Command {
 		const pingMsg = await msg.say('Calculando.**.**.');
 		const embed = new Discord.RichEmbed()
 			.setTitle(':ping_pong:  Pong!')
-			.addField(':e_mail: | Servidor:', `${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
-			.addField(':satellite_orbital: | Webhook:', `${Math.round(this.client.ping)}ms`)
+			.addField('Servidor:', `:e_mail: | ${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
+			.addField('Webhook:', `:satellite_orbital: | ${Math.round(this.client.ping)}ms`)
 			.setTimestamp()
 			.setFooter(`${msg.author.username}`, `${msg.author.avatarURL}`);
 		if (pingMsg.createdTimestamp - msg.createdTimestamp < 150) {
