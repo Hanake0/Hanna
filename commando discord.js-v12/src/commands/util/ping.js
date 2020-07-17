@@ -18,7 +18,7 @@ module.exports = class PingCommand extends Command {
 	}
 
 	async run(msg) {
-		const pingMsg = await msg.say('Calculando.**.**.');
+		const pingMsg = await msg.say('Calculando...');
 		const embed = new Discord.RichEmbed()
 			.setTitle(':ping_pong:  Pong!')
 			.addField('Servidor:', `:e_mail: | ${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
