@@ -1,4 +1,5 @@
 const { Command } = require('../../commando discord.js-v12/src/index.js');
+const { db } = require('../../index.js');
 
 module.exports = class TesteCommand extends Command {
   constructor(client) {
