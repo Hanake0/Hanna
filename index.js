@@ -5,7 +5,7 @@ const sqlite = require('sqlite');
 
 
 
-//inicializa o banco de dados (firebase)
+//inicializa o banco de dados (firebase) e exporta
 const firebase = require('firebase/app');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const admin = require('firebase-admin');
@@ -17,6 +17,10 @@ admin.initializeApp({
 
 let db = admin.firestore();
 module.exports = db;
+
+
+//guarda os dados
+
 
 //cria um client do Comando
 const donos = new Set()
