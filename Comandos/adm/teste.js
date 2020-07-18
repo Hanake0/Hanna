@@ -1,5 +1,4 @@
 const { Command } = require('../../commando discord.js-v12/src/index.js');
-const { db } = require('../../index.js');
 
 module.exports = class TesteCommand extends Command {
   constructor(client) {
@@ -22,7 +21,8 @@ module.exports = class TesteCommand extends Command {
     });
   }
 
-  async run(message, { msg, arg, db}) {
+  async run(message, { msg, arg}) {
+    const db = require('../../index.js');
     db.collection('teste').doc(msg.channel.guild.id).set({
       'ID': msg.channel.guild.id,
       'canal': message.channel.name
