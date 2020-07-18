@@ -26,6 +26,6 @@ module.exports = class TesteCommand extends Command {
       'ID': msg.channel.guild.id,
       'canal': message.channel.name
     });
-    message.channel.send()
+    message.channel.send('aaa');
   }
 };
