@@ -3,6 +3,21 @@ const { CommandoClient, SQLiteProvider } = require('./commando discord.js-v12/sr
 const path = require('path');
 const sqlite = require('sqlite');
 
+
+
+//inicializa o banco de dados (firebase)
+const firebase = require('firebase/app');
+const FieldValue = require('firebase-admin').firestore.FieldValue;
+const admin = require('firebase-admin');
+const serviceAccount = require('./serviceAccount.json');
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount)
+})
+
+let db = admin.firestore();
+
+//cria um client do Comando
 const donos = new Set()
   donos.add('380512056413257729');
   donos.add('348664615175192577');
@@ -13,6 +28,8 @@ const client = new CommandoClient({
 	unknownCommandResponse: false,
 });
 
+
+//registra os comandos no client do Commando
 client.registry
 	.registerDefaultTypes()
 	.registerGroups([
@@ -23,10 +40,9 @@ client.registry
 	.registerDefaultGroups()
 	.registerDefaultCommands()
 	.registerCommandsIn(path.join(__dirname, 'Comandos'))
-	client.setProvider(
-	sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
-).catch(console.error);
 
+
+//mensagem de inicialização e "watching" dinânimico
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
 	setInterval(async () => {
@@ -38,5 +54,7 @@ client.once('ready', () => {
   }, 15000);
 });
 
+
+//erros e login
 client.on('error', console.error);
 client.login(process.env.AUTH_TOKEN);

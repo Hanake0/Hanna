@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "firebase-admin": "9.0.0",
     "common-tags": "^1.8.0",
     "discord.js": "^11.6.4",
     "escape-string-regexp": "^4.0.0",
