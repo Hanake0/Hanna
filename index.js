@@ -16,6 +16,7 @@ admin.initializeApp({
 })
 
 let db = admin.firestore();
+module.exports = db;
 
 //cria um client do Comando
 const donos = new Set()
