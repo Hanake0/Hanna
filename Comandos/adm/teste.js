@@ -25,6 +25,7 @@ module.exports = class TesteCommand extends Command {
     db.collection('teste').doc(msg.channel.guild.id).set({
       'ID': msg.channel.guild.id,
       'canal': message.channel.name
-    })
+    });
+    message.channel.send()
   }
 };
