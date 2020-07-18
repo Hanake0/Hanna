@@ -21,7 +21,7 @@ module.exports = class TesteCommand extends Command {
     });
   }
 
-  async run(message, { msg, arg}) {
+  async run(message, { arg }) {
     const db = require('../../index.js');
     db.collection('teste').doc(msg.channel.guild.id).set({
       'ID': message.channel.guild.id,
