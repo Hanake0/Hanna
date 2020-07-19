@@ -26,7 +26,7 @@ var HM = new Object();
 
 
 usersOn.get().then(snap => {
-	console.log(snap);
+	console.log(snap.data());
 });
 
 
