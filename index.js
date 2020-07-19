@@ -31,8 +31,8 @@ usersOn.get().then(snap => {
 		this.money = money;
 	}
 
-	const eu = usersOff.changeInfo(380512056413257729, 9);
-	console.log(eu);
+	//const eu = usersOff.changeInfo(380512056413257729, 9);
+	//console.log(eu);
 
 	var a = {}
 	usersOff.forEach(valor => {
