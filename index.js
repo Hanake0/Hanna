@@ -7,17 +7,14 @@ const sqlite = require('sqlite');
 
 //inicializa o banco de dados (firebase) e exporta
 const firebase = require('firebase');
-const FieldValue = require('firebase-admin').firestore.FieldValue;
 const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccount.json');
-const { Message } = require('discord.js');
 
 firebase.initializeApp({
 	serviceAccount: './serviceAccount.json',
 	databaseURL: 'https://hanna-91e34.firebaseio.com/'
 })
 
-var db = firebase.database();
+var db = admin.database();
 let ref = db.ref('/usuarios');
 
 
@@ -29,13 +26,17 @@ function user(id, money) {
 	this.money = money;
 };
 
+var dados = [];
+
 ref.once("value", function(snap) {
 	var data = snap.val();
 	console.log(data);
+	dados.push(data);
+	console.log(dados[0]);
   });
 
-fsdf
-//cria um client do Comando
+
+//cria um client do Commpmando
 const donos = new Set()
   donos.add('380512056413257729');
   donos.add('348664615175192577');
