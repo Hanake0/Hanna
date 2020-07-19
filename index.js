@@ -21,7 +21,7 @@ module.exports.db = db;
 //guarda os dados localmente
 let usersOn = db.collection('usuários');
 let usersOff = [];
-await usersOn.get().then(snap => {
+usersOn.get().then(snap => {
 	let docs = snap.docs;
 	for (let doc of docs) {
 		const usuárioSelec = {
