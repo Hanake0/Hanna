@@ -28,7 +28,7 @@ function user(id, money) {
 };
 
 usersOn.update({
-	380512056413257729: user(380512056413257729, 3),
+	380512056413257729: {id: 23232, money: 24},
 });
 
 //let usersOff = new Map();
