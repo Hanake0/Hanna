@@ -30,7 +30,7 @@ function user(id, money) {
 
 let usersOff = [];
 usersOn.get().then(snap => {
-	let docs = snap.docs;
+	let docs = snap;
 	for (let doc of docs) {
 		const usuárioSelec = user(doc.id, doc.money);
 		usersOff.push(usuárioSelec);
