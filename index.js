@@ -26,9 +26,7 @@ var HM = new Object();
 
 
 usersOn.get().then(snap => {
-	snap.forEach(doc => {
-		console.log(doc.id, doc.data());
-	  });
+	console.log(snap);
 });
 
 
