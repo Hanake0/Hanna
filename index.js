@@ -23,13 +23,19 @@ let usersOn = db.collection('usuarios').doc('usuarios');
 
 
 usersOn.get().then(snap => {
-	const usersOff = snap.data();
-	console.log(Object.values(usersOff));
-	const valores = Object.values(usersOff);
-	const eu = valores.find(a => a.money === 24);
+	const usersOff = Object.values(snap.data());
+	console.log(usersOff);
+
+	function changeInfo(id, money){
+		this.id = id;
+		this.money = money;
+	}
+
+	const eu = usersOff.changeInfo(usersOff.find(a => a.money === 24).id, 9);
 	console.log(eu);
+
 	var a = {}
-	valores.forEach(valor => {
+	usersOff.forEach(valor => {
 		Object.defineProperty(a, valor.id, {
 			value: valor,
 			writable: true,
