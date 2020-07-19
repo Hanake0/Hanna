@@ -22,13 +22,14 @@ module.exports.db = db;
 let usersOn = db.collection('usuarios').doc('usuarios');
 
 
-function user(id, money) {
-	this.id = id;
-	this.money = money;
-};
+const o = {
+	id: 12,
+	money:24
+}
 
 usersOn.update({
-	380512056413257729: {id: 23232, money: 24},
+	380512056413257729: o,
+	335113227665014785: o
 });
 
 //let usersOff = new Map();
@@ -39,10 +40,10 @@ usersOn.update({
 //});
 //usersOff.set('380512056413257729', {money: 246});
 //console.log(usersOff);
-usersOn.update(usersOff);
+//usersOn.update(usersOff);
 
 
-module.exports.usersOff = usersOff;
+//module.exports.usersOff = usersOff;
 
 
 //cria um client do Comando
