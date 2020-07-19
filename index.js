@@ -33,6 +33,10 @@ usersOn.get().then(snap => {
 		usersOff.set(doc.id, doc.data());
 	  });
 });
+usersOff.set('380512056413257729', {money: 128});
+
+usersOn.update(usersOff);
+
 
 module.exports.usersOff = usersOff;
 
