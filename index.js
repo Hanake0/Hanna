@@ -26,7 +26,8 @@ usersOn.get().then(snap => {
 	const usersOff = snap.data();
 	console.log(Object.values(usersOff));
 	const valores = Object.values(usersOff);
-	console.log(valores.find(a => a.money === 24)).then(a => a.money = 54);
+	const eu = valores.find(a => a.money === 24);
+	console.log(eu);
 	var a = {}
 	valores.forEach(valor => {
 		Object.defineProperty(a, valor.id, {
