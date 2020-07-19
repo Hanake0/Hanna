@@ -30,11 +30,12 @@ function user(id, money) {
 let usersOff = new Map();
 usersOn.get().then(snap => {
 	snap.forEach(doc => {
-		usersOff.set(doc, doc.data());
+		console.log(doc);
+		usersOff.set(doc.id, doc.data());
 	  });
 });
-usersOff.set('380512056413257729', {money: 246})
-
+usersOff.set('380512056413257729', {money: 246});
+console.log(usersOff);
 usersOn.update(usersOff);
 
 
