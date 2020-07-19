@@ -34,7 +34,7 @@ ref.once("value", function(snap) {
 	console.log(data);
   });
 
-
+fsdf
 //cria um client do Comando
 const donos = new Set()
   donos.add('380512056413257729');
