@@ -16,10 +16,22 @@ admin.initializeApp({
 })
 
 let db = admin.firestore();
-module.exports = db;
+module.exports.db = db;
 
-
-//guarda os dados
+//guarda os dados localmente
+let usersOn = db.collection('usuários');
+let usersOff = [];
+await usersOn.get().then(snap => {
+	let docs = snap.docs;
+	for (let doc of docs) {
+		const usuárioSelec = {
+			id: doc.id,
+			money: doc.data().money
+		};
+		usersOff.push(usuárioSelec);
+	}
+});
+module.exports.usersOff = usersOff;
 
 
 //cria um client do Comando
