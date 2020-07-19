@@ -26,7 +26,7 @@ usersOn.get().then(snap => {
 	const usersOff = snap.data();
 	console.log(Object.values(usersOff));
 	const valores = Object.values(usersOff);
-	console.log(valores[0].money);
+	console.log(valores.find(a => a.money === 24));
 });
 
 
