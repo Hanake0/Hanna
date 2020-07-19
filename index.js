@@ -29,7 +29,6 @@ function user(id, money) {
 
 usersOn.update({
 	380512056413257729: user(380512056413257729, 3),
-	388488666017693706: user(388488666017693706, 6)
 });
 
 //let usersOff = new Map();
