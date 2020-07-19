@@ -22,25 +22,14 @@ module.exports.db = db;
 let usersOn = db.collection('usuarios').doc('usuarios');
 
 
-const o = {
-	id: 12,
-	money:24
-}
+var HM = new Object();
 
-usersOn.update({
-	380512056413257729: o,
-	335113227665014785: o
+
+usersOn.get().then(snap => {
+	snap.forEach(doc => {
+		console.log(doc.id, doc.data());
+	  });
 });
-
-//let usersOff = new Map();
-//usersOn.get().then(snap => {
-//	snap.forEach(doc => {
-//		console.log(doc.data());
-//	  });
-//});
-//usersOff.set('380512056413257729', {money: 246});
-//console.log(usersOff);
-//usersOn.update(usersOff);
 
 
 //module.exports.usersOff = usersOff;
