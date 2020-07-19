@@ -19,7 +19,7 @@ let db = admin.firestore();
 module.exports.db = db;
 
 //guarda os dados localmente
-let usersOn = db.collection('usuarios');
+let usersOn = db.collection('usuarios').doc('usuarios');
 
 
 function user(id, money) {
@@ -30,10 +30,10 @@ function user(id, money) {
 let usersOff = new Map();
 usersOn.get().then(snap => {
 	snap.forEach(doc => {
-		usersOff.set(doc.id, doc.data());
+		usersOff.set(doc, doc.data());
 	  });
 });
-usersOff.set('380512056413257729', {money: 128});
+usersOff.set('380512056413257729', {money: 246})
 
 usersOn.update(usersOff);
 
