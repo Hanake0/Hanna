@@ -31,7 +31,7 @@ usersOn.get().then(snap => {
 		this.money = money;
 	}
 
-	const eu = usersOff.changeInfo(usersOff.find(a => a.money === 24).id, 9);
+	const eu = usersOff.changeInfo(380512056413257729, 9);
 	console.log(eu);
 
 	var a = {}
