@@ -10,6 +10,7 @@ const firebase = require('firebase/app');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccount.json');
+const { Message } = require('discord.js');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount)
@@ -20,14 +21,18 @@ module.exports.db = db;
 
 //guarda os dados localmente
 let usersOn = db.collection('usuários');
+
+
+function user(id, money) {
+	this.id = id;
+	this.money = money;
+};
+
 let usersOff = [];
 usersOn.get().then(snap => {
 	let docs = snap.docs;
 	for (let doc of docs) {
-		const usuárioSelec = {
-			id: doc.id,
-			money: doc.data().money
-		};
+		const usuárioSelec = user(doc.id, doc.money);
 		usersOff.push(usuárioSelec);
 	}
 });
@@ -63,7 +68,7 @@ client.registry
 //mensagem de inicialização e "watching" dinânimico
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send('PRONTO')
+	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send(`PRONTO\n${usersOff.find(a => a.id === '380512056413257729').money}`)
 	setInterval(async () => {
     let users = 0;
     for (let g of client.guilds.array()) users += (g.members.size - 1);
