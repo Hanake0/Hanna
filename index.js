@@ -74,7 +74,7 @@ client.registry
 //mensagem de inicialização e "watching" dinânimico
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send(`PRONTO\n${usersOff.get('348664615175192577').money}`);
+	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send(`PRONTO}`);
 	setInterval(async () => {
     let users = 0;
     for (let g of client.guilds.array()) users += (g.members.size - 1);
