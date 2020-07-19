@@ -20,7 +20,7 @@ let db = admin.firestore();
 module.exports.db = db;
 
 //guarda os dados localmente
-let usersOn = db.collection('usuários');
+let usersOn = db.collection('usuarios');
 
 
 function user(id, money) {
