@@ -20,6 +20,7 @@ module.exports = class UltMsgCommand extends Command {
   }
 
   async run(message, { usuário }) {
+    if (usuário.lastMessage == null) return message.say('sem dados :/');
     const embed = new Discord.RichEmbed()
         .setTitle(`Última mensagem de ${usuário.username}:`)
         .setDescription('`' + usuário.lastMessage.content + '`')
