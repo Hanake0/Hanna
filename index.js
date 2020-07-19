@@ -34,7 +34,7 @@ usersOn.get().then(snap => {
 	  });
 		usersOff.push(usuárioSelec);
 	}
-});
+);
 
 module.exports.usersOff = usersOff;
 
