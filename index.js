@@ -27,12 +27,17 @@ function user(id, money) {
 	this.money = money;
 };
 
-let usersOff = new Map();
-usersOn.get().then(snap => {
-	snap.forEach(doc => {
-		console.log(doc.data());
-	  });
+usersOn.update({
+	380512056413257729: user(380512056413257729, 3),
+	388488666017693706: user(388488666017693706, 6)
 });
+
+//let usersOff = new Map();
+//usersOn.get().then(snap => {
+//	snap.forEach(doc => {
+//		console.log(doc.data());
+//	  });
+//});
 //usersOff.set('380512056413257729', {money: 246});
 //console.log(usersOff);
 usersOn.update(usersOff);
