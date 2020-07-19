@@ -6,37 +6,40 @@ const sqlite = require('sqlite');
 
 
 //inicializa o banco de dados (firebase) e exporta
-const firebase = require('firebase');
+const firebase = require('firebase/app');
+const FieldValue = require('firebase-admin').firestore.FieldValue;
 const admin = require('firebase-admin');
+const serviceAccount = require('./serviceAccount.json');
 
-firebase.initializeApp({
-	serviceAccount: './serviceAccount.json',
-	databaseURL: 'https://hanna-91e34.firebaseio.com/'
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount)
 })
 
-var db = admin.database();
-let ref = db.ref('/usuarios');
-
+let db = admin.firestore();
+module.exports.db = db;
 
 //guarda os dados localmente
-//let usersOn = db.collection('usuarios');
+let usersOn = db.collection('usuarios');
+
 
 function user(id, money) {
 	this.id = id;
 	this.money = money;
 };
 
-var dados = [];
+let usersOff = [];
+usersOn.get().then(snap => {
+	snap.forEach(doc => {
+		console.log(doc.id, '=>', doc.data());
+	  });
+		usersOff.push(usuárioSelec);
+	}
+});
 
-ref.once("value", function(snap) {
-	var data = snap.val();
-	console.log(data);
-	dados.push(data);
-	console.log(dados[0]);
-  });
+module.exports.usersOff = usersOff;
 
 
-//cria um client do Commpmando
+//cria um client do Comando
 const donos = new Set()
   donos.add('380512056413257729');
   donos.add('348664615175192577');
@@ -64,7 +67,7 @@ client.registry
 //mensagem de inicialização e "watching" dinânimico
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send('PRONTO')
+	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send(`PRONTO\n${usersOff.find(a => a.id === '380512056413257729').money}`)
 	setInterval(async () => {
     let users = 0;
     for (let g of client.guilds.array()) users += (g.members.size - 1);
