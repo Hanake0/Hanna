@@ -25,5 +25,11 @@ module.exports = class TesteCommand extends Command {
     const { usersOff } = require('../../index.js');
 
     message.channel.send(`${usersOff.money}`);
+
+    let permsF = {}
+    Object.defineProperty(permsF, "teste", {
+      value: "1256",
+    });
+    message.channel.send(`${permsF.teste}`);
   }
 };
