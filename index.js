@@ -32,9 +32,7 @@ usersOn.get().then(snap => {
 	snap.forEach(doc => {
 		console.log(doc.id, '=>', doc.data());
 	  });
-		usersOff.push(usuárioSelec);
-	}
-);
+});
 
 module.exports.usersOff = usersOff;
 
