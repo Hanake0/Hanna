@@ -27,7 +27,7 @@ module.exports = class UltMsgCommand extends Command {
         .setThumbnail(`${usuário.avatarURL}`)
         .addField('Enviado em:', `${usuário.lastMessage.channel}`, true)
         .setTimestamp(usuário.lastMessage.createdTimestamp)
-        .setFooter('Mensagem enviada:', `${message.author.avatarURL}`);
+        .setFooter('Mensagem enviada: ', `${message.author.avatarURL}`);
     if (usuário.lastMessage.deleted) {
         embed.addField('Apagada?', 'sim', true);
     };
