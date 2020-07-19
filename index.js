@@ -23,9 +23,10 @@ let usersOn = db.collection('usuarios').doc('usuarios');
 
 
 usersOn.get().then(snap => {
-	console.log(snap.data());
 	const usersOff = snap.data();
-	console.log(Object.values(usersOff).find((a) => a.id === '335113227665014800'));
+	console.log(Object.values(usersOff));
+	const valores = Object.values(usersOff);
+	console.log(valores[0].money);
 });
 
 
