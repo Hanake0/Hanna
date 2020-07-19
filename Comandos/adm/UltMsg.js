@@ -27,6 +27,9 @@ module.exports = class UltMsgCommand extends Command {
         .addField('Enviado em:', `${usuário.lastMessage.channel}`, true)
         .setTimestamp(usuário.lastMessage.createdTimestamp)
         .setFooter(`Pedido por: ${message.author.username}`, `${message.author.avatarURL}`);
+    if (usuário.lastMessage.deleted) {
+        embed.addField('Apagada?', 'sim', true);
+    };
     await message.say(embed);
     message.delete()
 
