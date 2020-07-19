@@ -22,11 +22,10 @@ module.exports.db = db;
 let usersOn = db.collection('usuarios').doc('usuarios');
 
 
-var HM = new Object();
-
-
 usersOn.get().then(snap => {
 	console.log(snap.data());
+	const usersOff = snap.data();
+	console.log(Object.values(usersOff).find(a => a.id === '12').set({id: 31}));
 });
 
 
