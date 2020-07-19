@@ -5,9 +5,9 @@ module.exports = class UltMsgCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'ultmsg',
-      aliases: ['vistoporultimo', 'lastmsg', 'ultimamsg'],
+      aliases: ['vistoporultimo', 'lastmsg', 'ultimamensagem'],
       group: 'utilidades',
-      memberName: 'UltimaMensagem',
+      memberName: 'ultimamensagem',
       description: 'Mostra o conteúdo e a hora da última mensagem de um usuário no servidor.',
       args: [
         {
