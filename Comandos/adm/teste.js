@@ -24,6 +24,6 @@ module.exports = class TesteCommand extends Command {
   async run(message, { arg }) {
     const { usersOff } = require('../../index.js');
 
-    message.channel.send(`${usersOff.get(message.author.id).money}`);
+    message.channel.send(`${usersOff.money}`);
   }
 };
