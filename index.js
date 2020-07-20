@@ -39,13 +39,6 @@ usersOn.get().then(snap => {
 	usersOff.set(eu, euInfo);
 	console.log(usersOff);
 
-	//Object.defineProperty(usersOff, eu.money, {
-	//	value: 999,
-	//	writable: true,
-	//	enumerable: true,
-	//	configurable: true
-	//});
-
 	var a = {}
 	usersOff.forEach(valor => {
 		Object.defineProperty(a, valor.id, {
@@ -57,6 +50,8 @@ usersOn.get().then(snap => {
 	});
 	console.log(a)
 });
+
+usersOn.update(a);
 
 
 //module.exports.usersOff = usersOff;
