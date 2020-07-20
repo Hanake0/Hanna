@@ -27,7 +27,7 @@ usersOn.get().then(snap => {
 	const usersOff = new Map(Object.entries(snap.data()));
 	console.log(usersOff);
 
-	const eu = '80512056413257729';
+	const eu = '380512056413257729';
 	const euInfo = usersOff.get(eu);
 	console.log(euInfo);
 	Object.defineProperty(euInfo, 'money', {
