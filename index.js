@@ -23,17 +23,22 @@ let usersOn = db.collection('usuarios').doc('usuarios');
 
 
 usersOn.get().then(snap => {
-	const usersOff = Object.values(snap.data());
-	console.log(usersOff);
+	console.log(snap.data());
+	const usersOff = snap.data();
 
 	function changeInfo(id, money){
 		this.id = id;
 		this.money = money;
 	};
 
-	snap.data()
-		.380512056413257729.money = 999;
-	console.log(eu);
+	eu = 380512056413257729;
+	Object.defineProperty(usersOff, eu.money, {
+		value: 999,
+		writable: true,
+		enumerable: true,
+		configurable: true
+	});
+	console.log(usersOff);
 
 	var a = {}
 	usersOff.forEach(valor => {
