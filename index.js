@@ -49,9 +49,10 @@ usersOn.get().then(snap => {
 		  });
 	});
 	console.log(a)
+	usersOn.update(a);
 });
 
-usersOn.update(a);
+
 
 
 //module.exports.usersOff = usersOff;
