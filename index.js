@@ -29,10 +29,11 @@ usersOn.get().then(snap => {
 	function changeInfo(id, money){
 		this.id = id;
 		this.money = money;
-	}
+	};
 
-	//const eu = usersOff.changeInfo(380512056413257729, 9);
-	//console.log(eu);
+	snap.data()
+		.380512056413257729.money = 999;
+	console.log(eu);
 
 	var a = {}
 	usersOff.forEach(valor => {
