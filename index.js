@@ -25,8 +25,9 @@ let usersOn = db.collection('usuarios').doc('usuarios');
 usersOn.get().then(snap => {
 	console.log(snap.data());
 	const usersOff = Object.values(snap.data());
+	console.log(usersOff);
 
-	eu.money = 99;
+	const eu = { money: 99 };
 	usersOff.set('380512056413257729', eu);
 	console.log(usersOff);
 
