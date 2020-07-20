@@ -29,6 +29,7 @@ usersOn.get().then(snap => {
 
 	const eu = '80512056413257729';
 	const euInfo = usersOff.get(eu);
+	console.log(euInfo);
 	Object.defineProperty(euInfo, 'money', {
 			value: 999,
 			writable: true,
