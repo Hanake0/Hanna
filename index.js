@@ -31,25 +31,30 @@ usersOn.get().then(snap => {
 		this.money = money;
 	};
 
-	eu = 380512056413257729;
-	Object.defineProperty(usersOff, eu.money, {
-		value: 999,
-		writable: true,
-		enumerable: true,
-		configurable: true
-	});
+	const eu = usersOff.get('380512056413257729')
+	eu.money = 99;
+	usersOff.set('380512056413257729', eu);
 	console.log(usersOff);
 
-	var a = {}
-	usersOff.forEach(valor => {
-		Object.defineProperty(a, valor.id, {
-			value: valor,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		  });
-	});
-	console.log(a)
+	//eu = 380512056413257729;
+	//Object.defineProperty(usersOff, eu.money, {
+	//	value: 999,
+	//	writable: true,
+	//	enumerable: true,
+	//	configurable: true
+	//});
+	//console.log(usersOff);
+
+	//var a = {}
+	//usersOff.forEach(valor => {
+	//	Object.defineProperty(a, valor.id, {
+	//		value: valor,
+	//		writable: true,
+	//		enumerable: true,
+	//		configurable: true
+	//	  });
+	//});
+	//console.log(a)
 });
 
 
