@@ -68,18 +68,49 @@ client.registry
 	.registerCommandsIn(path.join(__dirname, 'Comandos'))
 
 
-//mensagem de inicialização e "watching" dinânimico
+//mensagem de inicialização e "watching" dinânamico
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
 	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send(`PRONTO}`);
 	setInterval(async () => {
-    let users = 0;
-    for (let g of client.guilds.array()) users += (g.members.size - 1);
+	let users = client.guilds.find(a => a.id === '698560208309452810').members.size - 1
 
-    await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''} online`, {type: 'WATCHING'})
+    await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''}`, {type: 'WATCHING'})
     .catch(err => console.error());
   }, 15000);
 });
+
+
+//sistema de contagem de xp e "as parada"
+client.on("message", message => {
+	if (usersOffDB.get(message.author.id).value() === 'undefined') {
+	  usersOffDB.set(message.author.id, {
+		"galo_nivel": 0,
+		"medalhas": [],
+		"galo?": false,
+		"username": message.author.id,
+		"idade": "undefined",
+		"interesses": [],
+		"mensagens": 0,
+		"xp": 0,
+		"id": message.author.id,
+		"xp_semanal": 0,
+		"money": 0,
+		"sexualidade": ""
+	  }).write();
+	};
+
+	const user = usersOffDB.get(message.author.id).value();
+
+	if (message.author.lastMessage) {
+	  const tempinho = message.author.lastMessage.createdAt - Date();
+
+	  if ( tempinho > 86400000) {
+		user.update('xp', n => n - (25 * Math.round(tempinho / 60000)))
+			.update('mensagens', n => n + 1).write();
+	  }
+	} else return user.update('xp', n => n + 1).update('mensagens', n => n + 1).write();
+  });
 
 
 //erros e login
