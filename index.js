@@ -25,6 +25,7 @@ module.exports.db = db;
 
 //guarda os dados localmente e exporta o banco Offline
 let usersOn = db.collection('usuarios').doc('usuarios');
+module.exports.usersOn = usersOn;
 
 usersOn.get().then(snap => {
 	var usersOff = new Map(Object.entries(snap.data()));
