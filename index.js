@@ -98,9 +98,8 @@ client.on("message", message => {
 		"money": 0,
 		"sexualidade": ""
 	  }).write();
-	};
-
-	const user = usersOffDB.get(message.author.id).value();
+	  var user = usersOffDB.get(message.author.id).value();
+	} else {const user = usersOffDB.get(message.author.id).value()};
 
 	if (message.author.lastMessage) {
 	  const tempinho = message.author.lastMessage.createdAt - Date();
