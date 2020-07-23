@@ -23,7 +23,9 @@ module.exports = class TesteCommand extends Command {
   }
 
   async run(message, { arg }) {
-    const { usersOffDB } = require('../../index');
+    const { usersOffDB, usersOn } = require('../../index');
+    usersOffDB.get(message.author.id).update('mensagens', n => n+1).write();
+    usersOn.update(usersOffDB);
     message.say(`${usersOffDB.get(message.author.id).value().money}`)
   }
 };

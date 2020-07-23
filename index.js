@@ -37,7 +37,7 @@ usersOn.get().then(snap => {
 });
 
 setInterval(async () => {
-    usersOn.update(usersOffDB.getState());
+	usersOn.update(usersOffDB.getState()).then( () => console.log('Update concluído com suscesso'));
 }, 3600000);
 
 
