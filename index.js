@@ -99,30 +99,29 @@ client.on("message", message => {
 				"money": 0,
 				"sexualidade": null
 			  }).write();
-			var user = usersOffDB.get(message.author.id);
 
 			if (message.author.lastMessage) {
 				const tempinho = message.author.lastMessage.createdAt - Date();
 		  
 				if ( tempinho > 86400000) {
-				  user.update('xp', n => n - (25 * Math.round(tempinho / 60000)))
+					usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
 					  .update('mensagens', n => n + 1).write();
 				}
 			  } else {
-				  user.update('xp', n => n + 1).update('mensagens', n => n + 1).write();
+				usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
 			  }
-			  
+
 		} else {
-			const user = usersOffDB.get(message.author.id)
 			if (message.author.lastMessage) {
 				const tempinho = message.author.lastMessage.createdAt - Date();
 		  
 				if ( tempinho > 86400000) {
-				  user.update('xp', n => n - (25 * Math.round(tempinho / 60000)))
+				  usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
 					  .update('mensagens', n => n + 1).write();
 				}
 			  } else {
-				  user.update('xp', n => n + 1).update('mensagens', n => n + 1).write();
+				  usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
+				  usersOn.update(usersOffDB.getState());
 			  }
 		};
 
