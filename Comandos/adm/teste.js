@@ -24,6 +24,6 @@ module.exports = class TesteCommand extends Command {
 
   async run(message, { arg }) {
     const { usersOffDB } = require('../../index');
-    message.channel.say(`${usersOffDB.get(message.author.id).value().money}`)
+    message.say(`${usersOffDB.get(message.author.id).value().money}`)
   }
 };
