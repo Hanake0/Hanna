@@ -16,7 +16,7 @@ module.exports = class AddPermCommand extends Command {
           key: 'addRem',
           prompt: 'Você gostaria de adicionar ou remover permissões?(add/remover)',
           type: 'string',
-          oneOf: ['add', 'remover'],
+          oneOf: ['add', 'remover', 'remove'],
         },
         {
           key: 'usuário',
@@ -34,8 +34,8 @@ module.exports = class AddPermCommand extends Command {
   }
 
   async run(message, { addRem, usuário, perm }) {
-
-    if (addRem === 'remover' && perm === '') {
+    const remove = ['remover', 'remove', 'rem'];
+    if (addRem in remove && perm === '') {
       message.channel.permissionOverwrites.get(usuário.id).delete();
     return message.say(`Todas as permissões específicas de ${usuário.username} foram removidas.`);
     }

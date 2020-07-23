@@ -1,11 +1,16 @@
 const Commando = require('./commando discord.js-v12/src/index.js')
 const { CommandoClient, SQLiteProvider } = require('./commando discord.js-v12/src/index.js');
 const path = require('path');
-const sqlite = require('sqlite');
 
 
+//inicializa o lowDB
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
 
-//inicializa o banco de dados (firebase) e exporta
+const adapter = new FileSync('usersOffDB.json');
+const usersOffDB = low(adapter);
+
+//inicializa o banco de dados (firebase) e exporta o banco Online
 const firebase = require('firebase/app');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const admin = require('firebase-admin');
@@ -18,44 +23,23 @@ admin.initializeApp({
 let db = admin.firestore();
 module.exports.db = db;
 
-//guarda os dados localmente
+//guarda os dados localmente e exporta o banco Offline
 let usersOn = db.collection('usuarios').doc('usuarios');
 
-
 usersOn.get().then(snap => {
-	console.log(snap.data());
-	const usersOff = new Map(Object.entries(snap.data()));
-	console.log(usersOff);
+	var usersOff = new Map(Object.entries(snap.data()));
 
-	const eu = '380512056413257729';
-	const euInfo = usersOff.get(eu);
-	console.log(euInfo);
-	Object.defineProperty(euInfo, 'money', {
-			value: 999,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		});
-	usersOff.set(eu, euInfo);
-	console.log(usersOff);
+    usersOff.forEach(user => {
+        usersOffDB.set(`${user.id}`, user).write();
+    });
 
-	var a = {}
-	usersOff.forEach(valor => {
-		Object.defineProperty(a, valor.id, {
-			value: valor,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		  });
-	});
-	console.log(a)
-	usersOn.update(a);
+    module.exports.usersOffDB = usersOffDB;
 });
 
+setInterval(async () => {
+    usersOn.update(usersOffDB.getState());
+}, 3600000);
 
-
-
-//module.exports.usersOff = usersOff;
 
 
 //cria um client do Comando

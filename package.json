@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lowdb": "1.0.0",
     "firebase": "7.16.1",
     "firebase-admin": "9.0.0",
     "common-tags": "^1.8.0",

@@ -1,4 +1,5 @@
 const { Command } = require('../../commando discord.js-v12/src/index.js');
+//const lowdb = require('lowdb');
 
 module.exports = class TesteCommand extends Command {
   constructor(client) {
@@ -22,14 +23,7 @@ module.exports = class TesteCommand extends Command {
   }
 
   async run(message, { arg }) {
-    const { usersOff } = require('../../index.js');
-
-    message.channel.send(`${usersOff.money}`);
-
-    let permsF = {}
-    Object.defineProperty(permsF, "teste", {
-      value: "1256",
-    });
-    message.channel.send(`${permsF.teste}`);
+    const { usersOffDB } = require('../../index');
+    message.channel.say(`${usersOffDB.get(message.author.id).value().money}`)
   }
 };
