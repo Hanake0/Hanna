@@ -184,7 +184,7 @@ class Argument {
 					Responda com \`cancelar\` para cancelar o comando.
 					${wait ? `O comando vai ser cancelado automaticamemte em ${this.wait} segundos.` : ''}
 				`}
-			`).then(a => a.delete(1200)));
+			`).then(a => a.delete(5000)));
 
 			// Get the user's response
 			const responses = await msg.channel.awaitMessages(msg2 => msg2.author.id === msg.author.id, {
@@ -273,7 +273,7 @@ class Argument {
 							Responda com \`cancelar\` para cancelar o comando, ou \`terminar\` para terminar a resposta.
 							${wait ? `O comando vai ser automaticamente cancelado em ${this.wait} segundos.` : ''}
 						`}
-					`).then(a => a.delete(1200)));
+					`).then(a => a.delete(5000)));
 				} else if(results.length === 0) {
 					prompts.push(await msg.reply(stripIndents`
 						${this.prompt}
@@ -281,7 +281,7 @@ class Argument {
 							Responda com \`cancelar\` para cancelar o comando, ou \`terminar\` para terminar a resposta.
 							${wait ? `O comando vai ser cancelado em ${this.wait} segundos, a não ser que você responda.` : ''}
 						`}
-					`).then(a => a.delete(1200)));
+					`).then(a => a.delete(5000)));
 				}
 
 				// Get the user's response
