@@ -25,13 +25,13 @@ module.exports = class UltMsgCommand extends Command {
 
     if (!usersOffDB.has(usuário.id).value()) return message.say('sem dados :/');
 
-    const momento = new Date(Math.round(usersOffDB.get(usuário.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(message.author.id).value().lastMessage.nanoseconds /  10000)));
+    //const momento = new Date(Math.round(usersOffDB.get(usuário.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(message.author.id).value().lastMessage.nanoseconds /  10000)));
     const embed = new Discord.RichEmbed()
         .setTitle(`Última mensagem de ${usuário.username}:`)
         .setDescription('`' + usersOffDB.get(usuário.id).value().lastMessageContent + '`')
         .setThumbnail(`${usuário.avatarURL}`)
         .addField('Enviado em:', `${client.channels.find(a => a.id === usersOffDB.get(usuário.id).value().lastMessageChannelID)}`, true)
-        .setTimestamp(momento.toISOString())
+        .setTimestamp(usersOffDB.get(usuário.id).value().lastMessage)
         .setFooter('Mensagem enviada: ', `${message.author.avatarURL}`);
 
     await message.say(embed);

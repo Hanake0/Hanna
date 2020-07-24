@@ -126,7 +126,7 @@ class CommandDispatcher {
 			usersOffDB.get(message.author.id).update('lastMessage', n => n = message.createdAt)
 				.set('lastMessageContent', `${message.content}`)
 				.set('lastMessageChannelID', `${message.channel.id}`).write();
-			const tempinho = new Date().valueOf() - Math.round(usersOffDB.get(message.author.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(message.author.id).value().lastMessage.nanoseconds /  10000));
+			const tempinho = new Date().valueOf() - usersOffDB.get(message.author.id).value().lastMessage.valueOf();
 	
 			if ( tempinho > 86400000) {
 				usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
