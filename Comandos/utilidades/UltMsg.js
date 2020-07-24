@@ -23,7 +23,7 @@ module.exports = class UltMsgCommand extends Command {
     const client = message.client;
     const { usersOffDB } = require('../../index');
 
-    if (!usersOffDB.has(usuário.id).value()) return message.say('sem dados :/');
+    if (!usersOffDB.has(usuário.id).value()) return message.say('sem dados :/').then(a => a.delete(5000).then(message.delete(5000)));
 
     //const momento = new Date(Math.round(usersOffDB.get(usuário.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(message.author.id).value().lastMessage.nanoseconds /  10000)));
     const embed = new Discord.RichEmbed()
