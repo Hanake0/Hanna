@@ -100,7 +100,8 @@ class CommandoClient extends discord.Client {
 					  usersOn.update(usersOffDB.getState());
 				  }
 			}
-			gambiarra(message)
+			gambiarra(message);
+			gambiarra2(message);
 
 			this.dispatcher.handleMessage(message).catch(msgErr); });
 		this.on('messageUpdate', (oldMessage, newMessage) => {
