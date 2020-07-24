@@ -28,7 +28,7 @@ module.exports = class UltMsgCommand extends Command {
         .setDescription('`' + usersOffDB.get(usuário.id).value().lastMessageContent + '`')
         .setThumbnail(`${usuário.avatarURL}`)
         .addField('Enviado em:', `${client.channels.find(a => a.id === usersOffDB.get(usuário.id).value().lastMessageChannelID)}`, true)
-        .setTimestamp(usersOffDB.get(usuário.id).value().lastMessage.valueOf())
+        .setTimestamp(usersOffDB.get(usuário.id).value().lastMessage.toISOString())
         .setFooter('Mensagem enviada: ', `${message.author.avatarURL}`);
 
     await message.say(embed);
