@@ -119,18 +119,17 @@ class CommandDispatcher {
 				"lastMessage": message.createdAt
 			}).write();
 		} else {
-			const user = usersOffDB.get(message.author.id)
 			//atualiza os valores do db
 			
-			user.update(message.author.id, message.author.lastMessage).write();
-			const tempinho = new Date() - user.value().lastMessage;
+			usersOffDB.get(message.author.id).update(message.author.id, message.author.lastMessage).write();
+			const tempinho = new Date() - usersOffDB.get(message.author.id).value().lastMessage;
 	
 			if ( tempinho > 86400000) {
-			user.update('xp', n => n - (25 * Math.round(tempinho / 60000)))
+				usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
 				.update('mensagens', n => n + 1)
 				.update('lastMessage', message.createdAt).write();
 			} else {
-				user.update('xp', n => n + 1)
+				usersOffDB.get(message.author.id).update('xp', n => n + 1)
 					.update('mensagens', n => n + 1)
 					.update('lastMessage', message.createdAt).write();
 			};
