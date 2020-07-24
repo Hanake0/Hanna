@@ -80,9 +80,6 @@ client.once('ready', () => {
   }, 15000);
 });
 
-
-	
-
 //erros e login
 client.on('error', console.error);
 client.login(process.env.AUTH_TOKEN);

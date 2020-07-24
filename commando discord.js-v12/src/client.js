@@ -67,7 +67,7 @@ class CommandoClient extends discord.Client {
 		const msgErr = err => { this.emit('error', err); };
 		this.on('message', message => {
 			async function gambiarra(message) {
-				if (usersOffDB.get(message.author.id).value() === 'undefined') {
+				if (usersOffDB.find(a => a.id === message.author.id).value() === 'undefined') {
 					await usersOffDB.set(message.author.id, {
 						"galo_nivel": 0,
 						"medalhas": [],
@@ -82,33 +82,22 @@ class CommandoClient extends discord.Client {
 						"money": 0,
 						"sexualidade": null
 					  }).write();
-		
-					if (message.author.lastMessage) {
-						const tempinho = message.author.lastMessage.createdAt - Date();
-				  
-						if ( tempinho > 86400000) {
-							usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
-							  .update('mensagens', n => n + 1).write();
-						}
-					  } else {
-						usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
-					  }
-		
-				} else {
-					if (message.author.lastMessage) {
-						const tempinho = message.author.lastMessage.createdAt - Date();
-				  
-						if ( tempinho > 86400000) {
-						  usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
-							  .update('mensagens', n => n + 1).write();
-						}
-					  } else {
-						  usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
-						  usersOn.update(usersOffDB.getState());
-					  }
 				};
 		
 			};
+			async function gambiarra2(message) {
+				if (message.author.lastMessage) {
+					const tempinho = message.author.lastMessage.createdAt - Date();
+			  
+					if ( tempinho > 86400000) {
+					  await usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
+						  .update('mensagens', n => n + 1).write();
+					}
+				  } else {
+					  await usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
+					  usersOn.update(usersOffDB.getState());
+				  }
+			}
 			gambiarra(message)
 
 			this.dispatcher.handleMessage(message).catch(msgErr); });
