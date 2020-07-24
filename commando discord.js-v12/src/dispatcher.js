@@ -98,6 +98,39 @@ class CommandDispatcher {
 	 * @private
 	 */
 	async handleMessage(message, oldMessage) {
+		//cria os presets se não existem
+		var { usersOffDB, usersOn } = require('../../index.js');
+		if (!usersOffDB.has(message.author.id)) {
+			usersOffDB.set(message.author.id, {
+				"galo_nivel": 0,
+				"medalhas": [],
+				"galo?": false,
+				"username": message.author.id,
+				"idade": null,
+				"interesses": [],
+				"mensagens": 0,
+				"xp": 0,
+				"id": message.author.id,
+				"xp_semanal": 0,
+				"money": 0,
+				"sexualidade": null
+			}).write();
+		} else {
+			//atualiza os valores do db
+			if (message.author.lastMessage) {
+				const tempinho = message.author.lastMessage.createdAt - Date();
+		
+				if ( tempinho > 86400000) {
+				usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
+					.update('mensagens', n => n + 1).write();
+				}
+			} else {
+				usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
+				usersOn.update(usersOffDB.getState());
+			}
+		};
+
+
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
 		// Parse the message, and get the old result if it exists
