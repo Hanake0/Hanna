@@ -110,11 +110,11 @@ class CommandDispatcher {
 				"username": message.author.username,
 				"idade": null,
 				"interesses": [],
-				"mensagens": 0,
-				"xp": 0,
+				"mensagens": 1,
+				"xp": 5,
 				"id": message.author.id,
-				"xp_semanal": 0,
-				"money": 0,
+				"xp_semanal": 5,
+				"money": 1,
 				"sexualidade": null,
 				"lastMessage": message.createdAt,
 				"lastMessageContent": message.content
@@ -129,11 +129,13 @@ class CommandDispatcher {
 			if ( tempinho > 86400000) {
 				usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
 				.update('mensagens', n => n + 1)
-				.update('lastMessage', message.createdAt).write();
+				.update('lastMessage', message.createdAt)
+				.update('money', n => n + 1).write();
 			} else {
 				usersOffDB.get(message.author.id).update('xp', n => n + 1)
 					.update('mensagens', n => n + 1)
-					.update('lastMessage', message.createdAt).write();
+					.update('lastMessage', message.createdAt)
+					.update('money', n => n + 1).write();
 			};
 		};
 
