@@ -2,7 +2,7 @@ const discord = require('discord.js');
 const CommandRegistry = require('./registry');
 const CommandDispatcher = require('./dispatcher');
 const GuildSettingsHelper = require('./providers/helper');
-
+const { usersOffDB, usersOn } = require('../../index.js');
 /**
  * Discord.js Client with a command framework
  * @extends {Client}
@@ -110,7 +110,7 @@ class CommandoClient extends discord.Client {
 		
 			};
 			gambiarra(message)
-			
+
 			this.dispatcher.handleMessage(message).catch(msgErr); });
 		this.on('messageUpdate', (oldMessage, newMessage) => {
 			this.dispatcher.handleMessage(newMessage, oldMessage).catch(msgErr);
