@@ -65,45 +65,7 @@ class CommandoClient extends discord.Client {
 
 		// Set up command handling
 		const msgErr = err => { this.emit('error', err); };
-		this.on('message', message => {
-			async function gambiarra(message) {
-				var { usersOffDB, usersOn } = require('../../index.js');
-				if (usersOffDB.find(a => a.id === message.author.id).value() === 'undefined') {
-					await usersOffDB.set(message.author.id, {
-						"galo_nivel": 0,
-						"medalhas": [],
-						"galo?": false,
-						"username": message.author.id,
-						"idade": null,
-						"interesses": [],
-						"mensagens": 0,
-						"xp": 0,
-						"id": message.author.id,
-						"xp_semanal": 0,
-						"money": 0,
-						"sexualidade": null
-					  }).write();
-				};
-		
-			};
-			async function gambiarra2(message) {
-				var { usersOffDB, usersOn } = require('../../index.js');
-				if (message.author.lastMessage) {
-					const tempinho = message.author.lastMessage.createdAt - Date();
-			  
-					if ( tempinho > 86400000) {
-					  await usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
-						  .update('mensagens', n => n + 1).write();
-					}
-				  } else {
-					  await usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
-					  usersOn.update(usersOffDB.getState());
-				  }
-			}
-			gambiarra(message);
-			gambiarra2(message);
-
-			this.dispatcher.handleMessage(message).catch(msgErr); });
+		this.on('message', message => { this.dispatcher.handleMessage(message).catch(msgErr); });
 		this.on('messageUpdate', (oldMessage, newMessage) => {
 			this.dispatcher.handleMessage(newMessage, oldMessage).catch(msgErr);
 		});
