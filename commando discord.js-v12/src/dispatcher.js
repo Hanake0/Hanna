@@ -166,6 +166,7 @@ class CommandDispatcher {
 				if(cmdMsg.command) {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
 						responses = await cmdMsg.reply(`O comando \`${cmdMsg.command.name}\` está desabilitado.`);
+						responses.delete(1200);
 					} else if(!oldMessage || typeof oldCmdMsg !== 'undefined') {
 						responses = await cmdMsg.run();
 						if(typeof responses === 'undefined') responses = null; // eslint-disable-line max-depth

@@ -130,12 +130,12 @@ class CommandMessage {
 			 * (built-in reasons are `guildOnly`, `permission`, and `throttling`)
 			 */
 			this.client.emit('commandBlocked', this, 'guildOnly');
-			return this.reply(`O comando \`${this.command.name}\` só pode ser usado em servidores.`);
+			return this.reply(`O comando \`${this.command.name}\` só pode ser usado em servidores.`).then(a => a.delete(1200));
 		}
 
 		if(this.command.nsfw && !this.message.channel.nsfw) {
 			this.client.emit('commandBlocked', this, 'nsfw');
-			return this.reply(`O comando\`${this.command.name}\` só pode ser usado em canais nsfw.`);
+			return this.reply(`O comando\`${this.command.name}\` só pode ser usado em canais nsfw.`).then(a => a.delete(1200));
 		}
 
 		// Ensure the user has permission to use the command
@@ -143,7 +143,7 @@ class CommandMessage {
 		if(!hasPermission || typeof hasPermission === 'string') {
 			this.client.emit('commandBlocked', this, 'permission');
 			if(typeof hasPermission === 'string') return this.reply(hasPermission);
-			else return this.reply(`Você não tem permissão para usar o comando \`${this.command.name}\``);
+			else return this.reply(`Você não tem permissão para usar o comando \`${this.command.name}\``).then(a => a.delete(1200));
 		}
 
 		// Ensure the client user has the required permissions
@@ -154,12 +154,12 @@ class CommandMessage {
 				if(missing.length === 1) {
 					return this.reply(
 						`Eu preciso da permissão:  "${permissions[missing[0]]}" para utilizar o comando \`${this.command.name}\``
-					);
+					).then(a => a.delete(1200));
 				}
 				return this.reply(oneLine`
 					Eu preciso das seguintes permissões para o comando \`${this.command.name}\` funcionar:
 					${missing.map(perm => permissions[perm]).join(', ')}
-				`);
+				`).then(a => a.delete());
 			}
 		}
 
@@ -170,7 +170,7 @@ class CommandMessage {
 			this.client.emit('commandBlocked', this, 'throttling');
 			return this.reply(
 				`Comando \`${this.command.name}\` inutilizado por ${remaining.toFixed(1)} segundos.`
-			);
+			).then(a => a.delete(1200));
 		}
 
 		// Figure out the command arguments
@@ -186,7 +186,7 @@ class CommandMessage {
 					const err = new CommandFormatError(this);
 					return this.reply(err.message);
 				}
-				return this.reply('Comando cancelado.');
+				return this.reply('Comando cancelado.').then(a => a.delete(1200));
 			}
 			args = result.values;
 		}
@@ -244,7 +244,7 @@ class CommandMessage {
 					errrr... parece que houve um erro no comando: \`${err.name}: ${err.message}\`
 					Você não deveria receber esse tipo de erro.
 					Por favor, fale com  ${ownerList || 'O dono do bot'}${invite ? ` neste servidor: ${invite}` : '.'}
-				`);
+				`).then(a => a.delete(1200));
 			}
 		}
 	}
