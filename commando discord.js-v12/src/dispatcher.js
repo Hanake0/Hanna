@@ -123,7 +123,7 @@ class CommandDispatcher {
 		} else {
 			//atualiza os valores do db
 			
-			usersOffDB.get(message.author.id).update('lastMessage', message.author.lastMessage.createdAt)
+			usersOffDB.get(message.author.id).update('lastMessage', message.createdAt)
 				.set('lastMessageContent', `${message.content}`)
 				.set('lastMessageChannelID', message.channel.id).write();
 			const tempinho = new Date().valueOf() - Math.round(usersOffDB.get(message.author.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(message.author.id).value().lastMessage.nanoseconds /  10000));
