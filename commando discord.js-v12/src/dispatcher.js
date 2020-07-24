@@ -122,8 +122,8 @@ class CommandDispatcher {
 		} else {
 			//atualiza os valores do db
 			
-			usersOffDB.get(message.author.id).update('lastMessage', message.author.lastMessage.createdAt)
-				.update('lastMessageContent', message.content).write();
+			usersOffDB.get(message.author.id).update('lastMessage', n => n = message.author.lastMessage.createdAt)
+				.update('lastMessageContent', n => n = message.content).write();
 			const tempinho = new Date() - usersOffDB.get(message.author.id).value().lastMessage;
 	
 			if ( tempinho > 86400000) {
