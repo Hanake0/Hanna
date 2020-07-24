@@ -67,6 +67,7 @@ class CommandoClient extends discord.Client {
 		const msgErr = err => { this.emit('error', err); };
 		this.on('message', message => {
 			async function gambiarra(message) {
+				var { usersOffDB, usersOn } = require('../../index.js');
 				if (usersOffDB.find(a => a.id === message.author.id).value() === 'undefined') {
 					await usersOffDB.set(message.author.id, {
 						"galo_nivel": 0,
@@ -86,6 +87,7 @@ class CommandoClient extends discord.Client {
 		
 			};
 			async function gambiarra2(message) {
+				var { usersOffDB, usersOn } = require('../../index.js');
 				if (message.author.lastMessage) {
 					const tempinho = message.author.lastMessage.createdAt - Date();
 			  
