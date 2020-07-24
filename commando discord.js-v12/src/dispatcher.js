@@ -134,7 +134,7 @@ class CommandDispatcher {
 				.update('lastMessage', message.createdAt)
 				.update('money', n => n + 1).write();
 			} else {
-				if (usersOffDB.get(message.author.id).value().xp < 0 ) return usersOffDB.get(message.author.id).update('xp', n => n = 0);
+				if (usersOffDB.get(message.author.id).value().xp < 0 ) usersOffDB.get(message.author.id).update('xp', n => n = 0);
 				usersOffDB.get(message.author.id).update('xp', n => n + 5)
 					.update('mensagens', n => n + 1)
 					.update('lastMessage', message.createdAt)
