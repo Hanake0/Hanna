@@ -98,14 +98,16 @@ class CommandDispatcher {
 	 * @private
 	 */
 	async handleMessage(message, oldMessage) {
+		if(!this.shouldHandleMessage(message, oldMessage)) return;
+
 		//cria os presets se não existem
 		var { usersOffDB, usersOn } = require('../../index.js');
-		if (!usersOffDB.has(message.author.id)) {
+		if (!usersOffDB.has(message.author.id).value()) {
 			usersOffDB.set(message.author.id, {
 				"galo_nivel": 0,
 				"medalhas": [],
 				"galo?": false,
-				"username": message.author.id,
+				"username": message.author.username,
 				"idade": null,
 				"interesses": [],
 				"mensagens": 0,
@@ -113,25 +115,27 @@ class CommandDispatcher {
 				"id": message.author.id,
 				"xp_semanal": 0,
 				"money": 0,
-				"sexualidade": null
+				"sexualidade": null,
+				"lastMessage": message.createdAt
 			}).write();
 		} else {
+			const user = usersOffDB.get(message.author.id)
 			//atualiza os valores do db
-			if (message.author.lastMessage) {
-				const tempinho = message.author.lastMessage.createdAt - Date();
-		
-				if ( tempinho > 86400000) {
-				usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
-					.update('mensagens', n => n + 1).write();
-				}
+			
+			user.update(message.author.id, message.author.lastMessage).write();
+			const tempinho = new Date() - user.value().lastMessage;
+	
+			if ( tempinho > 86400000) {
+			user.update('xp', n => n - (25 * Math.round(tempinho / 60000)))
+				.update('mensagens', n => n + 1)
+				.update('lastMessage', message.createdAt).write();
 			} else {
-				usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
-				usersOn.update(usersOffDB.getState());
-			}
+				user.update('xp', n => n + 1)
+					.update('mensagens', n => n + 1)
+					.update('lastMessage', message.createdAt).write();
+			};
 		};
 
-
-		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
 		// Parse the message, and get the old result if it exists
 		let cmdMsg, oldCmdMsg;
