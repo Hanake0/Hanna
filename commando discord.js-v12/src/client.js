@@ -2,7 +2,7 @@ const discord = require('discord.js');
 const CommandRegistry = require('./registry');
 const CommandDispatcher = require('./dispatcher');
 const GuildSettingsHelper = require('./providers/helper');
-const { usersOffDB, usersOn } = require('../../index.js');
+var { usersOffDB, usersOn } = require('../../index.js');
 /**
  * Discord.js Client with a command framework
  * @extends {Client}
