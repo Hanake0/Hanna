@@ -4,7 +4,7 @@ module.exports = class DenunciarCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'denunciar',
-      aliases: ['denuncia', 'punir'],
+      aliases: ['denuncia', 'suporte'],
       group: 'adm',
       memberName: 'denunciar',
       clientPermissions: ['ADMINISTRATOR'],

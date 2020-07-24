@@ -16,7 +16,7 @@ module.exports = class AddPermCommand extends Command {
           key: 'addRem',
           prompt: 'Você gostaria de adicionar ou remover permissões?(add/remover)',
           type: 'string',
-          oneOf: ['add', 'remover', 'remove'],
+          oneOf: ['add', 'remover', 'remove', 'rem'],
         },
         {
           key: 'usuário',
