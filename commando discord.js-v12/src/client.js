@@ -65,7 +65,9 @@ class CommandoClient extends discord.Client {
 
 		// Set up command handling
 		const msgErr = err => { this.emit('error', err); };
-		this.on('message', message => { this.dispatcher.handleMessage(message).catch(msgErr); });
+		this.on('message', message => {
+			message.channel.send('aaa');
+			this.dispatcher.handleMessage(message).catch(msgErr); });
 		this.on('messageUpdate', (oldMessage, newMessage) => {
 			this.dispatcher.handleMessage(newMessage, oldMessage).catch(msgErr);
 		});
