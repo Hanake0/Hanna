@@ -20,6 +20,7 @@ module.exports = class UltMsgCommand extends Command {
   }
 
   async run(message, { usuário }) {
+    const client = message.client;
     const { usersOffDB } = require('../../index');
     if (!usersOffDB.has(usuário.id).value()) return message.say('sem dados :/');
     const embed = new Discord.RichEmbed()
@@ -29,7 +30,7 @@ module.exports = class UltMsgCommand extends Command {
         .addField('Enviado em:', `${client.channels.find(a => a.id === usersOffDB.get(usuário.id).value().lastMessageChannelID)}`, true)
         .setTimestamp(usersOffDB.get(usuário.id).value().lastMessage)
         .setFooter('Mensagem enviada: ', `${message.author.avatarURL}`);
-        
+
     await message.say(embed);
     message.delete()
 
