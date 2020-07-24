@@ -22,10 +22,10 @@ module.exports = class UltMsgCommand extends Command {
   async run(message, { usuário }) {
     const client = message.client;
     const { usersOffDB } = require('../../index');
-    const momento = new Date(Math.round(usersOffDB.get(usuário.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(usuário.id).value().lastMessage.nanoseconds /  10000)));
 
     if (!usersOffDB.has(usuário.id).value()) return message.say('sem dados :/');
 
+    const momento = new Date(Math.round(usersOffDB.get(usuário.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(usuário.id).value().lastMessage.nanoseconds /  10000)));
     const embed = new Discord.RichEmbed()
         .setTitle(`Última mensagem de ${usuário.username}:`)
         .setDescription('`' + usersOffDB.get(usuário.id).value().lastMessageContent + '`')
