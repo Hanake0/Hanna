@@ -20,21 +20,18 @@ module.exports = class UltMsgCommand extends Command {
   }
 
   async run(message, { usuário }) {
-    if (usuário.lastMessage == null) return message.say('sem dados :/');
+    const { usersOffDB } = require('../../index');
+    if (!usersOffDB.has(usuário.id).value()) return message.say('sem dados :/');
     const embed = new Discord.RichEmbed()
         .setTitle(`Última mensagem de ${usuário.username}:`)
-        .setDescription('`' + usuário.lastMessage.content + '`')
+        .setDescription('`' + usersOffDB.get(usuário.id).value().lastMessageContent + '`')
         .setThumbnail(`${usuário.avatarURL}`)
-        .addField('Enviado em:', `${usuário.lastMessage.channel}`, true)
-        .setTimestamp(usuário.lastMessage.createdTimestamp)
+        .addField('Enviado em:', `${client.channels.find(a => a.id === usersOffDB.get(usuário.id).value().lastMessageChannelID)}`, true)
+        .setTimestamp(usersOffDB.get(usuário.id).value().lastMessage)
         .setFooter('Mensagem enviada: ', `${message.author.avatarURL}`);
-    if (usuário.lastMessage.deleted) {
-        embed.addField('Apagada?', 'sim', true);
-    };
+        
     await message.say(embed);
     message.delete()
-
-
 
   }
 };

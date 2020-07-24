@@ -117,13 +117,15 @@ class CommandDispatcher {
 				"money": 1,
 				"sexualidade": null,
 				"lastMessage": message.createdAt,
-				"lastMessageContent": message.content
+				"lastMessageContent": message.content,
+				"lastMessageChannelID": message.channel
 			}).write();
 		} else {
 			//atualiza os valores do db
 			
 			usersOffDB.get(message.author.id).update('lastMessage', message.author.lastMessage.createdAt)
-				.set('lastMessageContent', `${message.content}`).write();
+				.set('lastMessageContent', `${message.content}`)
+				.set('lastMessageChannelID', message.channel.id).write();
 			const tempinho = new Date() - usersOffDB.get(message.author.id).value().lastMessage;
 	
 			if ( tempinho > 86400000) {
