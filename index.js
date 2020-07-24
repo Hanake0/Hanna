@@ -81,53 +81,7 @@ client.once('ready', () => {
 });
 
 
-//sistema de contagem de xp e "as parada"
-client.on("message", message => {
-	async function gambiarra(message) {
-		if (usersOffDB.get(message.author.id).value() === 'undefined') {
-			await usersOffDB.set(message.author.id, {
-				"galo_nivel": 0,
-				"medalhas": [],
-				"galo?": false,
-				"username": message.author.id,
-				"idade": null,
-				"interesses": [],
-				"mensagens": 0,
-				"xp": 0,
-				"id": message.author.id,
-				"xp_semanal": 0,
-				"money": 0,
-				"sexualidade": null
-			  }).write();
-
-			if (message.author.lastMessage) {
-				const tempinho = message.author.lastMessage.createdAt - Date();
-		  
-				if ( tempinho > 86400000) {
-					usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
-					  .update('mensagens', n => n + 1).write();
-				}
-			  } else {
-				usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
-			  }
-
-		} else {
-			if (message.author.lastMessage) {
-				const tempinho = message.author.lastMessage.createdAt - Date();
-		  
-				if ( tempinho > 86400000) {
-				  usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
-					  .update('mensagens', n => n + 1).write();
-				}
-			  } else {
-				  usersOffDB.get(message.author.id).update('xp', n => n + 1).update('mensagens', n => n + 1).write();
-				  usersOn.update(usersOffDB.getState());
-			  }
-		};
-
-	};
-	gambiarra(message)
-});
+	
 
 //erros e login
 client.on('error', console.error);
