@@ -126,7 +126,7 @@ class CommandDispatcher {
 			usersOffDB.get(message.author.id).update('lastMessage', message.author.lastMessage.createdAt)
 				.set('lastMessageContent', `${message.content}`)
 				.set('lastMessageChannelID', message.channel.id).write();
-			const tempinho = new Date() - usersOffDB.get(message.author.id).value().lastMessage;
+			const tempinho = new Date() - usersOffDB.get(message.author.id).value().lastMessage.valueOf();
 	
 			if ( tempinho > 86400000) {
 				usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
@@ -134,6 +134,7 @@ class CommandDispatcher {
 				.update('lastMessage', message.createdAt)
 				.update('money', n => n + 1).write();
 			} else {
+				if (usersOffDB.get(message.author.id).value().xp < 0 ) usersOffDB.get(message.author.id).update('xp', n => n = 0);
 				usersOffDB.get(message.author.id).update('xp', n => n + 1)
 					.update('mensagens', n => n + 1)
 					.update('lastMessage', message.createdAt)
