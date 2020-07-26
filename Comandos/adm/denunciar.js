@@ -61,7 +61,7 @@ module.exports = class DenunciarCommand extends Command {
       .setColor('#24960e')
       .setDescription('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.')
       .addBlankField()
-      .addField('', 'Prints e a sua opinião sobre a ação do membro denunciado são bem vindos.', false);
+      .addField(' ', 'Prints e a sua opinião sobre a ação do membro denunciado são bem vindos.', false);
 
     const canalDenuncia = await message.guild.createChannel(mencao, canal, "canal de denuncia");
     message.delete()
