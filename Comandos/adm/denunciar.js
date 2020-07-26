@@ -49,11 +49,11 @@ module.exports = class DenunciarCommand extends Command {
       .setTitle('Denúncia:')
       .setAuthor(message.author.username, message.author.avatarURL)
       .setThumbnail(usuário.avatarURL)
-      .setField('Autor:', message.author, true)
+      .setField('Autor:', `<@!${message.author.id}>`, true)
       .setField('Id', `\`${message.author.id}\``, true)
       .addField('Motivo:', motivo)
       .addBlankField()
-      .addField('Username:', usuário, true)
+      .addField('Username:', `<@!${usuário.id}>`, true)
       .addField('Id:', `\`${usuário.id, true}\``)
       .setTimestamp()
     	.setFooter('Enviado:', message.client.user.avatarURL);
