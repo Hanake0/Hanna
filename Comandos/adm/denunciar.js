@@ -59,7 +59,7 @@ module.exports = class DenunciarCommand extends Command {
     	.setFooter('Enviado:', message.client.user.avatarURL);
     const embed2 = new Discord.RichEmbed()
       .setColor('#24960e')
-      .setDescription('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.\n\nPrints e a sua opinião sobre a ação do membro denunciado são bem vindos.');
+      .setDescription('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.\n\nPrints e a sua opinião sobre a ação do membro denunciado são bem vindos.\n(Marque a Staff se necessário)');
 
     const canalDenuncia = await message.guild.createChannel(mencao, canal, "canal de denuncia");
     message.delete()

@@ -1,5 +1,6 @@
 const escapeRegex = require('escape-string-regexp');
 const CommandMessage = require('./commands/message');
+const Discord = require('discord.js');
 
 /** Handles parsing messages and running commands from them */
 class CommandDispatcher {
@@ -167,8 +168,11 @@ class CommandDispatcher {
 			if(!inhibited) {
 				if(cmdMsg.command) {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
-						responses = await cmdMsg.reply(`O comando \`${cmdMsg.command.name}\` está desabilitado.`);
-						responses.delete(5000);
+						const embed = new Discord.RichEmbed()
+							.setDescription(`<a:2_animated_cross:723174740478525440> | \`${cmdMsg.command.name}\` está desabilitado`)
+						responses = await cmdMsg.say(embed);
+						responses.delete(15000);
+						cmdMsg.delete(15000);
 					} else if(!oldMessage || typeof oldCmdMsg !== 'undefined') {
 						responses = await cmdMsg.run();
 						if(typeof responses === 'undefined') responses = null; // eslint-disable-line max-depth
