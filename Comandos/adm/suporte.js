@@ -46,5 +46,6 @@ module.exports = class SuporteCommand extends Command {
     const embed = new Discord.RichEmbed()
         .setColor('#24960e')
         .setDescription(`Motivo de contato: ${motivo}`);
+    canalSuporte.send(embed);
 }
 };
