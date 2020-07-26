@@ -32,7 +32,7 @@ module.exports = class DenunciarCommand extends Command {
   async run(message, { usuário, motivo }) {
     const mencao = `${usuário.username}  ${usuário.id}`
     const canal = {
-      name: `Denuncia ${mencao}`,
+      name: `denuncia ${mencao}`,
       type: "text",
       parent: '728074741792899123',
       permissionOverwrites: [{
@@ -54,7 +54,7 @@ module.exports = class DenunciarCommand extends Command {
       .addField('Motivo:', motivo)
       .addBlankField()
       .addField('Username:', usuário, true)
-      .addField('Id:', `\`${usuário}\``, true)
+      .addField('Id:', `\`${usuário.id}\``, true)
       .setTimestamp()
     	.setFooter('Enviado:', message.client.user.avatarURL);
     const embed2 = new Discord.RichEmbed()
@@ -64,7 +64,7 @@ module.exports = class DenunciarCommand extends Command {
     const canalDenuncia = await message.guild.createChannel(mencao, canal, "canal de denuncia");
     message.delete()
     await canalDenuncia.send(embed);
+    await canalDenuncia.send(embed2);
     canalDenuncia.send(`Canal de denúncia criado com sucesso ${message.author}`);
-    canalDenuncia.send(embed2);
   }
 };
