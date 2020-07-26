@@ -47,8 +47,8 @@ module.exports = class DenunciarCommand extends Command {
     const embed = new Discord.RichEmbed()
       .setColor('#c22727')
       .setTitle('Denúncia:')
-      .setAuthor(message.author.username, message.author.avatarURL)
-      .setThumbnail(usuário.avatarURL)
+      .setAuthor(`${message.author.username}`, `${message.author.avatarURL}`)
+      .setThumbnail(`${usuário.avatarURL}`)
       .setField('Autor:', `<@!${message.author.id}>`, true)
       .setField('Id', `\`${message.author.id}\``, true)
       .addField('Motivo:', motivo)
@@ -56,7 +56,7 @@ module.exports = class DenunciarCommand extends Command {
       .addField('Username:', `<@!${usuário.id}>`, true)
       .addField('Id:', `\`${usuário.id, true}\``)
       .setTimestamp()
-    	.setFooter('Enviado:', message.client.user.avatarURL);
+    	.setFooter('Enviado:', `${message.client.user.avatarURL}`);
     const embed2 = new Discord.RichEmbed()
       .setColor('#24960e')
       .setDescription('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.')
