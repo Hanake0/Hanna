@@ -118,7 +118,7 @@ class CommandDispatcher {
 				"sexualidade": null,
 				"lastMessage": message.createdAt,
 				"lastMessageContent": message.content,
-				"lastMessageChannelID": message.channel
+				"lastMessageChannelID": message.channel.id
 			}).write();
 		} else {
 			//atualiza os valores do db
