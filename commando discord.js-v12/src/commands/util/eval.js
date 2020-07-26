@@ -30,7 +30,7 @@ module.exports = class EvalCommand extends Command {
 		this.lastResult = null;
 	}
 
-	async run(msg, args) {
+	run(msg, args) {
 		// Make a bunch of helpers
 		/* eslint-disable no-unused-vars */
 		const message = msg;
@@ -59,7 +59,7 @@ module.exports = class EvalCommand extends Command {
 		let hrDiff;
 		try {
 			const hrStart = process.hrtime();
-			this.lastResult = eval(args.script);
+			this.lastResult = eval(`(async () => {${args.script}})()`);
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
 			return msg.reply(`Erro ao executar: \`${err}\``);
