@@ -59,7 +59,7 @@ module.exports = class EvalCommand extends Command {
 		let hrDiff;
 		try {
 			const hrStart = process.hrtime();
-			this.lastResult = eval(`(async () => {${args.script}})()`);
+			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
 			return msg.reply(`Erro ao executar: \`${err}\``);
