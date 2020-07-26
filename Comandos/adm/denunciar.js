@@ -1,10 +1,11 @@
 const { Command } = require('../../commando discord.js-v12/src/index.js');
+const { DiscordAPIError } = require('discord.js');
 
 module.exports = class DenunciarCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'denunciar',
-      aliases: ['denuncia', 'suporte'],
+      aliases: ['denuncia'],
       group: 'adm',
       memberName: 'denunciar',
       clientPermissions: ['ADMINISTRATOR'],
@@ -16,16 +17,22 @@ module.exports = class DenunciarCommand extends Command {
           key: 'usuário',
           prompt: 'Quem você gostaria de denunciar?',
           type: 'user',
-				},
+        },
+        {
+          key: 'motivo',
+          prompt: 'Porquê denunciar esse usuário?',
+          type: 'string',
+          default: 'não específicado'
+        }
 			],
       argsPromptLimit: 0,
     });
   }
   
-  async run(message, { usuário }) {
+  async run(message, { usuário, motivo }) {
     const mencao = `${usuário.username}  ${usuário.id}`
     const canal = {
-      name: mencao,
+      name: `Denuncia ${mencao}`,
       type: "text",
       parent: '728074741792899123',
       permissionOverwrites: [{
@@ -37,10 +44,29 @@ module.exports = class DenunciarCommand extends Command {
           deny: ['READ_MESSAGES'],
         }],
     }
-    
+    const embed = new Discord.RichEmbed()
+      .setColor('#c22727')
+      .setTitle('Denúncia:')
+      .setAuthor(message.author.username, message.author.avatarURL)
+      .setThumbnail(usuário.avatarURL)
+      .setField('Autor:', message.author, true)
+      .setField('Id', `\`${message.author.id}\``, true)
+      .addField('Motivo:', motivo)
+      .addBlankField()
+      .addField('Username:', usuário, true)
+      .addField('Id:', `\`${usuário.id, true}\``)
+      .setTimestamp()
+    	.setFooter('Enviado:', message.client.user.avatarURL);
+    const embed2 = new Discord.RichEmbed()
+      .setColor('#24960e')
+      .setDescription('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.')
+      .addBlankField()
+      .addField('', 'Prints e a sua opinião sobre a ação do membro denunciado são bem vindos.', false);
+
     const canalDenuncia = await message.guild.createChannel(mencao, canal, "canal de denuncia");
     message.delete()
-    canalDenuncia.send(`Canal de denúncia criado com sucesso ${message.author}.\nA denúncia foi feita contra o usuário: ${usuário.username}#${usuário.discriminator}\nID: ${usuário.id}\nQuem denunciou foi: ${message.author.username}#${message.author.discriminator}\nID: ${message.author.id}`);
-    canalDenuncia.send('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.\nPrints e a sua opinião sobre a ação do membro denunciado são bem vindos.')
+    await canalDenuncia.send(embed);
+    canalDenuncia.send(`Canal de denúncia criado com sucesso ${message.author}`);
+    canalDenuncia.send(embed2);
   }
 };
