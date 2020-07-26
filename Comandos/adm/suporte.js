@@ -12,10 +12,18 @@ module.exports = class SuporteCommand extends Command {
       guildOnly: true,
       description: 'Cria um chat separado para entrar em contato com a Staff',
       details: 'Serve para entrar em contato com a staff facilmente em caso de dúvida ou sugestão caso, por exemplo, não estejam online.',
+      args: [
+        {
+            key: 'motivo',
+            prompt: 'Com o quê podemos ajudar?',
+            type: 'string',
+            default: null
+        }
+      ]
     });
   }
   
-  async run(message) {
+  async run(message, { motivo }) {
     const mencao = `${message.author.username}  ${message.author.id}`
     const canal = {
       name: `Suporte ${mencao}`,
@@ -31,9 +39,12 @@ module.exports = class SuporteCommand extends Command {
         }],
     }
     
-    const canalDenuncia = await message.guild.createChannel(mencao, canal, "canal de denuncia");
+    const canalSuporte = await message.guild.createChannel(mencao, canal, "canal de denuncia");
     message.delete()
-    canalDenuncia.send(`Canal criado com sucesso ${message.author}.`);
-    canalDenuncia.send('Com o que podemos ajudar?')
-  }
+    canalSuporte.send(`Canal criado com sucesso ${message.author}.`);
+    if (!motivo) return canalSuporte.send('Com o que podemos ajudar?');
+    const embed = new Discord.RichEmbed()
+        .setColor('#24960e')
+        .setDescription(`Motivo de contato: ${motivo}`);
+}
 };
