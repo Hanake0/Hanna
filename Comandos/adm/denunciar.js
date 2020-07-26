@@ -1,5 +1,5 @@
 const { Command } = require('../../commando discord.js-v12/src/index.js');
-const { DiscordAPIError } = require('discord.js');
+const Discord = require('discord.js');
 
 module.exports = class DenunciarCommand extends Command {
   constructor(client) {
