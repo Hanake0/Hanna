@@ -68,17 +68,16 @@ client.registry
 	.registerCommandsIn(path.join(__dirname, 'Comandos'))
 
 
-//mensagem de inicialização e "watching" dinânamico
-client.once('ready', () => {
-	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-	client.guilds.cache.find((a) => a.id === '698560208309452810').channels.cache.find((a) => a.id === '732710544330457161').send(`PRONTO}`);
-	setInterval(async () => {
-	let users = client.guilds.cache.find(a => a.id === '698560208309452810').members.cache.size - 1;
+//Event Handler(Project-A)
+const evtFiles = readdirSync('./Eventos/')
+console.log('log', `Carregando o total de ${evtFiles.length} eventos`)
+evtFiles.forEach(f => {
+  const eventName = f.split('.')[0]
+  const event = require(`./Eventos/${f}`)
 
-    await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''}`, {type: 'WATCHING'})
-    .catch(err => console.error());
-  }, 15000);
-});
+  client.on(eventName, event.bind(null, client))
+})
+
 
 //erros e login
 client.on('error', console.error);
