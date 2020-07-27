@@ -82,4 +82,4 @@ client.once('ready', () => {
 
 //erros e login
 client.on('error', console.error);
-client.login('NzA2MzM0MzQ0NDg2MTkxMTI0.Xvvquw.8YOGQfNDbDYoqONBqRpecUhXmms');
+client.login(process.env.AUTH_TOKEN);
