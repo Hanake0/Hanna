@@ -115,7 +115,7 @@ class CommandRegistry {
 	registerCommands(commands) {
 		if(!Array.isArray(commands)) throw new TypeError('Commands must be an Array.');
 		for(let command of commands) {
-			if(typeof command === 'function') command = new Command(this.client); // eslint-disable-line new-cap
+			if(typeof command === 'function') command = new command(this.client); // eslint-disable-line new-cap
 
 			// Verify that it's an actual command
 			if(!(command instanceof Command)) {
