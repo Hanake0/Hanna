@@ -24,7 +24,7 @@ module.exports = class DigaCommand extends Command {
     if (message.channel.type === 'dm') {
       message.say(mensagem);
     } else {
-      await message.delete(5);
+      await message.delete({ timeout: 100 });
       message.say(mensagem);
     }
   }

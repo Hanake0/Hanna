@@ -235,7 +235,7 @@ class CommandMessage {
 			} else {
 				const owners = this.client.owners;
 				let ownerList = owners ? owners.map((usr, i) => {
-					const or = i === owners.length - 1 && owners.length > 1 ? 'or ' : '';
+					const or = i === owners.length - 1 && owners.length > 1 ? 'ou ' : '';
 					return `${or}${discord.escapeMarkdown(usr.username)}#${usr.discriminator}`;
 				}).join(owners.length > 2 ? ', ' : ' ') : '';
 
