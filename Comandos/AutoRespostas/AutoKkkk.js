@@ -3,9 +3,9 @@ const { Command } = require('../../commando discord.js-v12/src/index.js');
 module.exports = class AutoBase extends Command {
   constructor(client) {
     super(client, {
-      name: 'base',
+      name: 'autokkkk',
       group: 'autorespostas',
-      memberName: 'base',
+      memberName: 'kkkk',
       description: 'Responde com: texto',
       patterns: [/kkkk/i],
       hidden: true,

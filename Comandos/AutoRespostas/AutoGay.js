@@ -3,7 +3,7 @@ const { Command } = require('../../commando discord.js-v12/src/index.js');
 module.exports = class AutoGay extends Command {
   constructor(client) {
     super(client, {
-      name: 'gay',
+      name: 'autogay',
       group: 'autorespostas',
       memberName: 'gay',
       description: 'Responde com: tu que é, tu que deixa',
