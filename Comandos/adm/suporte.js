@@ -24,26 +24,27 @@ module.exports = class SuporteCommand extends Command {
   }
   
   async run(message, { motivo }) {
-    const mencao = `${message.author.username}  ${message.author.id}`
+    const mencao = `suporte ${message.author.username}  ${message.author.id}`
     const canal = {
-      name: `Suporte ${mencao}`,
       type: "text",
       parent: '728074741792899123',
-      permissionOverwrites: [{
+      permissionOverwrites: [
+        {
           id: message.author.id,
-          allow: ['READ_MESSAGES', 'SEND_MESSAGES'],
+          allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
         },
         {
-          id: message.guild.defaultRole.id,
-          deny: ['READ_MESSAGES'],
-        }],
+          id: message.guild.id,
+          deny: ['VIEW_CHANNEL'],
+        },
+      ],
     }
     
-    const canalSuporte = await message.guild.createChannel(mencao, canal, "canal de denuncia");
+    const canalSuporte = await message.guild.channels.create(mencao, canal, "canal de denuncia");
     message.delete()
     canalSuporte.send(`Canal criado com sucesso ${message.author}.`);
     if (!motivo) return canalSuporte.send('Com o que podemos ajudar?');
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
         .setColor('#24960e')
         .setDescription(`Motivo de contato: ${motivo}`);
     canalSuporte.send(embed);

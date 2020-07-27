@@ -71,9 +71,9 @@ client.registry
 //mensagem de inicialização e "watching" dinânamico
 client.once('ready', () => {
 	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-	client.guilds.find((a) => a.id === '698560208309452810').channels.find((a) => a.id === '732710544330457161').send(`PRONTO}`);
+	client.guilds.cache.find((a) => a.id === '698560208309452810').channels.cache.find((a) => a.id === '732710544330457161').send(`PRONTO}`);
 	setInterval(async () => {
-	let users = client.guilds.find(a => a.id === '698560208309452810').members.size - 1
+	let users = client.guilds.cache.find(a => a.id === '698560208309452810').members.size - 1
 
     await client.user.setActivity(`${users} usuário${users !== 1 ? 's' : ''}`, {type: 'WATCHING'})
     .catch(err => console.error());
@@ -82,4 +82,4 @@ client.once('ready', () => {
 
 //erros e login
 client.on('error', console.error);
-client.login(process.env.AUTH_TOKEN);
+client.login('NzA2MzM0MzQ0NDg2MTkxMTI0.Xvvquw.8YOGQfNDbDYoqONBqRpecUhXmms');

@@ -9,6 +9,7 @@ module.exports = class UltMsgCommand extends Command {
       group: 'utilidades',
       memberName: 'ultimamensagem',
       description: 'Mostra o conteúdo e a hora da última mensagem de um usuário no servidor.',
+      guildOnly: true,
       args: [
         {
           key: 'usuário',
@@ -26,7 +27,7 @@ module.exports = class UltMsgCommand extends Command {
     if (!usersOffDB.has(usuário.id).value()) return message.say('sem dados :/').then(a => a.delete(5000).then(message.delete(5000)));
 
     //const momento = new Date(Math.round(usersOffDB.get(usuário.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(message.author.id).value().lastMessage.nanoseconds /  10000)));
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
         .setTitle(`Última mensagem de ${usuário.username}:`)
         .setDescription('`' + usersOffDB.get(usuário.id).value().lastMessageContent + '`')
         .setThumbnail(`${usuário.avatarURL}`)

@@ -19,12 +19,12 @@ module.exports = class PingCommand extends Command {
 
 	async run(msg) {
 		const pingMsg = await msg.say('Calculando...');
-		const embed = new Discord.RichEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setTitle(':ping_pong:  Pong!')
 			.addField('Servidor:', `:e_mail: | ${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
-			.addField('Webhook:', `:satellite_orbital: | ${Math.round(this.client.ping)}ms`)
+			.addField('Webhook:', `:satellite_orbital: | ${Math.round(this.client.ws.ping)}ms`)
 			.setTimestamp()
-			.setFooter(`${msg.author.username}`, `${msg.author.avatarURL}`);
+			.setFooter(`${msg.author.username}`, msg.author.avatarURL);
 		if (pingMsg.createdTimestamp - msg.createdTimestamp < 150) {
 			embed.setColor('#38b833');
 		} else if (pingMsg.createdTimestamp - msg.createdTimestamp < 250) {
@@ -32,10 +32,11 @@ module.exports = class PingCommand extends Command {
 		} else {
 			embed.setColor('#ff2b1c');
 		}
-		if(!pingMsg.editable) {
+		if(!pingMsg.deletable) {
 			return msg.say(embed);
 		} else {
-			return pingMsg.edit(embed);
+			pingMsg.delete();
+			msg.say(embed)
 		}
 	}
 };

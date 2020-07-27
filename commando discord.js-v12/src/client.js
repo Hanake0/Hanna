@@ -75,13 +75,13 @@ class CommandoClient extends discord.Client {
 			this.once('ready', () => {
 				if(options.owner instanceof Array || options.owner instanceof Set) {
 					for(const owner of options.owner) {
-						this.fetchUser(owner).catch(err => {
+						this.users.fetch(owner).catch(err => {
 							this.emit('warn', `Unable to fetch owner ${owner}.`);
 							this.emit('error', err);
 						});
 					}
 				} else {
-					this.fetchUser(options.owner).catch(err => {
+					this.users.fetch(options.owner).catch(err => {
 						this.emit('warn', `Unable to fetch owner ${options.owner}.`);
 						this.emit('error', err);
 					});
@@ -115,9 +115,9 @@ class CommandoClient extends discord.Client {
 	 */
 	get owners() {
 		if(!this.options.owner) return null;
-		if(typeof this.options.owner === 'string') return [this.users.get(this.options.owner)];
+		if(typeof this.options.owner === 'string') return [this.users.cache.get(this.options.owner)];
 		const owners = [];
-		for(const owner of this.options.owner) owners.push(this.users.get(owner));
+		for(const owner of this.options.owner) owners.push(this.users.cache.get(owner));
 		return owners;
 	}
 
@@ -128,7 +128,7 @@ class CommandoClient extends discord.Client {
 	 */
 	isOwner(user) {
 		if(!this.options.owner) return false;
-		user = this.resolver.resolveUser(user);
+		user = this.users.resolve(user);
 		if(!user) throw new RangeError('Unable to resolve user.');
 		if(typeof this.options.owner === 'string') return user.id === this.options.owner;
 		if(this.options.owner instanceof Array) return this.options.owner.includes(user.id);

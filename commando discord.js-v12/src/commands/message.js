@@ -115,7 +115,7 @@ class CommandMessage {
 	 */
 	async run() { // eslint-disable-line complexity
 		// Obtain the member if we don't have it (ugly-ass if statement ahead)
-		if(this.message.channel.type === 'text' && !this.message.guild.members.has(this.message.author.id) &&
+		if(this.message.channel.type === 'text' && !this.message.guild.members.cache.has(this.message.author.id) &&
 			!this.message.webhookID) {
 			this.message.member = await this.message.guild.fetchMember(this.message.author);
 		}
@@ -135,7 +135,7 @@ class CommandMessage {
 
 		if(this.command.nsfw && !this.message.channel.nsfw) {
 			this.client.emit('commandBlocked', this, 'nsfw');
-			return this.reply(`<a:2_animated_cross:723174740478525440> | \`${this.command.name}\` só pode ser usado em canais nsfw.`).then(a => a.delete(15000));
+			return this.reply(`<a:2_animated_cross:723174740478525440> | \`${this.command.name}\` só pode ser usado em canais nsfw.`).then(a => a.delete({ timeout: 15000 }));
 		}
 
 		// Ensure the user has permission to use the command
@@ -143,7 +143,7 @@ class CommandMessage {
 		if(!hasPermission || typeof hasPermission === 'string') {
 			this.client.emit('commandBlocked', this, 'permission');
 			if(typeof hasPermission === 'string') return this.reply(hasPermission);
-			else return this.reply(`<a:2_animated_cross:723174740478525440> | Você não tem permissão para usar o comando \`${this.command.name}\``).then(a => a.delete(15000));
+			else return this.reply(`<a:2_animated_cross:723174740478525440> | Você não tem permissão para usar o comando \`${this.command.name}\``).then(a => a.delete({ timeout: 15000 }));
 		}
 
 		// Ensure the client user has the required permissions
@@ -154,7 +154,7 @@ class CommandMessage {
 				if(missing.length === 1) {
 					return this.reply(
 						`Eu preciso da permissão:  "${permissions[missing[0]]}" para utilizar o comando \`${this.command.name}\``
-					).then(a => a.delete(15000));
+					).then(a => a.delete({ timeout: 15000 }));
 				}
 				return this.reply(oneLine`
 					Eu preciso das seguintes permissões para o comando \`${this.command.name}\` funcionar:
@@ -170,7 +170,7 @@ class CommandMessage {
 			this.client.emit('commandBlocked', this, 'throttling');
 			return this.reply(
 				`Comando \`${this.command.name}\` inutilizado por ${remaining.toFixed(1)} segundos.`
-			).then(a => a.delete(15000));
+			).then(a => a.delete({ timeout: 15000 }));
 		}
 
 		// Figure out the command arguments
@@ -186,7 +186,7 @@ class CommandMessage {
 					const err = new CommandFormatError(this);
 					return this.reply(err.message);
 				}
-				return this.reply('<a:2_animated_cross:723174740478525440> | Comando cancelado.').then(a => a.delete(15000));
+				return this.reply('<a:2_animated_cross:723174740478525440> | Comando cancelado.').then(a => a.delete({ timeout: 15000 }));
 			}
 			args = result.values;
 		}
@@ -244,7 +244,7 @@ class CommandMessage {
 					errrr... parece que houve um erro no comando: \`${err.name}: ${err.message}\`
 					Você não deveria receber esse tipo de erro.
 					Por favor, fale com  ${ownerList || 'O dono do bot'}${invite ? ` neste servidor: ${invite}` : '.'}
-				`).then(a => a.delete(15000));
+				`).then(a => a.delete({ timeout: 15000 }));
 			}
 		}
 	}
@@ -268,7 +268,7 @@ class CommandMessage {
 			}
 		}
 
-		content = this.client.resolver.resolveString(content);
+		content = content.toString();
 
 		switch(type) {
 			case 'plain':
@@ -407,7 +407,7 @@ class CommandMessage {
 
 	/**
 	 * Responds with an embed
-	 * @param {RichEmbed|Object} embed - Embed to send
+	 * @param {MessageEmbed|Object} embed - Embed to send
 	 * @param {StringResolvable} [content] - Content for the message
 	 * @param {MessageOptions} [options] - Options for the message
 	 * @return {Promise<Message|Message[]>}
@@ -420,7 +420,7 @@ class CommandMessage {
 
 	/**
 	 * Responds with a mention + embed
-	 * @param {RichEmbed|Object} embed - Embed to send
+	 * @param {MessageEmbed|Object} embed - Embed to send
 	 * @param {StringResolvable} [content] - Content for the message
 	 * @param {MessageOptions} [options] - Options for the message
 	 * @return {Promise<Message|Message[]>}

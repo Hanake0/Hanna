@@ -168,11 +168,11 @@ class CommandDispatcher {
 			if(!inhibited) {
 				if(cmdMsg.command) {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
-						const embed = new Discord.RichEmbed()
+						const embed = new Discord.MessageEmbed()
 							.setDescription(`<a:2_animated_cross:723174740478525440> | \`${cmdMsg.command.name}\` está desabilitado`)
 						responses = await cmdMsg.say(embed);
-						responses.delete(15000);
-						cmdMsg.delete(15000);
+						responses.delete({ timeout: 15000 });
+						cmdMsg.delete({ timeout: 15000 });
 					} else if(!oldMessage || typeof oldCmdMsg !== 'undefined') {
 						responses = await cmdMsg.run();
 						if(typeof responses === 'undefined') responses = null; // eslint-disable-line max-depth

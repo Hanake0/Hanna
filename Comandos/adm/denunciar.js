@@ -30,21 +30,20 @@ module.exports = class DenunciarCommand extends Command {
   }
   
   async run(message, { usuário, motivo }) {
-    const mencao = `${usuário.username}  ${usuário.id}`
+    const mencao = `denuncia ${usuário.username} ${usuário.id}`
     const canal = {
-      name: `denuncia ${mencao}`,
       type: "text",
       parent: '728074741792899123',
       permissionOverwrites: [{
           id: message.author.id,
-          allow: ['READ_MESSAGES', 'SEND_MESSAGES'],
+          allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
         },
         {
-          id: message.guild.defaultRole.id,
-          deny: ['READ_MESSAGES'],
+          id: message.guild.roles.everyone.id,
+          deny: ['VIEW_CHANNEL'],
         }],
     }
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
       .setColor('#c22727')
       .setTitle('Denúncia:')
       .setAuthor(message.author.username, message.author.avatarURL)
@@ -52,16 +51,16 @@ module.exports = class DenunciarCommand extends Command {
       .addField('Autor:', message.author, true)
       .addField('Id', `\`${message.author.id}\``, true)
       .addField('Motivo:', motivo)
-      .addBlankField()
+      .addField('\u200b', '\u200b')
       .addField('Username:', usuário, true)
       .addField('Id:', `\`${usuário.id}\``, true)
       .setTimestamp()
     	.setFooter('Enviado:', message.client.user.avatarURL);
-    const embed2 = new Discord.RichEmbed()
+    const embed2 = new Discord.MessageEmbed()
       .setColor('#24960e')
       .setDescription('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.\n\nPrints e a sua opinião sobre a ação do membro denunciado são bem vindos.\n(Marque a Staff se necessário)');
 
-    const canalDenuncia = await message.guild.createChannel(mencao, canal, "canal de denuncia");
+    const canalDenuncia = await message.guild.channels.create(mencao, canal, "canal de denuncia");
     message.delete()
     await canalDenuncia.send(embed);
     await canalDenuncia.send(embed2);
