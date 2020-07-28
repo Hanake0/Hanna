@@ -69,14 +69,14 @@ client.registry
 
 
 //Event Handler(Project-A)
-//const evtFiles = readdirSync('./Eventos/')
-//console.log('log', `Carregando o total de ${evtFiles.length} eventos`)
-//evtFiles.forEach(f => {
-//  const eventName = f.split('.')[0]
-//  const event = require(`./Eventos/${f}`)
-//
-//  client.on(eventName, event.bind(null, client))
-//})
+const evtFiles = readdirSync('./Eventos/')
+console.log('log', `Carregando o total de ${evtFiles.length} eventos`)
+evtFiles.forEach(f => {
+  const eventName = f.split('.')[0]
+  const event = require(`./Eventos/${f}`)
+
+  client.on(eventName, event.bind(null, client))
+})
 
 
 //erros e login
