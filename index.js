@@ -1,6 +1,7 @@
 const Commando = require('./commando discord.js-v12/src/index.js')
 const { CommandoClient, SQLiteProvider } = require('./commando discord.js-v12/src/index.js');
 const path = require('path');
+const { readdirSync } = require('fs')
 
 
 //inicializa o lowDB
