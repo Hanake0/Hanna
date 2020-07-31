@@ -17,6 +17,7 @@ module.exports = class PrefixCommand extends Command {
 				Apenas Administradores podem mudar o prefixo.
 			`,
 			examples: ['prefixo', 'prefixo -', 'prefixo h.', 'prefixo padrão', 'prefixo nenhum'],
+			userPermissions: ['MANAGE_CHANNELS'],
 
 			args: [
 				{
