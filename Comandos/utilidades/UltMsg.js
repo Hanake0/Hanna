@@ -30,10 +30,10 @@ module.exports = class UltMsgCommand extends Command {
     const embed = new Discord.MessageEmbed()
         .setTitle(`Última mensagem de ${usuário.username}:`)
         .setDescription('`' + usersOffDB.get(usuário.id).value().lastMessageContent + '`')
-        .setThumbnail(`${usuário.avatarURL}`)
+        .setThumbnail(`${usuário.avatarURL()}`)
         .addField('Enviado em:', `${client.channels.cache.find(a => a.id === usersOffDB.get(usuário.id).value().lastMessageChannelID)}`, true)
         .setTimestamp(usersOffDB.get(usuário.id).value().lastMessage)
-        .setFooter('Mensagem enviada: ', `${message.author.avatarURL}`);
+        .setFooter('Mensagem enviada: ', `${message.author.avatarURL()}`);
 
     await message.say(embed);
     message.delete()
