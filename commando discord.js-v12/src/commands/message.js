@@ -130,12 +130,12 @@ class CommandMessage {
 			 * (built-in reasons are `guildOnly`, `permission`, and `throttling`)
 			 */
 			this.client.emit('commandBlocked', this, 'guildOnly');
-			return this.reply(`<a:2_animated_cross:723174740478525440> | \`${this.command.name}\` só pode ser usado em servidores.`);
+			return this.reply(`<a:cross_gif:738900572664496169> | \`${this.command.name}\` só pode ser usado em servidores.`);
 		}
 
 		if(this.command.nsfw && !this.message.channel.nsfw) {
 			this.client.emit('commandBlocked', this, 'nsfw');
-			return this.reply(`<a:2_animated_cross:723174740478525440> | \`${this.command.name}\` só pode ser usado em canais nsfw.`).then(a => a.delete({ timeout: 15000 }));
+			return this.reply(`<a:cross_gif:738900572664496169> | \`${this.command.name}\` só pode ser usado em canais nsfw.`).then(a => a.delete({ timeout: 15000 }));
 		}
 
 		// Ensure the user has permission to use the command
@@ -143,7 +143,7 @@ class CommandMessage {
 		if(!hasPermission || typeof hasPermission === 'string') {
 			this.client.emit('commandBlocked', this, 'permission');
 			if(typeof hasPermission === 'string') return this.reply(hasPermission);
-			else return this.reply(`<a:2_animated_cross:723174740478525440> | Você não tem permissão para usar o comando \`${this.command.name}\``).then(a => a.delete({ timeout: 15000 }));
+			else return this.reply(`<a:cross_gif:738900572664496169> | Você não tem permissão para usar o comando \`${this.command.name}\``).then(a => a.delete({ timeout: 15000 }));
 		}
 
 		// Ensure the client user has the required permissions
@@ -186,7 +186,7 @@ class CommandMessage {
 					const err = new CommandFormatError(this);
 					return this.reply(err.message);
 				}
-				return this.reply('<a:2_animated_cross:723174740478525440> | Comando cancelado.').then(a => a.delete({ timeout: 15000 }));
+				return this.reply('<a:cross_gif:738900572664496169> | Comando cancelado.').then(a => a.delete({ timeout: 15000 }));
 			}
 			args = result.values;
 		}

@@ -1,4 +1,4 @@
-const { Command } = require('../../commando discord.js-v12/src/index.js');
+const { Command } = require('../../CommandoV12/src/index.js');
 const Discord = require('discord.js');
 
 module.exports = class DenunciarCommand extends Command {
@@ -46,7 +46,7 @@ module.exports = class DenunciarCommand extends Command {
     const embed = new Discord.MessageEmbed()
       .setColor('#c22727')
       .setTitle('Denúncia:')
-      .setAuthor(message.author.username, message.author.avatarURL)
+      .setAuthor(message.author.username, message.author.avatarURL())
       .setThumbnail(usuário.avatarURL)
       .addField('Autor:', message.author, true)
       .addField('Id', `\`${message.author.id}\``, true)
@@ -55,7 +55,7 @@ module.exports = class DenunciarCommand extends Command {
       .addField('Username:', usuário, true)
       .addField('Id:', `\`${usuário.id}\``, true)
       .setTimestamp()
-    	.setFooter('Enviado:', message.client.user.avatarURL);
+    	.setFooter('Enviado:', message.client.user.avatarURL());
     const embed2 = new Discord.MessageEmbed()
       .setColor('#24960e')
       .setDescription('Este canal é privado e apenas os membros da staff podem visualizar este canal além de você.\n\nPrints e a sua opinião sobre a ação do membro denunciado são bem vindos.\n(Marque a Staff se necessário)');

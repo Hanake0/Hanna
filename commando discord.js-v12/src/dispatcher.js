@@ -169,7 +169,7 @@ class CommandDispatcher {
 				if(cmdMsg.command) {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
 						const embed = new Discord.MessageEmbed()
-							.setDescription(`<a:2_animated_cross:723174740478525440> | \`${cmdMsg.command.name}\` está desabilitado`)
+							.setDescription(`<a:cross_gif:738900572664496169> | \`${cmdMsg.command.name}\` está desabilitado`)
 						responses = await cmdMsg.say(embed);
 						responses.delete({ timeout: 15000 });
 						cmdMsg.delete({ timeout: 15000 });

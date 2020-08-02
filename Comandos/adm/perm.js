@@ -1,4 +1,4 @@
-const { Command } = require('../../commando discord.js-v12/src/index.js');
+const { Command } = require('../../CommandoV12/src/index.js');
 
 module.exports = class AddPermCommand extends Command {
   constructor(client) {
@@ -10,6 +10,7 @@ module.exports = class AddPermCommand extends Command {
       clientPermissions: ['MANAGE_CHANNELS'],
       userPermissions: ['MANAGE_CHANNELS'],
       guildOnly: true,
+      ownerOnly: true,
       description: 'Adiciona a(s) permiss(ão/ões) para o usuário no canal.',
       args: [
         {

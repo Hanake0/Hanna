@@ -1,4 +1,4 @@
-const { Command } = require('../../commando discord.js-v12/src/index.js');
+const { Command } = require('../../CommandoV12/src/index.js');
 
 module.exports = class AutoBase extends Command {
   constructor(client) {
