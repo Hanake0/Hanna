@@ -36,7 +36,7 @@ module.exports = class PingCommand extends Command {
 		if(!pingMsg.editable) {
 			return msg.embed(embed);
 		} else {
-			pingMsg.edit(embed)
+			pingMsg.edit('', embed)
 		}
 	}
 };
