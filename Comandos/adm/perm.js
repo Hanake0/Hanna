@@ -59,16 +59,11 @@ module.exports = class AddPermCommand extends Command {
         configurable: true
       });
     };
-    if (addRem === 'add') {
-      try {
-        message.channel.overwritePermissions(usuário.id, permsT).then(() =>
-          message.say(`Permissões adicionadas com sucesso para o usuário ${usuário.username}`));
-      } catch(err) { message.say(`hmmm, acho que você esqueceu de algo: ${err.name}: ${err.message}`) }
-    } else {
-      try {
-        message.channel.overwritePermissions(usuário.id, permsF).then(() =>
-          message.say(`Permissões removidas com sucesso para o usuário ${usuário.username}`));
-      } catch(err) { message.say(`oopsie, algo deu errado: ${err.name}: ${err.message}`) }
-    }
+    
+    message.channel.overwritePermissions(usuário.id, addRem === 'add' ? permsT : permsF).then(() => {
+      message.say(`Permissões ${ addRem === 'add' ? 'adicionadas' : 'removidas'} com sucesso para o usuário ${usuário.username}`)
+    }, err => {
+      message.say(`hmmm, acho que você esqueceu de algo: ${err.name}: ${err.message}`)
+    });
   }
 };
