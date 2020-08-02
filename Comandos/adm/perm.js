@@ -43,9 +43,7 @@ module.exports = class AddPermCommand extends Command {
 
     const perms = {};
     for (const p of perm.toUpperCase().split(/ +/)) {
-      Object.defineProperty(perms, p, {
-        value: addRem === 'add' ? true : false,
-      });
+      if (addRem === 'add') Object.defineProperty(perms, p, { value: true,}); else Object.defineProperty(perms, p, { value: false});
     };
 
     message.channel.overwritePermissions(usuário.id, perms).then(() => {
