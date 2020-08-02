@@ -41,26 +41,17 @@ module.exports = class AddPermCommand extends Command {
     return message.say(`Todas as permissões específicas de ${usuário.username} foram removidas.`);
     }
 
-    const permsT = {};
+    const perms = {};
     for (const p of perm.toUpperCase().split(/ +/)) {
-      Object.defineProperty(permsT, p, {
-        value: true,
+      Object.defineProperty(perms, p, {
+        value: addRem === 'add' ? true : false,
         writable: true,
         enumerable: true,
         configurable: true
       });
     };
-    const permsF = {};
-    for (const p of perm.toUpperCase().split(/ +/)) {
-      Object.defineProperty(permsF, p, {
-        value: false,
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-    };
-    
-    message.channel.overwritePermissions(usuário.id, addRem === 'add' ? permsT : permsF).then(() => {
+
+    message.channel.overwritePermissions(usuário.id, perms).then(() => {
       message.say(`Permissões ${ addRem === 'add' ? 'adicionadas' : 'removidas'} com sucesso para o usuário ${usuário.username}`)
     }, err => {
       message.say(`hmmm, acho que você esqueceu de algo: ${err.name}: ${err.message}`)
