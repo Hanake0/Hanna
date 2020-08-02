@@ -19,20 +19,14 @@ module.exports = class PingCommand extends Command {
 
 	async run(msg) {
 		const pingMsg = await msg.say('Calculando...');
+		const ping = pingMsg.createdTimestamp - msg.createdTimestamp;
 		const embed = new Discord.MessageEmbed()
 			.setTitle(':ping_pong:  Pong!')
 			.addField('Servidor:', `:e_mail: | ${pingMsg.createdTimestamp - msg.createdTimestamp}ms`, false)
 			.addField('Webhook:', `:satellite_orbital: | ${Math.round(this.client.ws.ping)}ms`)
 			.setTimestamp()
-			.setFooter(`${msg.author.username}`, msg.author.avatarURL)
-			.setColor(`${pingMsg.createdTimestamp - msg.createdTimestamp < 150 ? '#38b833' : pingMsg.createdTimestamp - msg.createdTimestamp < 250 ? '#ffa41c' : '#ff2b1c'}`)
-//		if (pingMsg.createdTimestamp - msg.createdTimestamp < 150) {
-//			embed.setColor('#38b833');
-//		} else if (pingMsg.createdTimestamp - msg.createdTimestamp < 250) {
-//			embed.setColor('#ffa41c');
-//		} else {
-//			embed.setColor('#ff2b1c');
-//		}
+			.setFooter(`${msg.author.username}`, msg.author.avatarURL())
+			.setColor(`${ping < 150 ? '#38b833' : ping < 250 ? '#ffa41c' : '#ff2b1c'}`);
 		if(!pingMsg.editable) {
 			return msg.embed(embed);
 		} else {
