@@ -122,14 +122,14 @@ class CommandDispatcher {
 				"xp_semanal": 5,
 				"money": 1,
 				"sexualidade": null,
-				"lastMessage": `${message.createdAt}`,
+				"lastMessage": `${message.createdAt.toISOString()}`,
 				"lastMessageContent": message.content,
 				"lastMessageChannelID": message.channel.id
 			}).write();
 		} else {
 			//atualiza os valores do db
 			
-			usersOffDB.get(message.author.id).update('lastMessage', n => n = `${message.createdAt.toISOString}`)
+			usersOffDB.get(message.author.id).update('lastMessage', n => n = `${message.createdAt.toISOString()}`)
 				.set('lastMessageContent', `${message.content}`)
 				.set('lastMessageChannelID', `${message.channel.id}`).write();
 			const tempinho = new Date().valueOf() - usersOffDB.get(message.author.id).value().lastMessage.valueOf();

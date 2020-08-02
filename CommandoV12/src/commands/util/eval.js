@@ -3,7 +3,6 @@ const discord = require('discord.js');
 const tags = require('common-tags');
 const { escapeRegex } = require('../../util');
 const Command = require('../base');
-const { usersOffDB, usersOn } = require('../../../../index.js');
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');
@@ -34,6 +33,7 @@ module.exports = class EvalCommand extends Command {
 	run(msg, args) {
 		// Make a bunch of helpers
 		/* eslint-disable no-unused-vars */
+		const { usersOffDB, usersOn } = require('../../../../index.js');
 		const message = msg;
 		const client = msg.client;
 		const lastResult = this.lastResult;
