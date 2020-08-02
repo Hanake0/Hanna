@@ -51,7 +51,7 @@ const donos = new Set()
 const client = new CommandoClient({
 	commandPrefix: 'h',
 	unknownCommandResponse: false,
-//	owner: donos,
+	owner: donos,
 	disableEveryone: true
 });
 
