@@ -36,7 +36,7 @@ module.exports = class AddPermCommand extends Command {
 
   async run(message, { addRem, usuário, perm }) {
     const remove = ['remover', 'remove', 'rem'];
-    if (addRem in remove && perm === '') {
+    if (addRem in remove && !perm) {
       message.channel.permissionOverwrites.get(usuário.id).delete();
     return message.say(`Todas as permissões específicas de ${usuário.username} foram removidas.`);
     }
@@ -48,10 +48,10 @@ module.exports = class AddPermCommand extends Command {
       });
     };
 
-    message.channel.overwritePermissions(usuário.id, perms)//.then(() => {
+    message.channel.overwritePermissions(usuário.id, perms).then(() => {
       message.say(`Permissões ${ addRem === 'add' ? 'adicionadas' : 'removidas'} com sucesso para o usuário ${usuário.username}`)
-    //}, err => {
-    //  message.say(`hmmm, acho que você esqueceu de algo: ${err.name}: ${err.message}`)
-    //});
+    }, err => {
+      message.say(`hmmm, acho que você esqueceu de algo: ${err.name}: ${err.message}`)
+    });
   }
 };
