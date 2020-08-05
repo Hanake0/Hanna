@@ -174,7 +174,7 @@ class CommandDispatcher {
 				if(cmdMsg.command) {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
 						if(!cmdMsg.command.unknown) {
-							responses = await cmdMsg.reply(`The \`${cmdMsg.command.name}\` command is disabled.`);
+							responses = await cmdMsg.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> |  \`${cmdMsg.command.name}\` está **desabilitado**.`});
 						} else {
 							/**
 							 * Emitted when an unknown command is triggered
@@ -288,6 +288,14 @@ class CommandDispatcher {
 	 * @private
 	 */
 	parseMessage(message) {
+
+		// Find the command to run with default command handling
+		const prefix = message.guild ? message.guild.commandPrefix : this.client.commandPrefix;
+		if(!this._commandPatterns[prefix]) this.buildCommandPattern(prefix);
+		let cmdMsg = this.matchDefault(message, this._commandPatterns[prefix], 2);
+		if(!cmdMsg && !message.guild) cmdMsg = this.matchDefault(message, /^([^\s]+)/i, 1, true);
+		return cmdMsg;
+
 		// Find the command to run by patterns
 		for(const command of this.registry.commands.values()) {
 			if(!command.patterns) continue;
@@ -296,13 +304,6 @@ class CommandDispatcher {
 				if(matches) return message.initCommand(command, null, matches);
 			}
 		}
-
-		// Find the command to run with default command handling
-		const prefix = message.guild ? message.guild.commandPrefix : this.client.commandPrefix;
-		if(!this._commandPatterns[prefix]) this.buildCommandPattern(prefix);
-		let cmdMsg = this.matchDefault(message, this._commandPatterns[prefix], 2);
-		if(!cmdMsg && !message.guild) cmdMsg = this.matchDefault(message, /^([^\s]+)/i, 1, true);
-		return cmdMsg;
 	}
 
 	/**

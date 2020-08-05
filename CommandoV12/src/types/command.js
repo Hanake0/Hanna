@@ -12,8 +12,8 @@ class CommandArgumentType extends ArgumentType {
 		if(commands.length === 1) return true;
 		if(commands.length === 0) return false;
 		return commands.length <= 15 ?
-			`${disambiguation(commands.map(cmd => escapeMarkdown(cmd.name)), 'commands', null)}\n` :
-			'Multiple commands found. Please be more specific.';
+			`${disambiguation(commands.map(cmd => escapeMarkdown(cmd.name)), 'comandos', null)}\n` :
+			'Multiplos comandos encontrados. Por favor seja mais específico.';
 	}
 
 	parse(val) {

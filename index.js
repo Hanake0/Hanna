@@ -60,9 +60,9 @@ const client = new CommandoClient({
 client.registry
 	.registerDefaults()
 	.registerGroups([
+		['autorespostas', 'AutoRespostas'],
 		['utilidades', 'Utilidades'],
 		['adm', 'Administrativos'],
-		['autorespostas', 'AutoRespostas'],
 	])
 	.registerCommandsIn(path.join(__dirname, 'Comandos'))
 

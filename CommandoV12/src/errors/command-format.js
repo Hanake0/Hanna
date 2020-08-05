@@ -10,15 +10,15 @@ class CommandFormatError extends FriendlyError {
 	 */
 	constructor(msg) {
 		super(
-			`Invalid command usage. The \`${msg.command.name}\` command's accepted format is: ${msg.usage(
+			`Formato de uso errado. \`${msg.command.name}\` aceita os formatos: ${msg.usage(
 				msg.command.format,
 				msg.guild ? undefined : null,
 				msg.guild ? undefined : null
 			)}. Use ${msg.anyUsage(
-				`help ${msg.command.name}`,
+				`ajuda ${msg.command.name}`,
 				msg.guild ? undefined : null,
 				msg.guild ? undefined : null
-			)} for more information.`
+			)} para mais informações.`
 		);
 		this.name = 'CommandFormatError';
 	}

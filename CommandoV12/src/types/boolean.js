@@ -3,8 +3,8 @@ const ArgumentType = require('./base');
 class BooleanArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'boolean');
-		this.truthy = new Set(['true', 't', 'yes', 'y', 'on', 'enable', 'enabled', '1', '+']);
-		this.falsy = new Set(['false', 'f', 'no', 'n', 'off', 'disable', 'disabled', '0', '-']);
+		this.truthy = new Set(['verdadeiro', 'v', 'sim', 's', 'on', 'ligar', 'ligado', '1', '+']);
+		this.falsy = new Set(['falso', 'f', 'não', 'nao', 'n', 'off', 'desligar', 'desligado', '0', '-']);
 	}
 
 	validate(val) {

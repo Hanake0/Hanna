@@ -8,7 +8,7 @@ module.exports = class DenunciarCommand extends Command {
       aliases: ['denuncia'],
       group: 'adm',
       memberName: 'denunciar',
-      clientPermissions: ['ADMINISTRATOR'],
+      clientPermissions: ['MANAGE_CHANNELS'],
       guildOnly: true,
       description: 'Abre um inquérito sobre determinado usuário em um canal privado onde mais informações podem ser providas.',
       details: 'Para evitar problemas pessoais, o usuário que vai ser denunciado não precisa ser marcado, basta inserir o nome dele, ou se o nome conter caracteres especiais e você não conseguir copiar, basta utilizar o ID do usuário.\nSe estiver com problemas para conseguir um ID, peça para algum membro da staff.',
@@ -25,7 +25,6 @@ module.exports = class DenunciarCommand extends Command {
           default: 'não específicado'
         }
 			],
-      argsPromptLimit: 0,
     });
   }
   

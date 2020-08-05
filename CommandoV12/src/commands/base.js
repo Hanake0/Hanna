@@ -302,28 +302,22 @@ class Command {
 	onBlock(message, reason, data) {
 		switch(reason) {
 			case 'guildOnly':
-				return message.reply(`The \`${this.name}\` command must be used in a server channel.`);
+				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | \`${this.name}\` só pode ser usado no servidor...` });
 			case 'nsfw':
-				return message.reply(`The \`${this.name}\` command can only be used in NSFW channels.`);
+				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | \`${this.name}\` só pode ser usado em canais NSFW.`});
 			case 'permission': {
 				if(data.response) return message.embed({ color: '#c22727', description: data.response });
-				return message.reply(`You do not have permission to use the \`${this.name}\` command.`);
+				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Você não tem permissão para usar o comando \`${this.name}\`.` });
 			}
 			case 'clientPermissions': {
 				if(data.missing.length === 1) {
-					return message.reply(
-						`I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`
-					);
+					return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Eu preciso da permissão "${permissions[data.missing[0]]}" para que o comando \`${this.name}\` funcione.`});
 				}
-				return message.reply(oneLine`
-					I need the following permissions for the \`${this.name}\` command to work:
-					${data.missing.map(perm => permissions[perm]).join(', ')}
-				`);
+				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Eu preciso dessas permissões aí pro comando \`${this.name}\` funcionar:
+					${data.missing.map(perm => permissions[perm]).join(',\n')}`});
 			}
 			case 'throttling': {
-				return message.reply(
-					`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`
-				);
+				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Aguarde ${data.remaining.toFixed(1)} segundos antes de usar o comando \`${this.name}\` denovo.`});
 			}
 			default:
 				return null;
@@ -343,16 +337,14 @@ class Command {
 	onError(err, message, args, fromPattern, result) { // eslint-disable-line no-unused-vars
 		const owners = this.client.owners;
 		const ownerList = owners ? owners.map((usr, i) => {
-			const or = i === owners.length - 1 && owners.length > 1 ? 'or ' : '';
+			const or = i === owners.length - 1 && owners.length > 1 ? 'ou ' : '';
 			return `${or}${escapeMarkdown(usr.username)}#${usr.discriminator}`;
 		}).join(owners.length > 2 ? ', ' : ' ') : '';
 
 		const invite = this.client.options.invite;
-		return message.reply(stripIndents`
-			An error occurred while running the command: \`${err.name}: ${err.message}\`
-			You shouldn't ever receive an error like this.
-			Please contact ${ownerList || 'the bot owner'}${invite ? ` in this server: ${invite}` : '.'}
-		`);
+		return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Ooopsie, parece que alguém fez caquinha...
+			Ocorreu um erro durante a execução do comando:\n \`${err.name}: ${err.message}\`\n
+			Por favor avise ${ownerList || 'meu dono'}${invite ? ` nesse servidor: ${invite}` : '.'}`});
 	}
 
 	/**
@@ -490,7 +482,7 @@ class Command {
 		let mentionPart;
 		if(user) mentionPart = `\`\`@${user.username.replace(/ /g, '\xa0')}#${user.discriminator}\xa0${nbcmd}\`\``;
 
-		return `${prefixPart || ''}${prefix && user ? ' or ' : ''}${mentionPart || ''}`;
+		return `${prefixPart || ''}${prefix && user ? ' ou ' : ''}${mentionPart || ''}`;
 	}
 
 	/**
