@@ -77,7 +77,7 @@ module.exports = class AjudaCommand extends Command {
 					utilize ${Command.usage('comando', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
 					Por exemplo, ${Command.usage('prefixo', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
 
-					Pra utilizar um comando no privado, só digita o comando, sem prefixo.
+					Pra utilizar um comando no privado, só digite o comando, sem prefixo.
 
 					Utilize ${this.usage('<comando>', null, null)} para ver informação mais detalhada sobre um comando.
 					Utilize ${this.usage('todos', null, null)} pra ver uma lista com *todos* os comandos, não só os que você pode usar.
