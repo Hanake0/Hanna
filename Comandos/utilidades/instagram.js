@@ -41,7 +41,7 @@ module.exports = class InstagramCommand extends Command {
             .setAuthor(usuário.username + '#' + usuário.discriminator, usuário.avatarURL())
             .setImage(img.url)
             .setTimestamp()
-            .setFooter('Evento Instagram, envie sua foto/desenho para algum membro da staff para participar', message.author.avatarURL());
+            .setFooter('Evento Galeria, envie sua foto/desenho para algum organizador do evento para participar', message.author.avatarURL());
 
             await instagram.send({embed: publicação}).then(pub => {
                 message.react('738900367814819940')
