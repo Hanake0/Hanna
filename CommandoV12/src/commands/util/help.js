@@ -44,10 +44,10 @@ module.exports = class AjudaCommand extends Command {
 
 					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}
 				`;
-				if(commands[0].aliases.length > 0) help += `\n**Outros nomes:** ${commands[0].aliases.join(', ')}`;
-				help += `\n**Grupo:** ${commands[0].group.name}(\`${commands[0].groupID}:${commands[0].memberName}\`)`;
-				if(commands[0].details) help += `\n**Detalhes:** ${commands[0].details}`;
-				if(commands[0].examples) help += `\n**Exemplos:**\n${commands[0].examples.join('\n')}`;
+				if(commands[0].aliases.length > 0) help += `.\n**Outros nomes:** ${commands[0].aliases.join(', ')}`;
+				help += `.\n**Grupo:** ${commands[0].group.name}(\`${commands[0].groupID}:${commands[0].memberName}\`)`;
+				if(commands[0].details) help += `.\n**Detalhes:** ${commands[0].details}`;
+				if(commands[0].examples) help += `.\n**Exemplos:**\n${commands[0].examples.join('\n')}`;
 
 				const messages = [];
 				try {
