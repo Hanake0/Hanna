@@ -317,7 +317,7 @@ class Command {
 					${data.missing.map(perm => permissions[perm]).join(',\n')}`});
 			}
 			case 'throttling': {
-				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Aguarde ${data.remaining.toFixed(1)} segundos antes de usar o comando \`${this.name}\` denovo.`});
+				if (this.throttling.respond) return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Aguarde ${data.remaining.toFixed(1)} segundos antes de usar o comando \`${this.name}\` denovo.`});
 			}
 			default:
 				return null;

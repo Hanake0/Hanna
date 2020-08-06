@@ -37,20 +37,20 @@ module.exports = class AjudaCommand extends Command {
 			if(commands.length === 1) {
 				let help = stripIndents`
 					${oneLine`
-						__Command **${commands[0].name}**:__ ${commands[0].description}
+						__Comando **${commands[0].name}**:__ ${commands[0].description}
 						${commands[0].guildOnly ? ' (apenas no servidor)' : ''}
 						${commands[0].nsfw ? ' (NSFW)' : ''}
 					`}
 
-					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}
+					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}\n
 				`;
-				if(commands[0].aliases.length > 0) help += `\n**Outros nomes:** ${commands[0].aliases.join(', ')}`;
+				if(commands[0].aliases.length > 0) help += `\n**Outros nomes:** ${commands[0].aliases.join(', ')}\n`;
 				help += `\n${oneLine`
 					**Grupo:** ${commands[0].group.name}
-					(\`${commands[0].groupID}:${commands[0].memberName}\`)
+					(\`${commands[0].groupID}:${commands[0].memberName}\`)\n
 				`}`;
-				if(commands[0].details) help += `\n**Detalhes:** ${commands[0].details}`;
-				if(commands[0].examples) help += `\n**Exemplos:**\n${commands[0].examples.join('\n')}`;
+				if(commands[0].details) help += `\n**Detalhes:** ${commands[0].details}\n`;
+				if(commands[0].examples) help += `\n**Exemplos:**\n${commands[0].examples.join('\n')}\n`;
 
 				const messages = [];
 				try {

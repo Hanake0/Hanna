@@ -10,7 +10,7 @@ module.exports = class PublicarCommand extends Command {
       memberName: 'publicar',
       clientPermissions: ['ADMINISTRATOR'],
       description: 'Envia sua foto no "Facebook" do servidor...',
-      details: 'Só funciona quando um ***gif ou foto*** está anexado a mensagem, então certifique-se de anexar um.\nNão funciona com vídeos, só imagens(o gif é cortado numa imagem só)',
+      details: 'Só funciona quando um **gif ou foto** está anexado a mensagem, então certifique-se de anexar um.\nNão funciona com vídeos, só imagens(o gif é cortado numa imagem só)',
       throttling: {
 				usages: 1,
 				duration: 300
@@ -35,7 +35,7 @@ module.exports = class PublicarCommand extends Command {
             const publicação = new Discord.MessageEmbed()
             .setColor( message.member ? message.member.displayColor : Math.floor(Math.random() * 16777214) + 1)
             .setTitle(título)
-            .setAuthor(message.author.username, message.author.avatarURL())
+            .setAuthor(message.author.username + '#' + message.author.discriminator, message.author.avatarURL())
             .setImage(img.url)
             .setTimestamp()
             .setFooter('Não sabe como fazer suas publicações? hajuda publicar', message.client.user.avatarURL());
