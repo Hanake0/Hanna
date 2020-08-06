@@ -10,7 +10,11 @@ module.exports = class PublicarCommand extends Command {
       memberName: 'publicar',
       clientPermissions: ['ADMINISTRATOR'],
       description: 'Envia sua foto no "Facebook" do servidor...',
-      details: 'Só funciona quando um arquivo está anexado a mensagem, então certifique-se de anexar uma.',
+      details: 'Só funciona quando um ***gif ou foto*** está anexado a mensagem, então certifique-se de anexar um.\nNão funciona com vídeos, só imagens(o gif é cortado numa imagem só)',
+      throttling: {
+				usages: 1,
+				duration: 300
+			},
       args: [
         {
             key: 'título',

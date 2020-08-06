@@ -46,7 +46,7 @@ setInterval(async () => {
 
 //cria um client do Comando
 const donos = new Set()
-  donos.add('380512056413257729');
+  //donos.add('380512056413257729');
   donos.add('348664615175192577');
 const client = new CommandoClient({
 	commandPrefix: 'h',
