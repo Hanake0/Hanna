@@ -42,12 +42,12 @@ module.exports = class AjudaCommand extends Command {
 						${commands[0].nsfw ? ' (NSFW)' : ''}
 					`}
 
-					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}\n`)}
+					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}
 				`;
-				if(commands[0].aliases.length > 0) help += `**Outros nomes:** ${commands[0].aliases.join(', ')}\n`;
-				help += `**Grupo:** ${commands[0].group.name}(\`${commands[0].groupID}:${commands[0].memberName}\`)\n`;
-				if(commands[0].details) help += `**Detalhes:** ${commands[0].details}\n`;
-				if(commands[0].examples) help += `**Exemplos:**\n${commands[0].examples.join('\n')}\n`;
+				if(commands[0].aliases.length > 0) help += `\n**Outros nomes:** ${commands[0].aliases.join(', ')}`;
+				help += `\n**Grupo:** ${commands[0].group.name}(\`${commands[0].groupID}:${commands[0].memberName}\`)`;
+				if(commands[0].details) help += `\n**Detalhes:** ${commands[0].details}`;
+				if(commands[0].examples) help += `\n**Exemplos:**\n${commands[0].examples.join('\n')}`;
 
 				const messages = [];
 				try {
