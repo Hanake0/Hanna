@@ -10,6 +10,10 @@ module.exports = class AutoGay extends Command {
       patterns: [/gay/i, /gays/i],
       hidden: true,
       defaultHandling: false,
+      throttling: {
+				usages: 2,
+				duration: 10
+			}
     });
 }
 
