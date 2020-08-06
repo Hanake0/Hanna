@@ -7,13 +7,13 @@ module.exports = class AutoBase extends Command {
       group: 'autorespostas',
       memberName: 'base',
       description: 'Responde com: texto',
-      patterns: [/coisamuitoespecificadetexte/i],
+      patterns: [/coisamuitoespecificadeteste/i],
       hidden: true,
       defaultHandling: false,
     });
 }
 
-  async run(message, { mensagem }) {
+  async run(message) {
     message.say(`> ${message.content}\n${message.author} texto`);
   }
 };

@@ -19,21 +19,24 @@ module.exports = class DigaCommand extends Command {
     });
   }
 
-  run(message, { mensagem }) {
-    const banidos = ['698560208309452810', '723218141945266177', 'daddy', 'felipe', 'fellipe', 'felippe'];
+  run(message, { texto }) {
+    const banidos = ['@everyone', 'daddy', 'felipe', 'fellipe', 'felippe'];
+    var a = 0
 
     banidos.forEach(word => {
-      if (message.contet.toLowerCase().includes(word)) {
+      if (message.content.toLowerCase().includes(word) && a !== 1) {
+        a = 1;
         if (message.deletable) message.delete({ timeout: 100 });
         message.reply('não diria isso nem se me pagassem...')
       }
     });
-
-    if (message.channel.type === 'dm') {
-      message.say(mensagem);
-    } else {
-      if (message.deletable) message.delete({ timeout: 100 });
-      message.say(mensagem);
+    if (a !== 1) {
+      if (message.channel.type === 'dm') {
+        message.say(texto);
+      } else {
+        if (message.deletable) message.delete({ timeout: 100 });
+        message.say(texto);
+      }
     }
   }
 };

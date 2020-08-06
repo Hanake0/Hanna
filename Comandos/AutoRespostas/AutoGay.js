@@ -17,7 +17,7 @@ module.exports = class AutoGay extends Command {
     });
 }
 
-  async run(message, { mensagem }) {
+  async run(message) {
     message.say('tu que é, tu que deixa');
   }
 };

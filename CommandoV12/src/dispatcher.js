@@ -294,16 +294,16 @@ class CommandDispatcher {
 		if(!this._commandPatterns[prefix]) this.buildCommandPattern(prefix);
 		let cmdMsg = this.matchDefault(message, this._commandPatterns[prefix], 2);
 		if(!cmdMsg && !message.guild) cmdMsg = this.matchDefault(message, /^([^\s]+)/i, 1, true);
-		return cmdMsg;
 
 		// Find the command to run by patterns
 		for(const command of this.registry.commands.values()) {
 			if(!command.patterns) continue;
 			for(const pattern of command.patterns) {
 				const matches = pattern.exec(message.content);
-				if(matches) return message.initCommand(command, null, matches);
+				if(matches && !cmdMsg) return message.initCommand(command, null, matches);
 			}
 		}
+		return cmdMsg;
 	}
 
 	/**
