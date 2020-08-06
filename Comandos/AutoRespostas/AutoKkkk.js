@@ -10,11 +10,6 @@ module.exports = class AutoBase extends Command {
       patterns: [/kkkk/i],
       hidden: true,
       defaultHandling: false,
-      throttling: {
-				usages: 1,
-        duration: 10,
-        respond: false
-			}
     });
 }
 

@@ -38,10 +38,10 @@ module.exports = class InstagramCommand extends Command {
             const publicação = new Discord.MessageEmbed()
             .setColor( message.client.guilds.cache.find((a) => a.id === '698560208309452810').members.cache.find(u => u.id === usuário.id).displayColor)
             .setTitle(título)
-            .setAuthor(usuário.username, usuário.avatarURL())
+            .setAuthor(usuário.username + '#' + usuário.discriminator, usuário.avatarURL())
             .setImage(img.url)
             .setTimestamp()
-            .setFooter('Evento Instagram, envie sua foto para algum membro da staff para participar', message.author.avatarURL());
+            .setFooter('Evento Instagram, envie sua foto/desenho para algum membro da staff para participar', message.author.avatarURL());
 
             await instagram.send({embed: publicação}).then(pub => {
                 message.react('738900367814819940')
