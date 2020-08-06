@@ -75,7 +75,7 @@ evtFiles.forEach(f => {
   const event = require(`./Eventos/${f}`)
 
 
-  client.on(eventName, event.bind(null, client, client, client, client));
+  client.on(eventName, event.bind(null, client));
   client
 	.on('error', console.error)
 	.on('warn', console.warn)
