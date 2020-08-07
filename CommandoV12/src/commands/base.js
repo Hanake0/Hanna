@@ -267,8 +267,9 @@ class Command {
 		}
 
 		if(message.channel.type === 'text' && this.userRoles) {
-			var falta = this.userRoles.forEach(role => {
-				if (!message.member._roles.includes(role)) falta.push(role)
+			let falta = [];
+			this.userRoles.forEach(cargo => {
+				if (!message.member._roles.includes(cargo)) falta.push(cargo)
 			});
 			if(falta.length > 0) {
 				if(falta.length === 1) {
