@@ -153,6 +153,12 @@ class Command {
 		this.userPermissions = info.userPermissions || null;
 
 		/**
+		 * Roles required by the user to use the command.
+		 * @type {?PermissionResolvable[]}
+		 */
+		this.userRoles = info.userRoles || null;
+
+		/**
 		 * Whether the command can only be used in NSFW channels
 		 * @type {boolean}
 		 */
@@ -269,7 +275,7 @@ class Command {
 		if(message.channel.type === 'text' && this.userRoles) {
 			let falta = [];
 			this.userRoles.forEach(cargo => {
-				if (!message.member._roles.includes(cargo)) falta.push(cargo)
+				if (!message.member._roles.includes(cargo)) falta.push(message.guild.roles.cache.get(cargo));
 			});
 			if(falta.length > 0) {
 				if(falta.length === 1) {
