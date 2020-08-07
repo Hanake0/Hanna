@@ -249,7 +249,7 @@ class Command {
 	 * @return {boolean|string} Whether the user has permission, or an error message to respond with if they don't
 	 */
 	hasPermission(message, ownerOverride = true) {
-		if(!this.ownerOnly && !this.userPermissions) return true;
+		if(!this.ownerOnly && !this.userPermissions && !this.userRoles) return true;
 		if(ownerOverride && this.client.isOwner(message.author)) return true;
 
 		if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {
@@ -263,6 +263,18 @@ class Command {
 					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham a permissão:\n"${permissions[missing[0]]}"`;
 				}
 				return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham as permissões:\n${missing.map(perm => permissions[perm]).join(', ')}`;
+			}
+		}
+
+		if(message.channel.type === 'text' && this.userRoles) {
+			const missing = this.userRoles.forEach(role => {
+				if (!message.member._roles.includes(role)) missing.push(role)
+			});
+			if(missing.length > 0) {
+				if(missing.length === 1) {
+					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham o cargo:\n"${missing[0]}"`;
+				}
+				return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham os cargos:\n${missing.join(', ')}`;
 			}
 		}
 

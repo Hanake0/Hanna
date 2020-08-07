@@ -4,12 +4,12 @@ const Discord = require('discord.js');
 module.exports = class InstagramCommand extends Command {
   constructor(client) {
     super(client, {
-      name: 'instagram',
-      aliases: ['instagram-postar'],
+      name: 'galeria',
+      aliases: ['galeria-postar'],
       group: 'adm',
-      memberName: 'instagram',
+      memberName: 'galeria',
       clientPermissions: ['ADMINISTRATOR'],
-      ownerOnly: true,
+      userRoles: ['741049474629107833'],
       serverOnly: true,
       description: 'Envia sua foto no Instagram do servidor',
       details: '',
