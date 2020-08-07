@@ -267,14 +267,14 @@ class Command {
 		}
 
 		if(message.channel.type === 'text' && this.userRoles) {
-			const missing = this.userRoles.forEach(role => {
-				if (!message.member._roles.includes(role)) missing.push(role)
+			const falta = this.userRoles.forEach(role => {
+				if (!message.member._roles.includes(role)) falta.push(role)
 			});
-			if(missing.length > 0) {
-				if(missing.length === 1) {
-					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham o cargo:\n"${missing[0]}"`;
+			if(falta.length > 0) {
+				if(falta.length === 1) {
+					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham o cargo:\n"${falta[0]}"`;
 				}
-				return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham os cargos:\n${missing.join(', ')}`;
+				return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham os cargos:\n${falta.join(', ')}`;
 			}
 		}
 
