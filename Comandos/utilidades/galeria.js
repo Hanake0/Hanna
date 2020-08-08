@@ -31,7 +31,7 @@ module.exports = class InstagramCommand extends Command {
   }
   
     async run(message, { usuário, título }) {
-        const instagram = message.client.guilds.cache.find((a) => a.id === '698560208309452810').channels.cache.find(chnl => chnl.id === '740989051615576175')
+        const instagram = message.client.guilds.cache.find((a) => a.id === '698560208309452810').channels.cache.find(chnl => chnl.id === '740989051615576175');
         const img = message.attachments.first()
        
         if (img) {
