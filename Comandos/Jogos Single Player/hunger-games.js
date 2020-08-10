@@ -9,7 +9,7 @@ module.exports = class HungerGamesCommand extends Command {
     super(client, {
       name: 'hunger-games',
       aliases: ['jogos vorazes'],
-      group: 'interação',
+      group: 'singleplayer',
       memberName: 'hunger-games',
       clientPermissions: ['ADMINISTRATOR'],
       description: '(não é o do Minecraft) Inicia uma partida simulada dos Jogos Vorazes',

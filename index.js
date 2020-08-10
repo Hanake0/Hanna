@@ -63,6 +63,7 @@ client.registry
 		['autorespostas', 'Auto Respostas'],
 		['utilidades', 'Utilidades'],
 		['interação', 'Interação entre Membros'],
+		['singleplayer', 'Jogos Single Player'],
 		['imgs-ia', 'Imagens Geradas com Inteligência Artificial'],
 		['adm', 'Reservados á Staff'],
 		['eventos', 'Relacionados a Eventos'],
