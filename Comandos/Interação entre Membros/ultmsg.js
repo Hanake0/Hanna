@@ -6,7 +6,7 @@ module.exports = class UltMsgCommand extends Command {
     super(client, {
       name: 'ultmsg',
       aliases: ['vistoporultimo', 'lastmsg', 'ultimamensagem'],
-      group: 'utilidades',
+      group: 'interação',
       memberName: 'ultimamensagem',
       description: 'Mostra o conteúdo e a hora da última mensagem de um usuário no servidor.',
       guildOnly: true,

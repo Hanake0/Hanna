@@ -297,8 +297,8 @@ class Argument {
 				// Make sure they actually answered
 				if(responses && responses.size === 1) {
 					answers.push(responses.first());
-					prompts[0].delete().then(() => prompts.shift());
-					responses.first().delete();
+					//prompts[0].delete().then(() => prompts.shift());
+					answers[currentVal].react('738900367814819940');
 					val = answers[answers.length - 1].content;
 				} else {
 					prompts[0].delete()

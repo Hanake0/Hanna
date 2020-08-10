@@ -6,7 +6,7 @@ module.exports = class PublicarCommand extends Command {
     super(client, {
       name: 'publicar',
       aliases: ['postar', 'publish', 'enviar'],
-      group: 'utilidades',
+      group: 'interação',
       memberName: 'publicar',
       clientPermissions: ['ADMINISTRATOR'],
       description: 'Envia sua foto no "Facebook" do servidor...',

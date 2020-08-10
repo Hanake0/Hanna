@@ -6,7 +6,7 @@ module.exports = class DenunciarCommand extends Command {
     super(client, {
       name: 'denunciar',
       aliases: ['denuncia'],
-      group: 'adm',
+      group: 'interação',
       memberName: 'denunciar',
       clientPermissions: ['MANAGE_CHANNELS'],
       guildOnly: true,

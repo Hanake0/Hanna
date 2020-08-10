@@ -6,7 +6,7 @@ module.exports = class SuporteCommand extends Command {
     super(client, {
       name: 'suporte',
       aliases: ['staff'],
-      group: 'adm',
+      group: 'interação',
       memberName: 'suporte',
       clientPermissions: ['ADMINISTRATOR'],
       guildOnly: true,

@@ -154,9 +154,15 @@ class Command {
 
 		/**
 		 * Roles required by the user to use the command.
-		 * @type {?PermissionResolvable[]}
+		 * @type {?string[]}
 		 */
 		this.userRoles = info.userRoles || null;
+
+		/**
+		* Channels the command is blacklisted on.
+		* @type {?string[]}
+		*/
+	   this.blackListed = info.blackListed || null;
 
 		/**
 		 * Whether the command can only be used in NSFW channels
@@ -255,7 +261,7 @@ class Command {
 	 * @return {boolean|string} Whether the user has permission, or an error message to respond with if they don't
 	 */
 	hasPermission(message, ownerOverride = true) {
-		if(!this.ownerOnly && !this.userPermissions && !this.userRoles) return true;
+		if(!this.ownerOnly && !this.userPermissions && !this.userRoles && !this.blackListed) return true;
 		if(ownerOverride && this.client.isOwner(message.author)) return true;
 
 		if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {
@@ -283,6 +289,12 @@ class Command {
 				}
 				return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham os cargos:\n${falta.join(', ')}`;
 			}
+		}
+
+		if(message.channel.type === 'text' && this.blackListed) {
+			if(this.blackListed.includes(message.channel.id)) {
+					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` não pode ser usado no canal:${message.channel}`;
+				}
 		}
 
 		return true;

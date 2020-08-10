@@ -44,7 +44,7 @@ module.exports = class AjudaCommand extends Command {
 
 					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}
 				`;
-				if(commands[0].aliases.length > 0) help += `.\n**Outros nomes:** ${commands[0].aliases.join(', ')}`;
+				if(commands[0].aliases.length > 0) help += `.\n**Outros nomes:** \`${commands[0].aliases.join('\`, \`')}\``;
 				help += `.\n**Grupo:** ${commands[0].group.name}(\`${commands[0].groupID}:${commands[0].memberName}\`)`;
 				if(commands[0].details) help += `.\n**Detalhes:** ${commands[0].details}`;
 				if(commands[0].examples) help += `.\n**Exemplos:**\n${commands[0].examples.join('\n')}`;
@@ -69,7 +69,7 @@ module.exports = class AjudaCommand extends Command {
 		} else {
 			const messages = [];
 			try {
-				messages.push(await msg.author.send({embed: { color: msg.member ? msg.member.displayColor : Math.floor(Math.random() * 16777214) + 1, description: stripIndents`
+				messages.push(await msg.author.send(stripIndents`
 					Para utilizar um comando em ${msg.guild ? msg.guild.name : 'qualquer canal'},
 					utilize ${Command.usage('comando', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
 					Por exemplo, ${Command.usage('prefixo', msg.guild ? msg.guild.commandPrefix : null, this.client.user)}.
@@ -89,7 +89,7 @@ module.exports = class AjudaCommand extends Command {
 							}
 						`).join('\n\n')
 					}
-				`}}));
+				`, { split: true }));
 				if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: '<a:checkmark_gif:738900367814819940> | Mandei no privado.' }));
 			} catch(err) {
 				messages.push(await msg.embed({ color: '#c22727', description: '<a:cross_gif:738900572664496169> | Não consegui mandar no privado, você provavelmente tem ele fechado :/' }));

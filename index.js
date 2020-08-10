@@ -60,9 +60,12 @@ const client = new CommandoClient({
 client.registry
 	.registerDefaults()
 	.registerGroups([
-		['autorespostas', 'AutoRespostas'],
+		['autorespostas', 'Auto Respostas'],
 		['utilidades', 'Utilidades'],
-		['adm', 'Administrativos'],
+		['interação', 'Interação entre Membros'],
+		['imgs-ia', 'Imagens Geradas com Inteligência Artificial'],
+		['adm', 'Reservados á Staff'],
+		['eventos', 'Relacionados a Eventos'],
 	])
 	.registerCommandsIn(path.join(__dirname, 'Comandos'))
 
@@ -96,4 +99,4 @@ evtFiles.forEach(f => {
 
 
 //login && token
-client.login(process.env.AUTH_TOKEN);
+client.login('NzA2MzM0MzQ0NDg2MTkxMTI0.Xq4vHg.ycfD_lGkYqFY8seXv8pb3_eVsLg');

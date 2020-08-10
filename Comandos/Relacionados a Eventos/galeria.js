@@ -6,13 +6,13 @@ module.exports = class InstagramCommand extends Command {
     super(client, {
       name: 'galeria',
       aliases: ['galeria-postar'],
-      group: 'adm',
+      group: 'eventos',
       memberName: 'galeria',
       clientPermissions: ['ADMINISTRATOR'],
       userRoles: ['741049474629107833'],
       serverOnly: true,
-      description: 'Envia sua foto no Instagram do servidor',
-      details: '',
+      description: 'Envia sua foto na galeria de eventos do servidor',
+      details: 'Deve marcar(também serve id ou só o nome) o autor da foto e anexar a foto.',
       args: [
         {
             key: 'usuário',

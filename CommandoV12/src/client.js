@@ -2,6 +2,7 @@ const discord = require('discord.js');
 const CommandoRegistry = require('./registry');
 const CommandDispatcher = require('./dispatcher');
 const GuildSettingsHelper = require('./providers/helper');
+const Collection = require('@discordjs/collection');
 
 /**
  * Discord.js Client with a command framework
@@ -51,6 +52,12 @@ class CommandoClient extends discord.Client {
 		 * @type {GuildSettingsHelper}
 		 */
 		this.settings = new GuildSettingsHelper(this, null);
+
+		/**
+		 * Collection of games being played
+		 * @type {a}
+		 */
+		this.games = new Collection();
 
 		/**
 		 * Internal global command prefix, controlled by the {@link CommandoClient#commandPrefix} getter/setter
