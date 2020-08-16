@@ -11,6 +11,7 @@ module.exports = class InfoCommand extends Command {
 			group: 'p&i',
 			memberName: 'info',
 			description: 'Mostra as informações de um usuário do servidor.',
+			blackListed: ['698678688153206915'],
 			args: [
 				{
 					key: 'usuário',
