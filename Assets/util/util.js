@@ -4,12 +4,67 @@ const yes = ['sim', 'yes', 'y', 's', 'ye', 'yeah', 'yup', 'yea', 'ya', 'hai', 's
 const no = ['não', 'nao', 'no', 'n', 'nah', 'nope', 'nop', 'iie', 'いいえ', 'non', 'nom', 'se foder'];
 const inviteRegex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(\.gg|(app)?\.com\/invite|\.me)\/([^ ]+)\/?/gi;
 const botInvRegex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(app)?\.com\/(api\/)?oauth2\/authorize\?([^ ]+)\/?/gi;
-const mentionRegex = /<@&?!?(\d+)>/gi
+const mentionRegex = /<@&?!?(\d+)>/gi;
+const status = {
+	online: 'Disponível/Online',
+	idle: 'Ausente',
+	dnd: 'Não perturbe/Indisponível',
+	offline: 'Offline/Invisível'
+};
+const activities = {
+	PLAYING: 'Jogando',
+	WATCHING: 'Assistindo',
+	LISTENING: 'Ouvindo',
+	STREAMING: 'Transmitindo'
+};
+const mesesN = {
+	1: 'Janeiro',
+	2: 'Fevereiro',
+	3: 'Março',
+	4: 'Abril',
+	5: 'Maio',
+	6: 'Junho',
+	7: 'Julho',
+	8: 'Agosto',
+	9: 'Setembro',
+	10: 'Outubro',
+	11: 'Novembro',
+	12: 'Dezembro'
+};
 
 module.exports = class Util {
+
 	static delay(ms) {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
+
+	static data(timestamp, extenso = true) {
+		const data = new Date(timestamp);
+		if (extenso) {
+			let dataString = data.getDate();
+			dataString += ` de ${mesesN[data.getMonth() + 1]}`;
+			dataString += ` de ${data.getFullYear()}`;
+			return dataString;
+		} else {
+			let dataString = `${data.getDate()}/${data.getMonth()}/${data.getFullYear()}`
+			return dataString;
+		};
+	}
+
+	static diff(timeBase, time2) {
+		let diff = time2 - timeBase;
+		const dias = diff > 86400000 ? Math.floor(diff/86400000) : null;
+		if (dias) diff -= dias * 86400000;
+		const horas = diff > 3600000 ? Math.floor(diff/3600000) : null;
+		if (horas) diff -= horas * 3600000;
+		const minutos = diff > 60000 ? Math.floor(diff/60000) : null;
+		if (minutos) diff -= minutos * 60000;
+		const segundos = diff > 1000 ? Math.floor(diff/1000) : null;
+		if (segundos) diff -= segundos * 1000;
+		
+		if (dias) return `${dias} dias${horas ? ` e ${horas} horas.` : `.`}`
+		else return `${horas} horas${minutos ? `${segundos ? ', ' : ' e '} ${minutos} minutos` : ''}${segundos ? ` e ${segundos} segundos.` : '.'}`
+		}
 
 	static shuffle(array) {
 		const arr = array.slice(0);

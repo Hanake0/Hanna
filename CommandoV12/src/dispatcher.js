@@ -107,7 +107,7 @@ class CommandDispatcher {
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
 		//cria os presets se não existem
-		var { usersOffDB, usersOn } = require('../../index.js');
+		var { usersOffDB} = require('../../index.js');
 		if (!usersOffDB.has(message.author.id).value()) {
 			usersOffDB.set(message.author.id, {
 				"galo_nivel": 0,
@@ -343,7 +343,7 @@ class CommandDispatcher {
 			pattern = new RegExp(`(^<@!?${this.client.user.id}>\\s+)([^\\s]+)`, 'i');
 		}
 		this._commandPatterns[prefix] = pattern;
-		this.client.emit('debug', `Built command pattern for prefix "${prefix}": ${pattern}`);
+		this.client.emit('debug', `Regex contruída para o prefixo "${prefix}": ${pattern}`);
 		return pattern;
 	}
 }

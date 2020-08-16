@@ -15,16 +15,16 @@ module.exports = class HungerGamesCommand extends Command {
       description: '(não é o do Minecraft) Inicia uma partida simulada dos Jogos Vorazes',
       details: 'Até 24 participantes são aceitos, mais que isso e o comando não funciona.\nParticipantes duplicados também não são aceitos.\nO nome de cada participante pode ter no máximo 20 caractéres',
       throttling: {
-				usages: 1,
-				duration: 300
-			},
+            usages: 1,
+            duration: 10
+        },
       args: [
         {
             key: 'tributos',
             prompt: '**UM** nome(pode ter sobrenome) que deve participar, digita aí, máximo de 20 caracteres e 24 tributos.',
-						type: 'string',
-						infinite: true,
-            max: 20,
+                type: 'string',
+                infinite: true,
+            max: 20
         }
       ]
     });
@@ -105,7 +105,7 @@ module.exports = class HungerGamesCommand extends Command {
 			.replace(/\(Player6\)/gi, `**${tributos[5]}**`);
 	};
 
-	//
+	// Escolhe os eventos randômicamente
 	makeEvents(tributos, kills, eventsArr, deaths, results) {
 		const turn = new Set(tributos);
 		for (const tribute of tributos) {
@@ -142,6 +142,7 @@ module.exports = class HungerGamesCommand extends Command {
 		}
 	};
 
+        // Faz o "Ranking de kills"
 	makeLeaderboard(tributos, kills, ganhador) {
 		let i = 0;
 		let previousPts = null;

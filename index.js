@@ -1,7 +1,7 @@
-const commando = require('./CommandoV12/src/index.js')
-const { CommandoClient, SQLiteProvider } = require('./CommandoV12/src/index.js');
+const commando = require('./CommandoV12/src/index.js');
+const { CommandoClient} = require('./CommandoV12/src/index.js');
 const path = require('path');
-const { readdirSync } = require('fs')
+const { readdirSync } = require('fs');
 
 
 //inicializa o lowDB
@@ -19,7 +19,7 @@ const serviceAccount = require('./serviceAccount.json');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount)
-})
+});
 
 let db = admin.firestore();
 module.exports.db = db;
@@ -45,11 +45,11 @@ setInterval(async () => {
 
 
 //cria um client do Comando
-const donos = new Set()
+const donos = new Set();
   donos.add('380512056413257729');
   donos.add('348664615175192577');
 const client = new CommandoClient({
-	commandPrefix: 'h',
+	commandPrefix: 't//',
 	unknownCommandResponse: false,
 	owner: donos,
 	disableEveryone: true
@@ -65,21 +65,23 @@ client.registry
 		['interação', 'Interação entre Membros'],
 		['singleplayer', 'Jogos Single Player'],
 		['imgs-ia', 'Imagens Geradas com Inteligência Artificial'],
+		['p&i', 'Perfil & Inventário'],
 		['adm', 'Reservados á Staff'],
-		['eventos', 'Relacionados a Eventos'],
+		['eventos', 'Relacionados a Eventos']
 	])
-	.registerCommandsIn(path.join(__dirname, 'Comandos'))
+	.registerCommandsIn(path.join(__dirname, 'Comandos'));
 
 
 //Event Handler(Project-A) && erros
-const evtFiles = readdirSync('./Eventos/')
-console.log('log', `Carregando o total de ${evtFiles.length} eventos`)
+const evtFiles = readdirSync('./Eventos/');
+console.log('log', `Carregando o total de ${evtFiles.length} eventos`);
 evtFiles.forEach(f => {
-  const eventName = f.split('.')[0]
-  const event = require(`./Eventos/${f}`)
+  const eventName = f.split('.')[0];
+  const event = require(`./Eventos/${f}`);
 
 
   client.on(eventName, event.bind(null, client));
+});
   client
 	.on('error', console.error)
 	.on('warn', console.warn)
@@ -95,9 +97,7 @@ evtFiles.forEach(f => {
 			Comando ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
 			bloqueado; ${reason}
 		`);
-	})
-})
-
+	});
 
 //login && token
 client.login(process.env.AUTH_TOKEN);
