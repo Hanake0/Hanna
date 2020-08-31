@@ -16,10 +16,12 @@ module.exports = async (client, membro) => {
       if (Wclub.members.cache.has(membro.id)) {
         membro.roles.add(role);
       }
+      break;
     case WC:
       if (Wstore.members.cache.has(membro.id)) {
         const membro2 = Wstore.members.cache.get(membro.id);
         membro2.roles.add(role);
       }
+      break;
   }
 }

@@ -16,6 +16,7 @@ module.exports = async (client, membro) => {
       if (Wstore.members.cache.has(membro.id)) {
         const membro2 = Wstore.members.cache.get(membro.id);
         membro2.roles.remove(role);
+        break;
       }
   }
 }
