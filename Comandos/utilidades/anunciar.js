@@ -29,7 +29,7 @@ module.exports = class AnunciarCommand extends Command {
 
 	async run(message, { canal, mensagem }) {
 	  if (message.guild.me.permissionsIn(canal).has("SEND_MESSAGES")) {
-	    await message.delete(5);
+	    await message.delete({ timeout: 5 });
 	    canal.send(mensagem);
 	  } else {
 	    message.say('Desculpe, mas eu não tenho permissão para enviar mensagens nesse canal')

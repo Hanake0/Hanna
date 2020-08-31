@@ -31,7 +31,7 @@ module.exports = class InfoCommand extends Command {
 			money:'$$ MONEY $$',
 			xp: '## XP ##',
 			xp_semanal: '## XP SEMANAL ##',
-			mensagens: '## MENSAGENS ##',
+			mensagens: '## MENSAGENS CONTADAS ##',
 			idade: '## IDADE ##',
 			sexualidade: '¬¬ SEXUALIDADE ¬¬'
 		};

@@ -1,36 +1,11 @@
 const crypto = require('crypto');
 const { SUCCESS_EMOJI_ID } = process.env;
+const { mesesN } = require('./util2');
 const yes = ['sim', 'yes', 'y', 's', 'ye', 'yeah', 'yup', 'yea', 'ya', 'hai', 'si', 'sí', 'oui', 'はい', 'correto', 'continuar', 'siis', 'simsim', 'sim sim'];
 const no = ['não', 'nao', 'no', 'n', 'nah', 'nope', 'nop', 'iie', 'いいえ', 'non', 'nom', 'se foder'];
 const inviteRegex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(\.gg|(app)?\.com\/invite|\.me)\/([^ ]+)\/?/gi;
 const botInvRegex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(app)?\.com\/(api\/)?oauth2\/authorize\?([^ ]+)\/?/gi;
 const mentionRegex = /<@&?!?(\d+)>/gi;
-const status = {
-	online: 'Disponível/Online',
-	idle: 'Ausente',
-	dnd: 'Não perturbe/Indisponível',
-	offline: 'Offline/Invisível'
-};
-const activities = {
-	PLAYING: 'Jogando',
-	WATCHING: 'Assistindo',
-	LISTENING: 'Ouvindo',
-	STREAMING: 'Transmitindo'
-};
-const mesesN = {
-	1: 'Janeiro',
-	2: 'Fevereiro',
-	3: 'Março',
-	4: 'Abril',
-	5: 'Maio',
-	6: 'Junho',
-	7: 'Julho',
-	8: 'Agosto',
-	9: 'Setembro',
-	10: 'Outubro',
-	11: 'Novembro',
-	12: 'Dezembro'
-};
 
 module.exports = class Util {
 
@@ -45,26 +20,35 @@ module.exports = class Util {
 			dataString += ` de ${mesesN[data.getMonth() + 1]}`;
 			dataString += ` de ${data.getFullYear()}`;
 			return dataString;
-		} else {
-			let dataString = `${data.getDate()}/${data.getMonth()}/${data.getFullYear()}`
+		}
+		else {
+			const dataString = `${data.getDate()}/${data.getMonth()}/${data.getFullYear()}`;
 			return dataString;
-		};
+		}
 	}
 
 	static diff(timeBase, time2) {
 		let diff = time2 - timeBase;
-		const dias = diff > 86400000 ? Math.floor(diff/86400000) : null;
+		const dias = diff > 86400000 ? Math.floor(diff / 86400000) : null;
 		if (dias) diff -= dias * 86400000;
-		const horas = diff > 3600000 ? Math.floor(diff/3600000) : null;
+		const horas = diff > 3600000 ? Math.floor(diff / 3600000) : null;
 		if (horas) diff -= horas * 3600000;
-		const minutos = diff > 60000 ? Math.floor(diff/60000) : null;
+		const minutos = diff > 60000 ? Math.floor(diff / 60000) : null;
 		if (minutos) diff -= minutos * 60000;
-		const segundos = diff > 1000 ? Math.floor(diff/1000) : null;
+		const segundos = diff > 1000 ? Math.floor(diff / 1000) : null;
 		if (segundos) diff -= segundos * 1000;
-		
-		if (dias) return `${dias} dias${horas ? ` e ${horas} horas.` : `.`}`
-		else return `${horas} horas${minutos ? `${segundos ? ', ' : ' e '} ${minutos} minutos` : ''}${segundos ? ` e ${segundos} segundos.` : '.'}`
+
+		if (dias) {
+			if (horas && minutos) return `${dias} dia${dias > 1 ? 's' : ''} e ${horas} hora${horas > 1 ? 's.' : '.'}`;
+
+			else return `${dias} dia${dias > 1 ? 's' : ''}${minutos ? `e ${minutos} minuto${minutos > 1 ? 's.' : '.'}` : `e ${horas} hora${horas > 1 ? 's.' : '.'}`}`;
 		}
+		else if (horas) return `${horas} hora${horas > 1 ? 's' : ''}${minutos ? ` e ${minutos} minuto${minutos > 1 ? 's.' : '.'}` : '.'}`;
+
+		else if (minutos) return `${minutos} minuto${minutos > 1 ? 's' : ''}${segundos ? `${segundos} segundo${segundos > 1 ? 's.' : '.'}` : '' }`;
+
+		else return `${segundos ? `${segundos} segundo${segundos > 1 ? 's.' : '.'}` : `${diff} milisegundos`}`;
+	}
 
 	static shuffle(array) {
 		const arr = array.slice(0);
@@ -125,7 +109,7 @@ module.exports = class Util {
 	static formatNumber(number, minimumFractionDigits = 0) {
 		return Number.parseFloat(number).toLocaleString(undefined, {
 			minimumFractionDigits,
-			maximumFractionDigits: 2
+			maximumFractionDigits: 2,
 		});
 	}
 
@@ -188,7 +172,7 @@ module.exports = class Util {
 		const color = {
 			r: Math.floor((lower.color.r * pctLower) + (upper.color.r * pctUpper)).toString(16).padStart(2, '0'),
 			g: Math.floor((lower.color.g * pctLower) + (upper.color.g * pctUpper)).toString(16).padStart(2, '0'),
-			b: Math.floor((lower.color.b * pctLower) + (upper.color.b * pctUpper)).toString(16).padStart(2, '0')
+			b: Math.floor((lower.color.b * pctLower) + (upper.color.b * pctUpper)).toString(16).padStart(2, '0'),
 		};
 		return `#${color.r}${color.g}${color.b}`;
 	}
@@ -213,17 +197,18 @@ module.exports = class Util {
 		return `[${title}](${url.replace(/\)/g, '%27')}${display ? ` "${display}"` : ''})`;
 	}
 
-	static stripInvites(str, { guild = true, bot = true, text = '[convite removido]' } = {}) {
+	static stripInvites(str, { guild = true, bot = true, text = '[convite]' } = {}) {
 		if (guild) str = str.replace(inviteRegex, text);
 		if (bot) str = str.replace(botInvRegex, text);
 		return str;
-    }
-    
-    static stripMentions(str, { text = '[menção removida]' } = {}) {
-		str = str.replace(/@everyone/gi, text)
+	}
+
+	static stripMentions(str, { text = '[menção]' } = {}) {
+		str = str.replace(/@here/gi, text);
+		str = str.replace(/@everyone/gi, text);
 		str = str.replace(mentionRegex, text);
 		return str;
-    }
+	}
 
 	static async verify(channel, user, { time = 30000, extraYes = [], extraNo = [] } = {}) {
 		const filter = res => {
@@ -233,7 +218,7 @@ module.exports = class Util {
 		};
 		const verify = await channel.awaitMessages(filter, {
 			max: 1,
-			time
+			time,
 		});
 		if (!verify.size) return 0;
 		const choice = verify.first().content.toLowerCase();
@@ -244,9 +229,7 @@ module.exports = class Util {
 
 	static async awaitPlayers(msg, max, min = 1) {
 		if (max === 1) return [msg.author.id];
-		await msg.say(
-			`Você precisa de pelomenos mais ${min - 1} jogador${min - 1 === 1 ? '' : 'es'} (no máximo ${max - 1}). Para participar, digite \`participar\`.`
-		);
+		await msg.say(`Você precisa de pelomenos mais ${min - 1} jogador${min - 1 === 1 ? '' : 'es'} (no máximo ${max - 1}). Para participar, digite \`participar\`.`);
 		const joined = [];
 		joined.push(msg.author.id);
 		const filter = res => {
