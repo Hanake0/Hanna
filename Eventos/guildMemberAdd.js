@@ -8,7 +8,7 @@ module.exports = async (client, membro) => {
   const Wstore = client.guilds.cache.get(WS);
   
   const roleID = '750073380711170142';
-  const role = client.guilds.get(Wstore).roles.cache.get(roleID);
+  const role = client.guilds.cache.get(Wstore).roles.cache.get(roleID);
 
   // verifica em que servidor o membro entrou e adiciona o cargo se ele estiver no outro
   switch (id) {
