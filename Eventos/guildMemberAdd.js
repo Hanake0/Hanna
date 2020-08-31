@@ -3,7 +3,7 @@ module.exports = async (client, membro) => {
   const WC = '698560208309452810';
   const Wclub = client.guilds.cache.get(WC);
   const WS = '749990911802474667';
-  const Wclub = client.guilds.cache.get(WS);
+  const Wstore = client.guilds.cache.get(WS);
   const roleID = '750073380711170142';
   const role = client.guilds.get(Wstore).roles.cache.get(roleID);
 
