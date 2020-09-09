@@ -26,7 +26,7 @@ module.exports = class MamarCommand extends Command {
   async run(message, { usuário }) {
     const adms = message.guild.members.cache.filter( m => m._roles.includes('698565526527672331'));
     
-    const mamado = usuário || adms[Array.from(adms.keys())[Math.floor(Math.random() * adms.size)]];
+    const mamado = usuário || adms.get(Array.from(adms.keys())[Math.floor(Math.random() * adms.size)]);
     
     const ações = ['mamou graciosamente', 'mamou delicadamente', 'MORDEU', 'mamou como um profissional'];
     
