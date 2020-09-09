@@ -26,7 +26,7 @@ module.exports = class MamarCommand extends Command {
   async run(message, { usuário }) {
     const adms = message.guild.members.cache.filter( m => m._roles.includes('698565526527672331'));
     
-    const mamado = usuário || adms[Array.from(adms.keys())[Math.floor(Math.random * adms.size)]];
+    const mamado = usuário || adms[Array.from(adms.keys())[Math.floor(Math.random() * adms.size)]];
     
     const ações = ['mamou graciosamente', 'mamou delicadamente', 'MORDEU', 'mamou como um profissional'];
     
@@ -37,8 +37,8 @@ module.exports = class MamarCommand extends Command {
       'mamou como um profissional': ['https://cdn.discordapp.com/attachments/716538673084235790/753262784942309406/e13c8229894d80889e7ca543f5e5b174.gif', 'https://cdn.discordapp.com/attachments/716538673084235790/753262782576853153/tenor_4.gif', 'https://cdn.discordapp.com/attachments/716538673084235790/753262773919678495/tenor_2.gif', 'https://cdn.discordapp.com/attachments/716538673084235790/753262762955636746/BLEDDeV.gif', 'https://cdn.discordapp.com/attachments/716538673084235790/753262725924126810/9617eeb279df79dc5e53a731d7bfb3c723b150ad_hq.gif', 'https://cdn.discordapp.com/attachments/716538673084235790/753262725651497050/5908-animated-animated-gif-blush-censored-erogos-eyes-closed-freezepop-gif-artifacts-licking-love-fe.gif', 'https://cdn.discordapp.com/attachments/716538673084235790/753262719381274714/Whenitsahotdayoutandtheicecream_fc5079e94385e77d4f7a218d2f460c3f.gif']
     };
     
-    const acao = ações[Math.floor(Math.random * ações.length)];
-    const gif = gifs[acao][Math.floor(Math.random * gifs[acao].length)];
+    const acao = ações[Math.floor(Math.random() * ações.length)];
+    const gif = gifs[acao][Math.floor(Math.random() * gifs[acao].length)];
     
     const embed = new Discord.MessageEmbed()
         .setDescription(`${message.author} ${acao} ${mamado}.`)
