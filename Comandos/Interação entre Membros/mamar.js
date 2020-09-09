@@ -12,6 +12,7 @@ module.exports = class MamarCommand extends Command {
       memberName: 'mamar',
       description: 'Mama um usuário ou adm do servidor.',
       guildOnly: true,
+      blackListed: ['698678688153206915'],
       args: [
         {
           key: 'usuário',
