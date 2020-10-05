@@ -9,7 +9,11 @@ const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
 const adapter = new FileSync('usersOffDB.json');
+const adapter2 = new FileSync('invitesDB.json');
 const usersOffDB = low(adapter);
+const invitesDB = low(adapter2);
+
+module.exports.invitesDB = invitesDB;
 
 //inicializa o banco de dados (firebase) e exporta o banco Online
 const firebase = require('firebase/app');
@@ -101,4 +105,4 @@ evtFiles.forEach(f => {
 	});
 
 //login && token
-client.login(process.env.AUTH_TOKEN);
+client.login('NzA2MzM0MzQ0NDg2MTkxMTI0.Xq4vHg.MbEGhwM0CSfnMqbvPUQf9FzQQwg');

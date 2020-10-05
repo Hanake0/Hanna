@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable complexity */
 const { escapeRegex } = require('./util');
 
 /** Handles parsing messages and running commands from them */
@@ -106,49 +108,56 @@ class CommandDispatcher {
 		/* eslint-disable max-depth */
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
-		//cria os presets se não existem
-		var { usersOffDB} = require('../../index.js');
-		if (!usersOffDB.has(message.author.id).value()) {
+		// Cria os presets se não existem
+		var { usersOffDB } = require('../../index.js');
+		if(!usersOffDB.has(message.author.id).value()) {
 			usersOffDB.set(message.author.id, {
-				"galo_nivel": 0,
-				"medalhas": [],
-				"galo?": false,
-				"username": message.author.username,
-				"idade": null,
-				"interesses": [],
-				"mensagens": 1,
-				"xp": 5,
-				"id": message.author.id,
-				"xp_semanal": 5,
-				"money": 1,
-				"sexualidade": null,
-				"lastMessage": `${message.createdAt.toISOString()}`,
-				"lastMessageContent": message.content,
-				"lastMessageChannelID": message.channel.id
+				galo_nivel: 0,
+				medalhas: [],
+				'galo?': false,
+				username: message.author.username,
+				idade: null,
+				interesses: [],
+				mensagens: 1,
+				xp: 5,
+				id: message.author.id,
+				xp_semanal: 5,
+				money: 1,
+				sexualidade: null,
+				lastMessage: `${message.createdAt.toISOString()}`,
+				lastMessageContent: message.content,
+				lastMessageChannelID: message.channel.id
 			}).write();
 		} else {
-			//atualiza os valores do db
-			
-			usersOffDB.get(message.author.id).update('lastMessage', n => n = `${message.createdAt.toISOString()}`)
+			// Atualiza os valores do db
+
+			usersOffDB.get(message.author.id).set('lastMessage', `${message.createdAt.toISOString()}`)
 				.set('lastMessageContent', `${message.content}`)
-				.set('lastMessageChannelID', `${message.channel.id}`).write();
+				.set('lastMessageChannelID', `${message.channel.id}`)
+				.write();
 			const tempinho = new Date().valueOf() - usersOffDB.get(message.author.id).value().lastMessage.valueOf();
-	
-			if ( tempinho > 86400000) {
-				usersOffDB.get(message.author.id).update('xp', n => n - (25 * Math.round(tempinho / 60000)))
-				.update('mensagens', n => n + 1)
-				.update('lastMessage', message.createdAt)
-				.update('money', n => n + 1).write();
-			} else {
-				if (usersOffDB.get(message.author.id).value().xp < 0 ) {
-					usersOffDB.get(message.author.id).update('xp', n => n = 0);
-				};
-				usersOffDB.get(message.author.id).update('xp', n => n + 5)
-					.update('mensagens', n => n + 1)
+
+			if(tempinho > 86400000) {
+				usersOffDB.get(message.author.id).update('xp', num => num - (25 * Math.round(tempinho / 60000)))
+					.update('mensagens', num => num + 1)
 					.update('lastMessage', message.createdAt)
-					.update('money', n => n + 1).write();
-			};
-		};
+					.write();
+				// If(message.author.username.startsWith('!ʷᶜ') || message.author.username.startsWith('!𝓦𝓒')) {
+				//	usersOffDB.get(message.author.id).update('money', num => num + 1).write();
+				// }
+			} else {
+				if(usersOffDB.get(message.author.id).value().xp < 0) {
+					usersOffDB.get(message.author.id).set('xp', 0).write();
+				}
+				usersOffDB.get(message.author.id).update('xp', num => num + 5)
+					.update('mensagens', num => num + 1)
+					.update('lastMessage', message.createdAt)
+					.write();
+				if(message.author.username.startsWith('!ʷᶜ') || message.author.username.startsWith('!𝓦𝓒')) {
+					usersOffDB.get(message.author.id).update('xp', xp => xp + 4).write();
+				}
+			}
+		}
 
 
 		// Parse the message, and get the old result if it exists
@@ -174,7 +183,10 @@ class CommandDispatcher {
 				if(cmdMsg.command) {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
 						if(!cmdMsg.command.unknown) {
-							responses = await cmdMsg.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> |  \`${cmdMsg.command.name}\` está **desabilitado**.`});
+							responses = await cmdMsg.embed({
+								color: '#c22727',
+								description: `<a:cross_gif:738900572664496169> |  \`${cmdMsg.command.name}\` está **desabilitado**.`
+							});
 						} else {
 							/**
 							 * Emitted when an unknown command is triggered
@@ -288,7 +300,6 @@ class CommandDispatcher {
 	 * @private
 	 */
 	parseMessage(message) {
-
 		// Find the command to run with default command handling
 		const prefix = message.guild ? message.guild.commandPrefix : this.client.commandPrefix;
 		if(!this._commandPatterns[prefix]) this.buildCommandPattern(prefix);
