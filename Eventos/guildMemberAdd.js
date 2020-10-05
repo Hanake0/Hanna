@@ -1,4 +1,3 @@
-const wait = require('util').promisify(setTimeout);
 var { usersOffDB, invitesDB } = require('../index.js');
 module.exports = async (client, membro) => {
   const membro2 = membro;
@@ -26,17 +25,38 @@ module.exports = async (client, membro) => {
         const membro2 = Wstore.members.cache.get(membro.id);
         membro2.roles.add(role);
       }
-      let invite = {};
-      let invitess = {}
-      Wclub.fetchInvites().then(invites => {
 
-        // pega os convites e descobre o certo
+      // Cria um mapa dos convites atuais
+      let invitesA = new Map();
+      invitesDB.forEach(invite => invitesA.set(invite.code, invite)).value()
 
-        invitess = invites
+      Wclub.fetchInvites().then(invitesN => {
 
-        invite = invitess.find(i => invitesDB.get(i.code).value().uses < i.uses);
-        console.log(invite)
-      }).then(() => 
+      // Atualiza o db
+      invitesN.forEach( invite => {
+        invitesDB.set(invite.code, invite).write()
+      })
+
+        invite = invitesN.find(i => invitesA.get(i.code).uses < i.uses);
+
+        if(usersOffDB.get(invite.inviter.id).has('invites').value() && !usersOffDB.has(membro.id).value()) {
+          usersOffDB.get(invite.inviter.id)
+            .update('invites', num => num + 1) 
+            .update('gems', num => num + 1)
+            .write();
+          
+        } else if(!usersOffDB.has(membro.id).value()){
+          usersOffDB.get(invite.inviter.id)
+            .set('invites', 1)
+            .set('gems', 1)
+            .write();
+        } else {
+          usersOffDB.get(invite.inviter.id)
+          .set('invites', 0)
+          .set('gems', 0)
+          .write();
+        }
+      }).then(() => {
 
         // Envia o embed
 
@@ -44,33 +64,21 @@ module.exports = async (client, membro) => {
           color: '#ffa41c',
           title: 'Uso de Convite:',
           author: {
-            name: invite.inviter.tag,
+            name: `${invite.inviter.tag} (${usersOffDB.get(invite.inviter.id).has('invites').value() ? usersOffDB.get(invite.inviter.id).value().invites : 0} invites)`,
             icon_url: invite.inviter.avatarURL()
           },
-          description: `Código: **\'${invite.code}\'**
-          Usos: ${invite.uses}
-          Temporário: **${invite.maxAge === 0 ? 'Não' : 'Sim'}**
-          
-          Usuário: ${membro.tag} (${membro.id})`,
-//          fields: [
-//            {
-//              name: membro.tag,
-//              value: usersOffDB.has(membro.id).value() ? '<a:cross_gif:738900572664496169> | Não é membro novo.' : '<a:checkmark_gif:738900367814819940> | É membro novo.'
-//            }
-//          ],
+          description: `Código: **\'${invite.code}\'**\nUsos(convite): ${invite.uses}\nTemporário: **${invite.maxAge === 0 ? 'Não' : 'Sim'}**`,
+          fields: [
+            {
+              name: `${membro.user.tag} (${membro.id})`,
+              value: usersOffDB.has(membro.id).value() ? '<a:cross_gif:738900572664496169> | Não é membro novo.' : '<a:checkmark_gif:738900367814819940> | É membro novo.'
+            }
+          ],
           timestamp: invite.maxAge != 0 ? invite.createdTimestamp + (invite.maxAge * 1000) : invite.createdTimestamp,
           footer: {
             text: invite.maxAge != 0 ? 'Válido até: ' : 'Criado:  '
           }
-        }}));
-
-      wait(1000);
-
-      // Atualiza o db
-
-      invites.forEach( invite => {
-        invitesDB.set(invite.code, invite).write()
-      })
+        }})});
       break;
   }
 }

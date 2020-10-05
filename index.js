@@ -8,12 +8,11 @@ const { readdirSync } = require('fs');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
-const adapter = new FileSync('usersOffDB.json');
-const adapter2 = new FileSync('invitesDB.json');
-const usersOffDB = low(adapter);
-const invitesDB = low(adapter2);
+const adpt1 = new FileSync('./usersOffDB.json');
+const usersOffDB = low(adpt1);
+const adpt2 = new FileSync('./invitesDB.json');
+const invitesDB = low(adpt2);
 
-module.exports.invitesDB = invitesDB;
 
 //inicializa o banco de dados (firebase) e exporta o banco Online
 const firebase = require('firebase/app');
@@ -38,9 +37,9 @@ usersOn.get().then(snap => {
     usersOff.forEach(user => {
         usersOffDB.set(`${user.id}`, user).write();
     });
-
-    module.exports.usersOffDB = usersOffDB;
 });
+module.exports.usersOffDB = usersOffDB;
+module.exports.invitesDB = invitesDB;
 
 setInterval(async () => {
 	usersOn.update(usersOffDB.getState()).then( () => console.log('Update concluído com suscesso'));

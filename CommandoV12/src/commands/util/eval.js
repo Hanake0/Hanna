@@ -13,8 +13,8 @@ module.exports = class EvalCommand extends Command {
 			name: 'eval',
 			group: 'util',
 			memberName: 'eval',
-			description: 'Executes JavaScript code.',
-			details: 'Only the bot owner(s) may use this command.',
+			description: 'Executa código javascript.',
+			details: 'Apenas meu dono pode usar esse comando.',
 			ownerOnly: true,
 
 			args: [
@@ -33,13 +33,13 @@ module.exports = class EvalCommand extends Command {
 	run(msg, args) {
 		// Make a bunch of helpers
 		/* eslint-disable no-unused-vars */
-		const { usersOffDB, usersOn } = require('../../../../index.js');
+		const { usersOffDB, usersOn, invitesDB } = require('../../../../index.js');
 		const message = msg;
 		const client = msg.client;
 		const lastResult = this.lastResult;
 		const doReply = val => {
 			if(val instanceof Error) {
-				msg.reply(`Callback error: \`${val}\``);
+				msg.reply(`Erro durante Callback: \`${val}\``);
 			} else {
 				const result = this.makeResultMessages(val, process.hrtime(this.hrStart));
 				if(Array.isArray(result)) {
@@ -58,7 +58,7 @@ module.exports = class EvalCommand extends Command {
 			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
-			return msg.reply(`Error while evaluating: \`${err}\``);
+			return msg.reply(`Erro durante execução: \`${err.name}: ${err.message}\``);
 		}
 
 		// Prepare for callback time and respond
@@ -85,14 +85,14 @@ module.exports = class EvalCommand extends Command {
 		const append = `\n${appendPart}\n\`\`\``;
 		if(input) {
 			return discord.splitMessage(tags.stripIndents`
-				*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
+				*Executado em ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
 				\`\`\`
 			`, { maxLength: 1900, prepend, append });
 		} else {
 			return discord.splitMessage(tags.stripIndents`
-				*Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
+				*Callback executada após ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
 				\`\`\`

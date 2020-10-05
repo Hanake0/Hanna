@@ -1,3 +1,5 @@
+/* eslint-disable curly */
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable complexity */
 const { escapeRegex } = require('./util');
@@ -109,7 +111,7 @@ class CommandDispatcher {
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
 		// Cria os presets se não existem
-		var { usersOffDB } = require('../../index.js');
+		var { usersOffDB, invitesDB } = require('../../index.js');
 		if(!usersOffDB.has(message.author.id).value()) {
 			usersOffDB.set(message.author.id, {
 				galo_nivel: 0,
@@ -118,6 +120,8 @@ class CommandDispatcher {
 				username: message.author.username,
 				idade: null,
 				interesses: [],
+				invites: 0,
+				gems: 0,
 				mensagens: 1,
 				xp: 5,
 				id: message.author.id,
@@ -142,9 +146,6 @@ class CommandDispatcher {
 					.update('mensagens', num => num + 1)
 					.update('lastMessage', message.createdAt)
 					.write();
-				// If(message.author.username.startsWith('!ʷᶜ') || message.author.username.startsWith('!𝓦𝓒')) {
-				//	usersOffDB.get(message.author.id).update('money', num => num + 1).write();
-				// }
 			} else {
 				if(usersOffDB.get(message.author.id).value().xp < 0) {
 					usersOffDB.get(message.author.id).set('xp', 0).write();
@@ -153,8 +154,25 @@ class CommandDispatcher {
 					.update('mensagens', num => num + 1)
 					.update('lastMessage', message.createdAt)
 					.write();
-				if(message.author.username.startsWith('!ʷᶜ') || message.author.username.startsWith('!𝓦𝓒')) {
-					usersOffDB.get(message.author.id).update('xp', xp => xp + 4).write();
+
+				if(message.guild.id === '698560208309452810') {
+					if(message.author.username.startsWith('!ʷᶜ') || message.author.username.startsWith('!𝓦𝓒')) {
+						usersOffDB.get(message.author.id).update('xp', xp => xp + 4).write();
+						if(!message.member._roles.includes('750739449889030235')) message.member.roles.add(message.client.guilds.cache.get('698560208309452810').roles.cache.get('750739449889030235'), 'Username começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
+					} else if(message.member._roles.includes('750739449889030235')) message.member.roles.remove(message.client.guilds.cache.get('698560208309452810').roles.cache.get('750739449889030235'), 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
+
+					if(message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS' !== undefined)) {
+						let codes = [];
+						let incluidos = [];
+						invitesDB.filter(inv => inv.maxAge === 0).value().forEach(inv => codes.push(inv.code));
+						for(const code of codes) {
+							if(message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS').state.includes(code)) incluidos.push(code);
+						}
+						if(incluidos.length > 0) {
+							usersOffDB.get(message.author.id).update('money', num => num + 1).write();
+							if(!message.member._roles.includes('735677045954314362')) message.member.roles.add(message.client.guilds.cache.get('698560208309452810').roles.cache.get('735677045954314362'), 'Convite permanente no status');
+						} else if(message.member._roles.includes('735677045954314362')) message.member.roles.remove(message.client.guilds.cache.get('698560208309452810').roles.cache.get('735677045954314362'), 'Não tem convite permanente no Status');
+					} else if(message.member._roles.includes('735677045954314362')) message.member.roles.remove(message.client.guilds.cache.get('698560208309452810').roles.cache.get('735677045954314362'), 'Não tem convite permanente no Status');
 				}
 			}
 		}
