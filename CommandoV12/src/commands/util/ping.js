@@ -1,6 +1,5 @@
-const { oneLine } = require('common-tags');
 const Command = require('../base');
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 
 module.exports = class PingCommand extends Command {
 	constructor(client) {
@@ -30,7 +29,7 @@ module.exports = class PingCommand extends Command {
 		if(!pingMsg.editable) {
 			return msg.embed(embed);
 		} else {
-			pingMsg.edit('', embed)
+			pingMsg.edit('', embed);
 		}
 	}
 };

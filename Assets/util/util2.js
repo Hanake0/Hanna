@@ -1,3 +1,5 @@
+const { usersOffDB } = require('../../index.js');
+
 const status = {
 	online: 'Disponível/Online',
 	idle: 'Ausente',
@@ -36,4 +38,27 @@ module.exports.status = status;
 module.exports.activities = activities;
 module.exports.mesesN = mesesN;
 module.exports.sim = sim;
-module.exports.nao = nao
+module.exports.nao = nao;
+
+module.exports = class Util {
+	static async comprar(nome, valor, canal, user, moeda) {
+		const { verify } = require('./util.js');
+		if(usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() > valor) {
+			canal.send(`${user}`, {embed: { color: '#ffa41c', description: `Tem certeza que deseja comprar **${nome}** por ${valor} ${moeda} ?` }})
+		} else {
+			canal.send(`${user}`, {embed: { color: '#ff2b1c', description: `<a:cross_gif:738900572664496169> | Você não tem ${moeda} o suficiente(faltam ${usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() !== undefined ? valor - usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() : valor} ${moeda})` }})
+			return false
+		}
+		const sn = await verify(canal, user);
+		if(sn && sn !== 0 ) {
+			canal.send(`${user}`, {embed: { color: '#38b833', description: '<a:checkmark_gif:738900367814819940> | Compra concluída com sucesso.' }});
+			return true
+		} else if(sn !== 0) {
+			canal.send(`${user}`, {embed: { color: '#ff2b1c', description: '<a:cross_gif:738900572664496169> | Compra cancelada.' }});
+			return false
+		} else {
+			canal.send(`${user}`, {embed: { color: '#ff2b1c', description: '<a:cross_gif:738900572664496169> | Tempo esgotado.' }});
+			return false
+		}
+	}
+}

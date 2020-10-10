@@ -1,4 +1,3 @@
-const message = require('../CommandoV12/src/extensions/message.js');
 const { invitesDB } = require('../index.js');
 module.exports = async (client, invite) => {
   invitesDB.set(invite.code).write();

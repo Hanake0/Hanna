@@ -161,7 +161,7 @@ class CommandDispatcher {
 						if(!message.member._roles.includes('750739449889030235')) message.member.roles.add(message.client.guilds.cache.get('698560208309452810').roles.cache.get('750739449889030235'), 'Username começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
 					} else if(message.member._roles.includes('750739449889030235')) message.member.roles.remove(message.client.guilds.cache.get('698560208309452810').roles.cache.get('750739449889030235'), 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
 
-					if(message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS' !== undefined)) {
+					if(!message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === undefined && !message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === null) {
 						let codes = [];
 						let incluidos = [];
 						invitesDB.filter(inv => inv.maxAge === 0).value().forEach(inv => codes.push(inv.code));

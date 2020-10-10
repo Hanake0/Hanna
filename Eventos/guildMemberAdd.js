@@ -32,12 +32,12 @@ module.exports = async (client, membro) => {
 
       Wclub.fetchInvites().then(invitesN => {
 
-      // Atualiza o db
-      invitesN.forEach( invite => {
-        invitesDB.set(invite.code, invite).write()
-      })
+        invite = invitesN.find(i => invitesDB.get(i.code).value().uses < i.uses);
 
-        invite = invitesN.find(i => invitesA.get(i.code).uses < i.uses);
+        // Atualiza o db
+        invitesN.forEach( invite => {
+          invitesDB.set(invite.code, invite).write()
+        })
 
         if(usersOffDB.get(invite.inviter.id).has('invites').value() && !usersOffDB.has(membro.id).value()) {
           usersOffDB.get(invite.inviter.id)
@@ -50,7 +50,7 @@ module.exports = async (client, membro) => {
             .set('invites', 1)
             .set('gems', 1)
             .write();
-        } else {
+        } else if(!usersOffDB.get(invite.inviter.id).has('invites').value()) {
           usersOffDB.get(invite.inviter.id)
           .set('invites', 0)
           .set('gems', 0)
@@ -78,7 +78,29 @@ module.exports = async (client, membro) => {
           footer: {
             text: invite.maxAge != 0 ? 'Válido até: ' : 'Criado:  '
           }
-        }})});
+        }}).then(() => {
+          if(!usersOffDB.has(membro.id).value()) {
+            usersOffDB.set(membro.id, {
+              galo_nivel: 0,
+              medalhas: [],
+              'galo?': false,
+              username: membro.user.username,
+              idade: null,
+              interesses: [],
+              invites: 0,
+              gems: 0,
+              mensagens: 1,
+              xp: 5,
+              id: membro.id,
+              xp_semanal: 5,
+              money: 1,
+              sexualidade: null,
+              lastMessage: null,
+              lastMessageContent: null,
+              lastMessageChannelID: null
+            }).write();
+          }
+        })});
       break;
   }
 }

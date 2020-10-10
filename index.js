@@ -2,6 +2,7 @@ const commando = require('./CommandoV12/src/index.js');
 const { CommandoClient} = require('./CommandoV12/src/index.js');
 const path = require('path');
 const { readdirSync } = require('fs');
+const { Intents } = require('discord.js');
 
 
 //inicializa o lowDB
@@ -53,6 +54,8 @@ const donos = new Set();
   donos.add('348664615175192577');
   donos.add('398852531259965440');
 const client = new CommandoClient({
+	ws: { intents: Intents.ALL },
+	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 	commandPrefix: 'h',
 	unknownCommandResponse: false,
 	owner: donos,
