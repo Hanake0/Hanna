@@ -1,9 +1,14 @@
 const catálogo = require('../Assets/JSON/catálogo.json');
+const emojis = require('../Assets/JSON/emojis.json');
 const { cor } = require('../Assets/util/inventário.js');
 const { usersOffDB } = require('../index.js');
 const { comprar } = require('../Assets/util/util2.js');
+const d = new Date();
+const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
+
 module.exports = async (client, reaction, user) => {
-  if(user.id === client.user.id) return;
+  if(user.id === client.user.id || user.bot) return;
+  console.log(hora, 'Evento \`messageReactionAdd\` emitido...');
 
   if (reaction.partial) {
 		try {
@@ -21,8 +26,19 @@ module.exports = async (client, reaction, user) => {
   const id = reaction.message.id;
   const gc = emojiId === '750840705269891112' ? 'gems' : 'coins';
 
+  // Todos os id's (Array)
   let mIDs = [];
 
+  // Coloca os id's de cada categoria em mIDs([]) e guarda as informações de cada categoria ({})
+  // Mensagens de informação e textos
+  let infos = [];
+  Object.keys(catálogo.infos).forEach(categoria => {
+    if(catálogo.infos[categoria].mID !== undefined) {
+      infos.push(catálogo.infos[categoria]);
+      mIDs.push(catálogo.infos[categoria].mID);
+    }
+  });
+  // Loja de cores { nome: '', aliases: [], valor: '', mID: '', rID: ''}
   let cores = [];
   Object.keys(catálogo.cores).forEach(cor => {
     if(catálogo.cores[cor].mID !== undefined) {
@@ -30,6 +46,15 @@ module.exports = async (client, reaction, user) => {
       mIDs.push(catálogo.cores[cor].mID);
     }
   });
+  // Loja de VIP's { nome: '', valor: '', mID: ''}
+  let vips = [];
+  Object.keys(catálogo.vips).forEach(tempo => {
+    if(catálogo.vips[tempo].mID !== undefined) {
+      vips.push(catálogo.vips[tempo]);
+      mIDs.push(catálogo.vips[tempo].mID);
+    }
+  });
+  // Outros itens genéricos { nome: '', valor: '', mID: ''}
   let outros = [];
   Object.keys(catálogo).forEach(item => {
     if(catálogo[item].mID !== undefined) {
@@ -69,7 +94,7 @@ module.exports = async (client, reaction, user) => {
           .write();
 
         // caso já tenha alguma cor e tenha essa
-      } else confirmação.send(`${user}`, {embed: { color: '#ff2b1c', description: `<a:cross_gif:738900572664496169> | Você já possui a cor **${cor.nome}**` }});
+      } else confirmação.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Você já possui a cor **${cor.nome}**` }});
 
     // caso não tenha nenhuma cor
     } else {

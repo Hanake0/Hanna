@@ -15,7 +15,7 @@ module.exports = class AutoBase extends Command {
 
   async run(message) {
     const reacts = ['760878648919588885', '760882289440849971'];
-    const número = Math.floor(Math.random() * reacts.length);  
-    message.react(reacts[número]);
+    const número = Math.floor(Math.random() * reacts.length);
+    if(Math.floor(Math.random() * 10) > 5) message.react(reacts[número]);
   }
 };

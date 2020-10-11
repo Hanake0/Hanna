@@ -1,5 +1,13 @@
 var { usersOffDB, invitesDB } = require('../index.js');
+const emojis = require('../Assets/JSON/emojis.json');
+const dbPressets= require('../Assets/JSON/dbPressets.json');
+const { stripIndents } = require('common-tags');
+const d = new Date();
+const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `;
+
 module.exports = async (client, membro) => {
+  console.log(hora, 'Evento \`guildMemberAdd\` emitido...');
+  
   const membro2 = membro;
 
   const id = membro.guild.id;
@@ -59,48 +67,42 @@ module.exports = async (client, membro) => {
       }).then(() => {
 
         // Envia o embed
-
         Wclub.channels.cache.get('751568642545680485').send({embed: {
-          color: '#ffa41c',
+          color: emojis.warningC,
           title: 'Uso de Convite:',
           author: {
             name: `${invite.inviter.tag} (${usersOffDB.get(invite.inviter.id).has('invites').value() ? usersOffDB.get(invite.inviter.id).value().invites : 0} invites)`,
             icon_url: invite.inviter.avatarURL()
           },
-          description: `Código: **\'${invite.code}\'**\nUsos(convite): ${invite.uses}\nTemporário: **${invite.maxAge === 0 ? 'Não' : 'Sim'}**`,
+          description: stripIndents`
+          Código: **\'${invite.code}\'**
+          Usos(convite): ${invite.uses}
+          Temporário: **${invite.maxAge === 0 ? 'Não' : 'Sim'}**`,
           fields: [
             {
               name: `${membro.user.tag} (${membro.id})`,
-              value: usersOffDB.has(membro.id).value() ? '<a:cross_gif:738900572664496169> | Não é membro novo.' : '<a:checkmark_gif:738900367814819940> | É membro novo.'
+              value: usersOffDB.has(membro.id).value() ? `${emojis.fail} | Não é membro novo.` : `${emojis.success} | É membro novo.`
             }
           ],
           timestamp: invite.maxAge != 0 ? invite.createdTimestamp + (invite.maxAge * 1000) : invite.createdTimestamp,
           footer: {
             text: invite.maxAge != 0 ? 'Válido até: ' : 'Criado:  '
           }
-        }}).then(() => {
-          if(!usersOffDB.has(membro.id).value()) {
-            usersOffDB.set(membro.id, {
-              galo_nivel: 0,
-              medalhas: [],
-              'galo?': false,
-              username: membro.user.username,
-              idade: null,
-              interesses: [],
-              invites: 0,
-              gems: 0,
-              mensagens: 1,
-              xp: 5,
-              id: membro.id,
-              xp_semanal: 5,
-              money: 1,
-              sexualidade: null,
-              lastMessage: null,
-              lastMessageContent: null,
-              lastMessageChannelID: null
-            }).write();
-          }
-        })});
+        }})
+
+      }).then(() => {
+        if(!usersOffDB.has(aID).value()) {
+          usersOffDB.set({
+            username: message.author.username,
+            id: aID
+          })
+            .write();
+    
+          aDB
+            .assign(dbPressets)
+            .write();
+        }
+      });
       break;
   }
 }

@@ -4,6 +4,7 @@ const { oneLine, stripIndents } = require('common-tags');
 const ArgumentCollector = require('./collector');
 const { permissions } = require('../util');
 const Discord = require('discord.js');
+const emojis = require('../../../Assets/JSON/emojis.json');
 
 /** A command that can be run in a client */
 class Command {
@@ -260,21 +261,22 @@ class Command {
 	 * @param {boolean} [ownerOverride=true] - Whether the bot owner(s) will always have permission
 	 * @return {boolean|string} Whether the user has permission, or an error message to respond with if they don't
 	 */
+	// eslint-disable-next-line complexity
 	hasPermission(message, ownerOverride = true) {
 		if(!this.ownerOnly && !this.userPermissions && !this.userRoles && !this.blackListed) return true;
 		if(ownerOverride && this.client.isOwner(message.author)) return true;
 
 		if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {
-			return `<a:cross_gif:738900572664496169> | Apenas meu dono pode usar esse comando.`;
+			return `${emojis.warning} | Apenas meu dono pode usar esse comando.`;
 		}
 
 		if(message.channel.type === 'text' && this.userPermissions) {
 			const missing = message.channel.permissionsFor(message.author).missing(this.userPermissions);
 			if(missing.length > 0) {
 				if(missing.length === 1) {
-					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham a permissão:\n"${permissions[missing[0]]}"`;
+					return `emojis.warning | O comando \`${this.name}\` só pode ser usado por pessoas que tenham a permissão:\n"${permissions[missing[0]]}"`;
 				}
-				return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham as permissões:\n${missing.map(perm => permissions[perm]).join(', ')}`;
+				return `${emojis.warning} | O comando \`${this.name}\` só pode ser usado por pessoas que tenham as permissões:\n${missing.map(perm => permissions[perm]).join(', ')}`;
 			}
 		}
 
@@ -285,15 +287,15 @@ class Command {
 			});
 			if(falta.length > 0) {
 				if(falta.length === 1) {
-					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham o cargo:\n"${falta[0]}"`;
+					return `${emojis.warning} | O comando \`${this.name}\` só pode ser usado por pessoas que tenham o cargo:\n"${falta[0]}"`;
 				}
-				return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` só pode ser usado por pessoas que tenham os cargos:\n${falta.join(', ')}`;
+				return `${emojis.warning} | O comando \`${this.name}\` só pode ser usado por pessoas que tenham os cargos:\n${falta.join(', ')}`;
 			}
 		}
 
 		if(message.channel.type === 'text' && this.blackListed) {
 			if(this.blackListed.includes(message.channel.id)) {
-					return `<a:cross_gif:738900572664496169> | O comando \`${this.name}\` não pode ser usado no canal:${message.channel}`;
+					return `${emojis.warning} | O comando \`${this.name}\` não pode ser usado no canal:${message.channel}`;
 				}
 		}
 
@@ -333,22 +335,22 @@ class Command {
 	onBlock(message, reason, data) {
 		switch(reason) {
 			case 'guildOnly':
-				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | \`${this.name}\` só pode ser usado no servidor...` });
+				return message.embed({ color: emojis.failC, description: `${emojis.fail} | \`${this.name}\` só pode ser usado no servidor...` });
 			case 'nsfw':
-				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | \`${this.name}\` só pode ser usado em canais NSFW.`});
+				return message.embed({ color: emojis.failC, description: `${emojis.fail} | \`${this.name}\` só pode ser usado em canais NSFW.`});
 			case 'permission': {
-				if(data.response) return message.embed({ color: '#c22727', description: data.response });
-				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Você não tem permissão para usar o comando \`${this.name}\`.` });
+				if(data.response) return message.embed({ color: emojis.failC, description: data.response });
+				return message.embed({ color: emojis.failC, description: `${emojis.fail} | Você não tem permissão para usar o comando \`${this.name}\`.` });
 			}
 			case 'clientPermissions': {
 				if(data.missing.length === 1) {
-					return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Eu preciso da permissão "${permissions[data.missing[0]]}" para que o comando \`${this.name}\` funcione.`});
+					return message.embed({ color: emojis.failC, description: `${emojis.fail} | Eu preciso da permissão "${permissions[data.missing[0]]}" para que o comando \`${this.name}\` funcione.`});
 				}
-				return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Eu preciso dessas permissões aí pro comando \`${this.name}\` funcionar:
-					${data.missing.map(perm => permissions[perm]).join(',\n')}`});
+				return message.embed({ color: emojis.warningC, description: `${emojis.warning} | Eu preciso dessas permissões pro comando \`${this.name}\` funcionar:
+					${data.missing.map(perm => permissions[perm]).join(',\n')}` });
 			}
 			case 'throttling': {
-				if (this.throttling.respond !== false) return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Aguarde ${data.remaining.toFixed(1)} segundos antes de usar o comando \`${this.name}\` denovo.`});
+				if (this.throttling.respond !== false) return message.embed({ color: emojis.warningC, description: `${emojis.warning} | Aguarde ${data.remaining.toFixed(1)} segundos antes de usar o comando \`${this.name}\` denovo.`});
 			}
 			default:
 				return null;
@@ -373,7 +375,8 @@ class Command {
 		}).join(owners.length > 2 ? ', ' : ' ') : '';
 
 		const invite = this.client.options.invite;
-		return message.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Ooopsie, parece que alguém fez caquinha...
+		return message.embed({ color: emojis.warningC, description: stripIndents`
+			${emojis.warning} | Ooopsie, parece que alguém fez caquinha...
 			Ocorreu um erro durante a execução do comando:\n \`${err.name}: ${err.message}\`\n
 			Por favor avise ${ownerList || 'meu dono'}${invite ? ` nesse servidor: ${invite}` : '.'}`});
 	}

@@ -1,6 +1,11 @@
 const wait = require('util').promisify(setTimeout);
 const { invitesDB } = require('../index.js');
+const d = new Date();
+const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
+
 module.exports = async (client) => {
+  console.log(hora, 'Evento \`ready\` emitido...');
+
   wait(1000);
 
   const WaifusClub = client.guilds.cache.find((a) => a.id === '698560208309452810');

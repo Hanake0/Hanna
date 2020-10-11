@@ -3,6 +3,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable complexity */
 const { escapeRegex } = require('./util');
+const emojis = require('../../Assets/JSON/emojis.json');
 
 /** Handles parsing messages and running commands from them */
 class CommandDispatcher {
@@ -110,73 +111,101 @@ class CommandDispatcher {
 		/* eslint-disable max-depth */
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
-		// Cria os presets se não existem
+		// Define as constantes pra facilitar depois
 		var { usersOffDB, invitesDB } = require('../../index.js');
-		if(!usersOffDB.has(message.author.id).value()) {
-			usersOffDB.set(message.author.id, {
-				galo_nivel: 0,
-				medalhas: [],
-				'galo?': false,
+		const dbPressets = require('../../Assets/JSON/dbPressets.json');
+
+		const aID = message.author.id;
+		const aDB = usersOffDB.get(aID);
+		const wcID = '698560208309452810';
+		const aUsername = message.author.username;
+		const isWC = message.guild.id === wcID;
+
+		const wc = message.client.guilds.cache.get('698560208309452810');
+		const familyRole = wc.roles.cache.get('750739449889030235');
+		const aWcMember = wc.members.cache.get(aID);
+		const hFamily = aWcMember._roles.includes('750739449889030235');
+		const hChngNick = aWcMember._roles.includes('735677045954314362');
+		const chngNickRole = wc.roles.cache.get('735677045954314362');
+
+		const aPresenceUndefined = aWcMember.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === undefined;
+		const aPresenceNull = message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === null;
+
+
+		let tempLM;
+
+		// Cria os pressets do db se não existem
+		if(!usersOffDB.has(aID).value()) {
+			usersOffDB.set({
 				username: message.author.username,
-				idade: null,
-				interesses: [],
-				invites: 0,
-				gems: 0,
-				mensagens: 1,
-				xp: 5,
-				id: message.author.id,
-				xp_semanal: 5,
-				money: 1,
-				sexualidade: null,
-				lastMessage: `${message.createdAt.toISOString()}`,
-				lastMessageContent: message.content,
-				lastMessageChannelID: message.channel.id
-			}).write();
-		} else {
-			// Atualiza os valores do db
-
-			usersOffDB.get(message.author.id).set('lastMessage', `${message.createdAt.toISOString()}`)
-				.set('lastMessageContent', `${message.content}`)
-				.set('lastMessageChannelID', `${message.channel.id}`)
+				id: aID
+			})
 				.write();
-			const tempinho = new Date().valueOf() - usersOffDB.get(message.author.id).value().lastMessage.valueOf();
 
-			if(tempinho > 86400000) {
-				usersOffDB.get(message.author.id).update('xp', num => num - (25 * Math.round(tempinho / 60000)))
+			aDB
+				.assign(dbPressets)
+				.write();
+
+			let tempLM = 0;
+		} else {
+			let tempLM = new Date() - aDB.value().lastMessage.valueOf();
+		}
+
+		// Atualiza os valores para "lastMsg"
+		aDB.assign({
+			lastMessage: `${message.createdAt.toISOString()}`,
+			lastMessageContent: `${message.content}`,
+			lastMessageChannelID: `${message.channel.id}`,
+			lastMessageAttachment: message.attachments.first() ? message.attachments.first().url : null
+		}).write();
+
+
+		if(isWC) {
+			// Verifica se é membro ativo
+			if(tempLM > 86400000) {
+				// Retira 25 de xp por minuto, se ficar 1 dia inativo
+				aDB.update('xp', num => num - (25 * Math.round(tempLM / 60000)))
 					.update('mensagens', num => num + 1)
 					.update('lastMessage', message.createdAt)
 					.write();
 			} else {
-				if(usersOffDB.get(message.author.id).value().xp < 0) {
-					usersOffDB.get(message.author.id).set('xp', 0).write();
-				}
-				usersOffDB.get(message.author.id).update('xp', num => num + 5)
+				// Atualiza xp e número de mensagens
+				aDB.update('xp', num => num + 5)
 					.update('mensagens', num => num + 1)
-					.update('lastMessage', message.createdAt)
 					.write();
-
-				if(message.guild.id === '698560208309452810') {
-					if(message.author.username.startsWith('!ʷᶜ') || message.author.username.startsWith('!𝓦𝓒')) {
-						usersOffDB.get(message.author.id).update('xp', xp => xp + 4).write();
-						if(!message.member._roles.includes('750739449889030235')) message.member.roles.add(message.client.guilds.cache.get('698560208309452810').roles.cache.get('750739449889030235'), 'Username começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
-					} else if(message.member._roles.includes('750739449889030235')) message.member.roles.remove(message.client.guilds.cache.get('698560208309452810').roles.cache.get('750739449889030235'), 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
-
-					if(!message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === undefined && !message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === null) {
-						let codes = [];
-						let incluidos = [];
-						invitesDB.filter(inv => inv.maxAge === 0).value().forEach(inv => codes.push(inv.code));
-						for(const code of codes) {
-							if(message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS').state.includes(code)) incluidos.push(code);
-						}
-						if(incluidos.length > 0) {
-							usersOffDB.get(message.author.id).update('money', num => num + 1).write();
-							if(!message.member._roles.includes('735677045954314362')) message.member.roles.add(message.client.guilds.cache.get('698560208309452810').roles.cache.get('735677045954314362'), 'Convite permanente no status');
-						} else if(message.member._roles.includes('735677045954314362')) message.member.roles.remove(message.client.guilds.cache.get('698560208309452810').roles.cache.get('735677045954314362'), 'Não tem convite permanente no Status');
-					} else if(message.member._roles.includes('735677045954314362')) message.member.roles.remove(message.client.guilds.cache.get('698560208309452810').roles.cache.get('735677045954314362'), 'Não tem convite permanente no Status');
-				}
 			}
-		}
 
+			// Se username correto: add xp e cargo, se não tiver
+			if(aUsername.startsWith('!ʷᶜ') || aUsername.startsWith('!𝓦𝓒')) {
+				aDB.update('xp', xp => xp + 4).write();
+				if(!hFamily) aWcMember.roles.add(familyRole, 'Username começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
+			// Se username errado: retira o cargo de família, se tiver
+			} else if(hFamily) aWcMember.roles.remove(familyRole, 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
+
+			if(!aPresenceUndefined && !aPresenceNull) {
+				const aPresenceState = aWcMember.presence.activities.find(act => act.type === 'CUSTOM_STATUS').state;
+
+				let codes = [];
+				let incluidos = [];
+
+				// Filtra os convites permanentes e verifica se o status do autor inclui um deles
+				invitesDB.filter(inv => inv.maxAge === 0).value().forEach(inv => codes.push(inv.code));
+				for(const code of codes) {
+					if(aPresenceState.includes(code)) incluidos.push(code);
+				}
+
+				// Caso tenha convite permanente
+				if(incluidos.length > 0) {
+					aDB.update('money', num => num + 1).write();
+					// Caso não tenha a perm
+					if(!hChngNick) aWcMember.roles.add(chngNickRole, 'Convite permanente no status');
+
+				// Caso não tenha convite permanente
+				} else if(hChngNick) aWcMember.roles.remove(chngNickRole, 'Não tem convite permanente no Status');
+
+			// Caso não tenha status customizado
+			} else if(hChngNick) aWcMember.roles.remove(chngNickRole, 'Não tem convite permanente no Status');
+		}
 
 		// Parse the message, and get the old result if it exists
 		let cmdMsg, oldCmdMsg;
@@ -202,8 +231,8 @@ class CommandDispatcher {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
 						if(!cmdMsg.command.unknown) {
 							responses = await cmdMsg.embed({
-								color: '#c22727',
-								description: `<a:cross_gif:738900572664496169> |  \`${cmdMsg.command.name}\` está **desabilitado**.`
+								color: emojis.warningC,
+								description: `emojis.warning |  \`${cmdMsg.command.name}\` está **desabilitado**.`
 							});
 						} else {
 							/**

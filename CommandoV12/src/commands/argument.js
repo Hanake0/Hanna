@@ -2,6 +2,7 @@ const { escapeMarkdown } = require('discord.js');
 const { oneLine, stripIndents } = require('common-tags');
 const ArgumentUnionType = require('../types/union');
 const Discord = require('discord.js');
+const emojis = require('../../../Assets/JSON/emojis.json');
 
 /** A fancy argument */
 class Argument {
@@ -88,6 +89,12 @@ class Argument {
 		 * @type {?ArgumentDefault}
 		 */
 		this.default = typeof info.default !== 'undefined' ? info.default : null;
+
+			/**
+		 * Whether bots should be accepted
+		 * @type {?ArgumentRestrictBot}
+		 */
+		this.bot = typeof info.bot !== 'undefined' ? !info.bot : true;
 
 		/**
 		 * Values the user can choose from
@@ -180,10 +187,10 @@ class Argument {
 
 			// Prompt the user for a new value
 			var InvEmbed = new Discord.MessageEmbed()
-				.setColor('#c22727')
-				.setDescription(`${empty ? this.prompt : valid ? valid : `<a:cross_gif:738900572664496169> | ${this.label} inválido. Tente denovo.`}\n
-						${`Responda com \`cancelar\` para cancelar o comando\n
-						${wait ? `O comando vai ser cancelado automaticamente em ${this.wait} segundos...` : ''}
+				.setColor(emojis.warningC)
+				.setDescription(stripIndents`${empty ? this.prompt : valid ? valid : `${emojis.warning} | ${this.label} inválido. Tente denovo.`}\n
+					${`Responda com \`cancelar\` para cancelar o comando\n
+					${wait ? `O comando vai ser cancelado automaticamente em ${this.wait} segundos...` : ''}
 					`}
 				`);
 			prompts.push(await msg.embed(InvEmbed));
@@ -267,16 +274,16 @@ class Argument {
 
 				// Prompt the user for a new value
 				var InvInfEmbed = new Discord.MessageEmbed()
-				.setColor('#c22727')
-				.setDescription(`${valid ? valid : `<a:cross_gif:738900572664496169> | ${this.label} inválido. Tente denovo.`}\n
-						${`Responda com \`cancelar\` para cancelar o comando,\nou \`terminar\` para finalizar sua resposta.\n
-						${wait ? `O comando vai ser cancelado automaticamente em ${this.wait} segundos a não ser que responda algo.` : ''}
+				.setColor(emojis.warningC)
+				.setDescription(stripIndents`${valid ? valid : `${emojis.warning} | ${this.label} inválido. Tente denovo.`}\n
+					${`Responda com \`cancelar\` para cancelar o comando,\nou \`terminar\` para finalizar sua resposta.\n
+					${wait ? `O comando vai ser cancelado automaticamente em ${this.wait} segundos a não ser que responda algo.` : ''}
 					`}
 				`);
 
 				var ValInfEmbed = new Discord.MessageEmbed()
-				.setColor('#c22727')
-				.setDescription(`${this.prompt}\n
+				.setColor(emojis.failC)
+				.setDescription(stripIndents`${this.prompt}\n
 					Responda com \`cancelar\` para cancelar o comando,\nou \`terminar\` para finalizar sua resposta.\n
 					${wait ? `O comando vai ser cancelado automaticamente em ${this.wait} segundos a não ser que responda algo.` : ''}
 				`);
@@ -301,7 +308,7 @@ class Argument {
 					answers[currentVal].react('738900367814819940');
 					val = answers[answers.length - 1].content;
 				} else {
-					prompts[0].delete()
+					prompts[0].delete();
 					return {
 						value: null,
 						cancelled: 'time',

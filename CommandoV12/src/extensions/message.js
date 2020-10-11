@@ -3,6 +3,7 @@ const { oneLine } = require('common-tags');
 const Command = require('../commands/base');
 const FriendlyError = require('../errors/friendly');
 const CommandFormatError = require('../errors/command-format');
+const emojis = require('../../../Assets/JSON/emojis.json');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
@@ -207,7 +208,7 @@ module.exports = Structures.extend('Message', Message => {
 					 * (if applicable - see {@link Command#run})
 					 */
 					this.client.emit('commandCancel', this.command, collResult.cancelled, this, collResult);
-					return this.embed({ color: '#24960e', description: '<a:cross_gif:738900572664496169> | cancelado'}).then(a => a.delete({ timeout: 5000 }))
+					return this.embed({ color: '#24960e', description: `emojis.fail | cancelado` }).then(a => a.delete({ timeout: 5000 }))
 				}
 				args = collResult.values;
 			}

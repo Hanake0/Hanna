@@ -1,6 +1,8 @@
+/* eslint-disable complexity */
 const ArgumentType = require('./base');
 const { disambiguation } = require('../util');
 const { escapeMarkdown } = require('discord.js');
+const emojis = require('../../../Assets/JSON/emojis.json');
 
 class UserArgumentType extends ArgumentType {
 	constructor(client) {
@@ -14,6 +16,7 @@ class UserArgumentType extends ArgumentType {
 				const user = await msg.client.users.fetch(matches[1]);
 				if(!user) return false;
 				if(arg.oneOf && !arg.oneOf.includes(user.id)) return false;
+				if(arg.bot && user.bot) return `${emojis.fail} | Esse comando não aceita bots.`;
 				return true;
 			} catch(err) {
 				return false;
@@ -25,11 +28,13 @@ class UserArgumentType extends ArgumentType {
 		if(members.size === 0) return false;
 		if(members.size === 1) {
 			if(arg.oneOf && !arg.oneOf.includes(members.first().id)) return false;
+			if(arg.bot && members.first().user.bot) return `${emojis.fail} | Esse comando não aceita bots.`;
 			return true;
 		}
 		const exactMembers = members.filter(memberFilterExact(search));
 		if(exactMembers.size === 1) {
 			if(arg.oneOf && !arg.oneOf.includes(exactMembers.first().id)) return false;
+			if(arg.bot && members.first().user.bot) return `${emojis.fail} | Esse comando não aceita bots.`;
 			return true;
 		}
 		if(exactMembers.size > 0) members = exactMembers;

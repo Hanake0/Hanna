@@ -1,4 +1,9 @@
+const d = new Date();
+const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
+
 module.exports = async (client, membro) => {
+  console.log(hora, 'Evento \`guildMemberRemove\` emitido...');
+
   const id = membro.guild.id;
   
   const WC = '698560208309452810';

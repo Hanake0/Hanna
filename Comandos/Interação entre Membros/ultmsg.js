@@ -15,6 +15,7 @@ module.exports = class UltMsgCommand extends Command {
           key: 'usuário',
           prompt: 'de quem?',
           type: 'user',
+          bot: false
         },
 			],
     });
@@ -24,16 +25,22 @@ module.exports = class UltMsgCommand extends Command {
     const client = message.client;
     const { usersOffDB } = require('../../index');
 
-    if (!usersOffDB.has(usuário.id).value()) return message.embed({description: 'sem dados :/' }).then(a => a.delete({ timeout: 5000 }).then(message.delete({ timeout: 5000 })));
+    if (!usersOffDB.has(usuário.id).value()) return message.embed({description: 'sem dados :/' })
+      .then(a => a.delete({ timeout: 5000 })
+      .then(message.delete({ timeout: 5000 })))
+      .then(() => null);
+    const uDB = usersOffDB.get(usuário.id).value();
 
-    //const momento = new Date(Math.round(usersOffDB.get(usuário.id).value().lastMessage.seconds * 1000 + (usersOffDB.get(message.author.id).value().lastMessage.nanoseconds /  10000)));
     const embed = new Discord.MessageEmbed()
         .setTitle(`Última mensagem de ${usuário.username}:`)
-        .setDescription('`' + usersOffDB.get(usuário.id).value().lastMessageContent + '`')
+        .setDescription('`' + uDB.lastMessageContent + '`')
         .setThumbnail(`${usuário.avatarURL()}`)
-        .addField('Enviado em:', `${client.channels.cache.find(a => a.id === usersOffDB.get(usuário.id).value().lastMessageChannelID)}`, true)
-        .setTimestamp(usersOffDB.get(usuário.id).value().lastMessage)
-        .setFooter('Mensagem enviada: ', `${message.author.avatarURL()}`);
+        .addField('Enviado em:', `${client.channels.cache.find(channel => channel.id === uDB.lastMessageChannelID)}`, true)
+        .setTimestamp(uDB.lastMessage)
+        .setFooter('Mensagem enviada: ', `${message.author.avatarURL()}`)
+        .setImage(uDB.lastMessageAttachment ? uDB.lastMessageAttachment : undefined);
+
+    // if(uDB.LastMessageAttachment) embed.setImage(uDB.LastMessageAttachment);
 
     await message.say(embed);
     message.delete()

@@ -3,6 +3,8 @@ const { CommandoClient} = require('./CommandoV12/src/index.js');
 const path = require('path');
 const { readdirSync } = require('fs');
 const { Intents } = require('discord.js');
+const d = new Date();
+const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
 
 
 //inicializa o lowDB
@@ -43,7 +45,8 @@ module.exports.usersOffDB = usersOffDB;
 module.exports.invitesDB = invitesDB;
 
 setInterval(async () => {
-	usersOn.update(usersOffDB.getState()).then( () => console.log('Update concluído com suscesso'));
+	console.log(hora, 'Iniciando update...')
+	usersOn.update(usersOffDB.getState()).then( () => console.log(hora, 'Update concluído com sucesso !'));
 }, 3600000);
 
 
@@ -81,23 +84,22 @@ client.registry
 
 //Event Handler(Project-A) && erros
 const evtFiles = readdirSync('./Eventos/');
-console.log('log', `Carregando o total de ${evtFiles.length} eventos`);
+console.log(hora, `Carregando o total de ${evtFiles.length} eventos`);
 evtFiles.forEach(f => {
   const eventName = f.split('.')[0];
   const event = require(`./Eventos/${f}`);
-
 
   client.on(eventName, event.bind(null, client));
 });
   client
 	.on('error', console.error)
 	.on('warn', console.warn)
-	.on('debug', (debug) => { if (!debug.includes('[WS => ')) console.log(debug); })
+	.on('debug', (debug) => { if (!debug.includes('[WS => ')) console.log(hora, debug); })
 	.on('disconnect', () => { console.warn('Disconectado!'); })
 	.on('reconnecting', () => { console.warn('Reconectando...'); })
 	.on('commandError', (cmd, err) => {
 		if(err instanceof commando.FriendlyError) return;
-		console.error(`Erro no comando ${cmd.groupID}:${cmd.memberName}`, err);
+		console.error(hora, `Erro no comando ${cmd.groupID}:${cmd.memberName}`, err);
 	})
 	.on('commandBlocked', (msg, reason) => {
 		console.log(oneLine`

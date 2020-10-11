@@ -1,5 +1,6 @@
 const Command = require('../base');
 const Discord = require('discord.js');
+const emojis = require('../../../../Assets/JSON/emojis.json');
 
 module.exports = class PingCommand extends Command {
 	constructor(client) {
@@ -25,7 +26,7 @@ module.exports = class PingCommand extends Command {
 			.addField('Webhook:', `:satellite_orbital: | ${Math.round(this.client.ws.ping)}ms`)
 			.setTimestamp()
 			.setFooter(`${msg.author.username}`, msg.author.avatarURL())
-			.setColor(`${ping < 150 ? '#38b833' : ping < 250 ? '#ffa41c' : '#ff2b1c'}`);
+			.setColor(`${ping < 150 ? emojis.successC : ping < 250 ? emojis.warningC : emojis.failC}`);
 		if(!pingMsg.editable) {
 			return msg.embed(embed);
 		} else {

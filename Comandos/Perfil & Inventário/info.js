@@ -17,7 +17,8 @@ module.exports = class InfoCommand extends Command {
 					key: 'usuário',
 					prompt: 'de quem?',
 					type: 'user',
-					default: msg => msg.author
+					default: msg => msg.author,
+					bot: false
 				},
 			],
 		});

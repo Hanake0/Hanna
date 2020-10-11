@@ -1,7 +1,7 @@
 const { stripIndents, oneLine } = require('common-tags');
 const Command = require('../base');
 const { disambiguation } = require('../../util');
-const message = require('../../extensions/message');
+const emojis = require('../../../../Assets/JSON/emojis.json');
 
 module.exports = class AjudaCommand extends Command {
 	constructor(client) {
@@ -51,18 +51,18 @@ module.exports = class AjudaCommand extends Command {
 
 				const messages = [];
 				try {
-					messages.push(await msg.author.send({embed: { color: msg.member ? msg.member.displayColor : Math.floor(Math.random() * 16777214) + 1, description: help}}));
-					if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: '<a:checkmark_gif:738900367814819940> | Mandei no privado.' }));
+					messages.push(await msg.author.send({embed: { color: msg.member ? msg.member.displayColor : Math.floor(Math.random() * 16777214) + 1, description: help } }));
+					if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: 'emojis.success | Mandei no privado.' }));
 				} catch(err) {
-					messages.push(await msg.embed({ color: '#c22727', description: '<a:cross_gif:738900572664496169> | Não consegui mandar no privado, você provavelmente tem ele fechado :/' }));
+					messages.push(await msg.embed({ color: emojis.failC, description: `${emojis.fail} | Não consegui mandar no privado, você provavelmente tem ele fechado` }));
 				}
 				return messages;
 			} else if(commands.length > 15) {
-				return msg.embed({ color: '#c22727', description: '<a:cross_gif:738900572664496169> | Multiplos comandos encontrados, por favor seja mais específico.' });
+				return msg.embed({ color: emojis.warningC, description: `${emojis.warning} | Multiplos comandos encontrados, por favor seja mais específico.` });
 			} else if(commands.length > 1) {
-				return msg.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | ${disambiguation(commands, 'comandos')}` });
+				return msg.embed({ color: emojis.warningC, description: `${emojis.warning} | ${disambiguation(commands, 'comandos')}` });
 			} else {
-				return msg.embed({ color: '#c22727', description: `<a:cross_gif:738900572664496169> | Não consegui identificar o comando... Utilize ${msg.usage(
+				return msg.embed({ color: emojis.warningC, description: `${emojis.warning} | Não consegui identificar o comando... Utilize ${msg.usage(
 						null, msg.channel.type === 'dm' ? null : undefined, msg.channel.type === 'dm' ? null : undefined
 					)} para ver uma lista com todos.` });
 			}
@@ -90,9 +90,9 @@ module.exports = class AjudaCommand extends Command {
 						`).join('\n\n')
 					}
 				`, { split: true }));
-				if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: '<a:checkmark_gif:738900367814819940> | Mandei no privado.' }));
+				if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: 'emojis.success | Mandei no privado.' }));
 			} catch(err) {
-				messages.push(await msg.embed({ color: '#c22727', description: '<a:cross_gif:738900572664496169> | Não consegui mandar no privado, você provavelmente tem ele fechado :/' }));
+				messages.push(await msg.embed({ color: emojis.failC, description: `${emojis.fail} | Não consegui mandar no privado, você provavelmente tem ele fechado` }));
 			}
 			return messages;
 		}

@@ -81,7 +81,7 @@ module.exports = class HungerGamesCommand extends Command {
 			}
 			this.client.games.delete(msg.channel.id);
 			const remainingArr = Array.from(remaining);
-			return msg.embed({color: 15844367, title: `E o vencedor ééé... **${remainingArr[0]}**!`, description: `
+			return msg.embed({color: 15844367, title: `E o vencedor ééé... **${remainingArr[0]}**!`, description: stripIndents`
 		
 
 				__**Ranking de kills:**__

@@ -1,5 +1,6 @@
 const { Command } = require('../../CommandoV12/src/index.js');
 const Discord = require('discord.js');
+const emojis = require('../../Assets/JSON/emojis.json');
 
 module.exports = class DenunciarCommand extends Command {
   constructor(client) {
@@ -17,6 +18,7 @@ module.exports = class DenunciarCommand extends Command {
           key: 'usuário',
           prompt: 'Quem você gostaria de denunciar?',
           type: 'user',
+          bot: false
         },
         {
           key: 'motivo',
@@ -43,7 +45,7 @@ module.exports = class DenunciarCommand extends Command {
         }],
     }
     const embed = new Discord.MessageEmbed()
-      .setColor('#c22727')
+      .setColor(emojis.failC)
       .setTitle('Denúncia:')
       .setAuthor(message.author.username, message.author.avatarURL())
       .setThumbnail(usuário.avatarURL)
