@@ -29,8 +29,10 @@ module.exports = class SelecionarCorCommand extends Command {
     const { usersOffDB } = require('../../index');
     const catálogo = require('../../Assets/JSON/catálogo.json');
 
+    const uDB = usersOffDB.get(msg.author.id);
     const wcRolesCache = msg.client.guilds.cache.get('698560208309452810').roles.cache;
-    
+    const wcMember = msg.client.guilds.cache.get('698560208309452810').members.cache.get(msg.author.id);
+
     let corE = [];
     let rIDs = [];
     Object.keys(catálogo.cores).forEach(cor => {
@@ -43,25 +45,26 @@ module.exports = class SelecionarCorCommand extends Command {
     });
 
     let emUso = [];
-    msg.member._roles.forEach(role => {
+    wcMember._roles.forEach(role => {
       if(rIDs.includes(role)) emUso.push(role);
     })
 
     const padrão = ['padrao', 'padrão', 'cor padrao', 'cor padrão', 'cor-padrao', 'cor-padrão'];
-    if(padrão.includes(corS.toLowerCase()) && emUso.length !== 0) return msg.member.roles.remove(wcRolesCache.get(emUso[0]), 'Cor selecionada').then(() => 
+    if(padrão.includes(corS.toLowerCase()) && emUso.length !== 0) return wcMember.roles.remove(wcRolesCache.get(emUso[0]), 'Cor selecionada').then(() => 
       msg.react('738900367814819940')).then(() => null);
 
     if(corE.length === 0 ) return msg.channel.send(`${msg.author}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Essa cor não existe.` }});
-    if(usersOffDB.get(msg.author.id).has('cores').value()) {
-      if(usersOffDB.get(msg.author.id).value().cores.includes(corE[0].rID)) {
+    if(uDB.has('cores').value() || uDB.value().vip) {
+      if(uDB.value().cores.includes(corE[0].rID) || uDB.value().vip) {
         if(emUso.length === 0) {
-          msg.member.roles.add(wcRolesCache.get(corE[0].rID), 'Cor selecionada').then(() => 
+          wcMember.roles.add(wcRolesCache.get(corE[0].rID), 'Cor selecionada').then(() => 
             msg.react('738900367814819940'));
         } else if(emUso[0] && emUso[0] !== corE[0].rID){
-          msg.member.roles.remove(wcRolesCache.get(emUso[0]), 'Cor selecionada').then(() => 
-            msg.member.roles.add(wcRolesCache.get(corE[0].rID), 'Cor selecionada')).then(() => 
+          wcMember.roles.remove(wcRolesCache.get(emUso[0]), 'Cor selecionada').then(() => 
+            wcMember.roles.add(wcRolesCache.get(corE[0].rID), 'Cor selecionada')).then(() => 
             msg.react('738900367814819940'));
-        } else if(emUso[0] === corE[0]) return msg.channel.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Você já está usando esta cor` }});
+
+        } else if(emUso[0] === corE[0].rID) return msg.channel.send(`${msg.author}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Você já está usando esta cor` }});
       } else return msg.channel.send(`${msg.author}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Você não possui essa cor` }});
     } else return msg.channel.send(`${msg.author}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Você não possui essa cor` }});
 

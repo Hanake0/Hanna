@@ -7,8 +7,6 @@ const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `;
 
 module.exports = async (client, membro) => {
   console.log(hora, 'Evento \`guildMemberAdd\` emitido...');
-  
-  const membro2 = membro;
 
   const id = membro.guild.id;
   
@@ -91,16 +89,15 @@ module.exports = async (client, membro) => {
         }})
 
       }).then(() => {
-        if(!usersOffDB.has(aID).value()) {
-          usersOffDB.set({
-            username: message.author.username,
-            id: aID
+        if(!usersOffDB.has(membro.id).value()) {
+          usersOffDB
+          .set(membro.id, {
+            id: membro.id,
+            username: membro.user.username
           })
-            .write();
-    
-          aDB
-            .assign(dbPressets)
-            .write();
+          .get(membro.id)
+          .assign(dbPressets)
+          .write();  
         }
       });
       break;

@@ -46,7 +46,7 @@ module.exports = class Util {
 		if(usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() > valor) {
 			canal.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Tem certeza que deseja comprar **${nome}** por ${valor} ${moeda} ?` }})
 		} else {
-			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Você não tem ${moeda} o suficiente(faltam ${usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() !== undefined ? valor - usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() : valor} ${moeda})` }})
+			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | **${nome}**: Você não tem ${moeda} o suficiente(faltam ${usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() !== undefined ? valor - usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() : valor} ${moeda})` }})
 			return false
 		}
 		const sn = await verify(canal, user);

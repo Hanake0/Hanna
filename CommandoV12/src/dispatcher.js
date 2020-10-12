@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
 /* eslint-disable curly */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
@@ -117,38 +119,43 @@ class CommandDispatcher {
 
 		const aID = message.author.id;
 		const aDB = usersOffDB.get(aID);
+		const aDBValue = aDB.value();
 		const wcID = '698560208309452810';
 		const aUsername = message.author.username;
-		const isWC = message.guild.id === wcID;
+		const isWC = message.guild ? message.guild.id === wcID : false;
 
 		const wc = message.client.guilds.cache.get('698560208309452810');
-		const familyRole = wc.roles.cache.get('750739449889030235');
 		const aWcMember = wc.members.cache.get(aID);
-		const hFamily = aWcMember._roles.includes('750739449889030235');
-		const hChngNick = aWcMember._roles.includes('735677045954314362');
-		const chngNickRole = wc.roles.cache.get('735677045954314362');
 
-		const aPresenceUndefined = aWcMember.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === undefined;
-		const aPresenceNull = message.member.presence.activities.find(act => act.type === 'CUSTOM_STATUS') === null;
+		const vipRole = wc.roles.cache.get('754453852618489946');
+		const hVip = aWcMember._roles.includes('754453852618489946');
+
+		const familyRole = wc.roles.cache.get('750739449889030235');
+		const hFamily = aWcMember._roles.includes('750739449889030235');
+
+		const chngNickRole = wc.roles.cache.get('735677045954314362');
+		const hChngNick = aWcMember._roles.includes('735677045954314362');
+
+		const aCustomStatus = aWcMember.presence.activities.find(act => act.type === 'CUSTOM_STATUS');
+		const aPresenceUndefined = aCustomStatus === undefined;
+		const aPresenceNull = aPresenceUndefined ? true : aCustomStatus.state === null;
 
 
 		let tempLM;
 
 		// Cria os pressets do db se não existem
 		if(!usersOffDB.has(aID).value()) {
-			usersOffDB.set({
-				username: message.author.username,
-				id: aID
-			})
-				.write();
-
-			aDB
+			usersOffDB
+				.set(aID, {
+					id: aID,
+					username: message.author.username
+				}).get(aID)
 				.assign(dbPressets)
 				.write();
 
 			let tempLM = 0;
 		} else {
-			let tempLM = new Date() - aDB.value().lastMessage.valueOf();
+			let tempLM = new Date() - aDBValue.lastMessage.valueOf();
 		}
 
 		// Atualiza os valores para "lastMsg"
@@ -159,6 +166,16 @@ class CommandDispatcher {
 			lastMessageAttachment: message.attachments.first() ? message.attachments.first().url : null
 		}).write();
 
+		// Caso o membro seja vip
+		if(aDBValue.vip) {
+			if(aDBValue.vipUntil < new Date()) {
+				aDB.assign({
+					vip: false,
+					vipUntil: null
+				}).write();
+				aWcMember.roles.remove(vipRole, 'VIP acaba de expirar');
+			} else if(!hVip) aWcMember.roles.add(vipRole, 'Membro VIP');
+		} else if(hVip) aWcMember.roles.remove(vipRole, 'VIP expirado');
 
 		if(isWC) {
 			// Verifica se é membro ativo
@@ -183,15 +200,13 @@ class CommandDispatcher {
 			} else if(hFamily) aWcMember.roles.remove(familyRole, 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
 
 			if(!aPresenceUndefined && !aPresenceNull) {
-				const aPresenceState = aWcMember.presence.activities.find(act => act.type === 'CUSTOM_STATUS').state;
-
 				let codes = [];
 				let incluidos = [];
 
 				// Filtra os convites permanentes e verifica se o status do autor inclui um deles
 				invitesDB.filter(inv => inv.maxAge === 0).value().forEach(inv => codes.push(inv.code));
 				for(const code of codes) {
-					if(aPresenceState.includes(code)) incluidos.push(code);
+					if(aCustomStatus.state.includes(code)) incluidos.push(code);
 				}
 
 				// Caso tenha convite permanente

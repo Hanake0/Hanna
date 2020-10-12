@@ -52,7 +52,7 @@ module.exports = class AjudaCommand extends Command {
 				const messages = [];
 				try {
 					messages.push(await msg.author.send({embed: { color: msg.member ? msg.member.displayColor : Math.floor(Math.random() * 16777214) + 1, description: help } }));
-					if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: 'emojis.success | Mandei no privado.' }));
+					if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: `${emojis.success} | Mandei no privado.` }));
 				} catch(err) {
 					messages.push(await msg.embed({ color: emojis.failC, description: `${emojis.fail} | Não consegui mandar no privado, você provavelmente tem ele fechado` }));
 				}
@@ -90,7 +90,7 @@ module.exports = class AjudaCommand extends Command {
 						`).join('\n\n')
 					}
 				`, { split: true }));
-				if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: 'emojis.success | Mandei no privado.' }));
+				if(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: `${emojis.success} | Mandei no privado.` }));
 			} catch(err) {
 				messages.push(await msg.embed({ color: emojis.failC, description: `${emojis.fail} | Não consegui mandar no privado, você provavelmente tem ele fechado` }));
 			}

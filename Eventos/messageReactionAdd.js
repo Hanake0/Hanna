@@ -30,7 +30,8 @@ module.exports = async (client, reaction, user) => {
   let mIDs = [];
 
   // Coloca os id's de cada categoria em mIDs([]) e guarda as informações de cada categoria ({})
-  // Mensagens de informação e textos
+  
+  // Mensagens de informação e textos { <categoria>: { texto: '', mID: '' } }
   let infos = [];
   Object.keys(catálogo.infos).forEach(categoria => {
     if(catálogo.infos[categoria].mID !== undefined) {
@@ -38,7 +39,8 @@ module.exports = async (client, reaction, user) => {
       mIDs.push(catálogo.infos[categoria].mID);
     }
   });
-  // Loja de cores { nome: '', aliases: [], valor: '', mID: '', rID: ''}
+  
+  // Loja de cores { nome: '', aliases: [], valor: '', mID: '', rID: '' }
   let cores = [];
   Object.keys(catálogo.cores).forEach(cor => {
     if(catálogo.cores[cor].mID !== undefined) {
@@ -46,7 +48,9 @@ module.exports = async (client, reaction, user) => {
       mIDs.push(catálogo.cores[cor].mID);
     }
   });
-  // Loja de VIP's { nome: '', valor: '', mID: ''}
+  const cor = cores.find(cor => cor.mID === id);
+  
+  // Loja de VIP's { nome: '', valor: '', mID: '' }
   let vips = [];
   Object.keys(catálogo.vips).forEach(tempo => {
     if(catálogo.vips[tempo].mID !== undefined) {
@@ -54,7 +58,9 @@ module.exports = async (client, reaction, user) => {
       mIDs.push(catálogo.vips[tempo].mID);
     }
   });
-  // Outros itens genéricos { nome: '', valor: '', mID: ''}
+  const vip = vips.find(tempo => tempo.mID === id);
+
+  // Outros itens genéricos { nome: '', valor: '', mID: '' }
   let outros = [];
   Object.keys(catálogo).forEach(item => {
     if(catálogo[item].mID !== undefined) {
@@ -65,47 +71,57 @@ module.exports = async (client, reaction, user) => {
 
   // Verifica se a mensagem está dentre as da loja e aciona a função do item
   if(!mIDs.includes(id)) return;
+
+  if(!usersOffDB.has(user.id).value()) return;
+  const uDB = usersOffDB.get(user.id);
+
+  // Apaga a reação selecionada
   await reaction.message.reactions.cache.forEach(async reaction => {
     if(reaction.count > 1) {
       await reaction.remove()
         .catch(error => console.error('messageReactionAdd => Falha ao remover emoji: ', error))
     }
   });
+  // Reage denovo
   reaction.message.react(emojiId);
 
-  // caso a mensagem seja a de uma cor
-  if(cores.find(cor => cor.mID === id) !== undefined) {
-    const cor = cores.find(cor => cor.mID === id);
+
+  // Caso o id seja de uma cor
+  if(cor !== undefined) {
     const valor = gc === 'gems' ? cor.valor/1000 : cor.valor;
+    let cores = uDB.value().cores ? uDB.value().cores : []; 
 
-    if(usersOffDB.get(user.id).value().cores !== undefined) {
-
-      // caso tenha alguma cor
-      if(!usersOffDB.get(user.id).value().cores.includes(cor.rID)) {
-
-        // caso já tenha alguma cor e não tenha essa
-        const compra = await comprar(cor.nome, valor, confirmação, user, gc);
-        let cores = usersOffDB.get(user.id).value().cores;
-        cores.push(cor.rID);
-        // caso compra aceita
-        if(compra) usersOffDB.get(user.id)
-          .set('cores', cores)
-          .update(gc === 'gems' ? 'gems' : 'money', num => num - valor)
-          .write();
-
-        // caso já tenha alguma cor e tenha essa
-      } else confirmação.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Você já possui a cor **${cor.nome}**` }});
-
-    // caso não tenha nenhuma cor
-    } else {
+    // Caso já tenha essa cor
+    if(uDB.value().cores.includes(cor.rID)) confirmação.send(`${user}`, 
+      { embed: { 
+        color: emojis.warningC,
+        description: `${emojis.warning} | Você já possui a cor **${cor.nome}**`
+      }});
+    // Caso não tenha essa cor
+    else {
       const compra = await comprar(cor.nome, valor, confirmação, user, gc);
-      const cores = [ cor.rID ];
-      // caso compra aceita
-      if(compra) usersOffDB.get(user.id)
-       .set('cores', cores)
-       .update(gc === 'gems' ? 'gems' : 'money', num => num - valor)
-       .write();
+      cores.push(cor.rID);
+      if(compra) uDB
+        .set('cores', cores)
+        .update(gc === 'gems' ? 'gems' : 'money', num => num - valor)
+        .write();
     }
+
+  // Caso o id seja de um vip
+  } else if(vip !== undefined) { 
+    const valor = gc === 'gems' ? vip.valor/1000 : vip.valor;
+    const compra = await comprar(vip.nome, valor, confirmação, user, gc);
+
+    const timestamp = uDB.value().vip ? parseInt(uDB.value().vipUntil) + parseInt(vip.tempo) : d.valueOf() + parseInt(vip.tempo);
+    if(compra) uDB
+      .assign({
+        vip: true,
+        vipUntil: timestamp
+      })
+      .update(gc === 'gems' ? 'gems' : 'money', num => num - valor)
+      .write();
+
+    
   } else if(outros.find(item => item.mID === id) !== undefined) {
     return
   }
