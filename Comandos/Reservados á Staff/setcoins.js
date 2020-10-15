@@ -1,35 +1,44 @@
 const { Command } = require('../../CommandoV12/src/index.js');
 const Discord = require('discord.js');
+const emojis = require('../../Assets/JSON/emojis.json');
 
-module.exports = class CarteiraCommand extends Command {
+module.exports = class SetCoinsCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'carteira',
-			aliases: ['money', 'wallet', 'dinheiro', 'coins', 'gems'],
-			group: 'p&i',
-			memberName: 'carteira',
-      description: 'Mostra quanto dinheiro você ou alguém tem na carteira',
-      blackListed: ['698678688153206915'],
+			name: 'set-coins',
+			group: 'adm',
+			memberName: 'set-coins',
+			description: 'Muda a quantidade de coins na carteira de um usuário',
+			serverOnly: true,
+      ownerOnly: true,
 			throttling: {
 				usages: 2,
 				duration: 10
       },
       args: [
+        {
+          key: 'valor',
+          prompt: 'Atualizar valor para quanto ?',
+          type: 'integer'
+        },
 				{
 					key: 'usuário',
 					prompt: 'de quem?',
 					type: 'user',
 					default: msg => msg.author,
 					bot: false
-				},
+        }
 			],
 		});
 	}
 
-	async run(msg, { usuário }) {
+	async run(msg, { usuário, valor }) {
 
 		const { usersOffDB } = require('../../index');
-		const uDB = usersOffDB.get(usuário.id)
+    const uDB = usersOffDB.get(usuário.id)
+    
+    uDB.set('money', valor).write();
+    msg.embed({ color: '#24960e', description: `${emojis.success} | Coins de ${usuário} atualizadas com sucesso para \`\`${valor}\`\`!`});
 
 		const member = msg.client.guilds.cache.get('698560208309452810').members.cache.get(usuário.id);
     

@@ -115,6 +115,7 @@ class CommandDispatcher {
 
 		// Define as constantes pra facilitar depois
 		var { usersOffDB, invitesDB } = require('../../index.js');
+		if(!usersOffDB || !invitesDB) return;
 		const dbPressets = require('../../Assets/JSON/dbPressets.json');
 
 		const aID = message.author.id;
@@ -199,6 +200,7 @@ class CommandDispatcher {
 			// Se username errado: retira o cargo de família, se tiver
 			} else if(hFamily) aWcMember.roles.remove(familyRole, 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
 
+			// Se tiver "CUSTOM_STATUS" com state
 			if(!aPresenceUndefined && !aPresenceNull) {
 				let codes = [];
 				let incluidos = [];

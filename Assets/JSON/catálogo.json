@@ -24,105 +24,105 @@
   "cores": {
     "amendoa": {
       "nome": "Amêndoa",
-      "aliases": ["amendoa", "amêndoa"],
+      "aliases": ["amendoa", "amêndoa", "almond"],
       "valor": "2000",
       "mID": "754583901925671005",
       "rID": "740952074069606520"
     },
     "rosaBebe": {
       "nome": "Rosa Bebê",
-      "aliases": ["rosabebe", "rosabebê", "rosa bebe", "rosa bebê"],
+      "aliases": ["rosabebe", "rosabebê", "rosa bebe", "rosa bebê", "baby pink", "babypink"],
       "valor": "2000",
       "mID": "754584058175946825",
       "rID": "740951943119372408"
     },
     "menta": {
       "nome": "Menta",
-      "aliases": ["menta"],
+      "aliases": ["menta", "mint"],
       "valor": "2000",
       "mID": "754584165793529876",
       "rID": "740951321686966374"
     },
     "marrom": {
       "nome": "Marrom",
-      "aliases": ["marrom"],
+      "aliases": ["marrom", "brown"],
       "valor": "3000",
       "mID": "754584347276738590",
       "rID": "740950979381559406"
     },
     "meiaNoite": {
       "nome": "Meia Noite",
-      "aliases": ["meianoite", "meia noite"],
+      "aliases": ["meianoite", "meia noite", "midnight", "mid night"],
       "valor": "3000",
       "mID": "754584466089050132",
       "rID": "740951421792550992"
     },
     "lima": {
       "nome": "Lima",
-      "aliases": ["lima"],
+      "aliases": ["lima", "lime"],
       "valor": "3000",
       "mID": "754584594568839258",
       "rID": "740950048518701086"
     },
     "vermelho": {
       "nome": "Vermelho",
-      "aliases": ["vermelho"],
+      "aliases": ["vermelho", "red"],
       "valor": "5000",
       "mID": "754584723652608020",
       "rID": "740949818364395641"
     },
     "amarelo": {
       "nome": "Amarelo",
-      "aliases": ["amarelo"],
+      "aliases": ["amarelo", "yellow"],
       "valor": "5000",
       "mID": "754584765973135442",
       "rID": "740950888960753805"
     },
     "azul": {
       "nome": "Azul",
-      "aliases": ["azul"],
+      "aliases": ["azul", "blue"],
       "valor": "5000",
       "mID": "754584807626768524",
       "rID": "750763215289319464"
     },
     "verdeGrama": {
       "nome": "Verde Grama",
-      "aliases": ["verdegrama", "verde grama"],
+      "aliases": ["verdegrama", "verde grama", "grass green", "grass-green"],
       "valor": "5000",
       "mID": "754584877600604211",
       "rID": "750762921080127659"
     },
     "purpura": {
       "nome": "Púrpura",
-      "aliases": ["purpura", "púpura"],
+      "aliases": ["purpura", "púpura", "purple"],
       "valor": "8000",
       "mID": "754585047717249094",
       "rID": "740950250449141800"
     },
     "laranja": {
       "nome": "Laranja",
-      "aliases": ["laranja"],
+      "aliases": ["laranja", "orange"],
       "valor": "8000",
       "mID": "754585177518243902",
       "rID": "740950794035003464"
     },
     "ciano": {
       "nome": "Ciano",
-      "aliases": ["ciano"],
+      "aliases": ["ciano", "cian"],
       "valor": "8000",
       "mID": "754585228588351578",
       "rID": "740950634001596498"
     },
     "branco": {
       "nome": "Branco",
-      "aliases": ["branco"],
+      "aliases": ["branco", "white"],
       "valor": "8000",
       "mID": "754585295231385610",
       "rID": "740950693006803005"
     },
     "void": {
       "nome": "Void",
-      "aliases": ["void", "preto"],
+      "aliases": ["void", "preto", "black"],
       "valor": "10000",
       "mID": "754585534231478313",
       "rID": "740951145064824874"
