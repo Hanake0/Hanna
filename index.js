@@ -46,8 +46,12 @@ module.exports.invitesDB = invitesDB;
 
 setInterval(async () => {
 	console.log(hora, 'Iniciando update...')
-	usersOn.update(usersOffDB.getState()).then( () => console.log(hora, 'Update concluído com sucesso !'));
-}, 3600000);
+	try {
+		usersOn.update(usersOffDB.getState()).then( () => console.log(hora, 'Update concluído com sucesso !'));
+	} catch(err) {
+		client.guilds.cache.get('698560208309452810').channels.cache.get('732710544330457161').send(`Erro ao atualizar Firestore: ${err.name}: ${err.message}`)
+	}
+}, 900000);
 
 
 
