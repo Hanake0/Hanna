@@ -1,4 +1,5 @@
 const { Command } = require('../../CommandoV12/src/index.js');
+const { shorten } = require('../../Assets/util/util.js');
 const Discord = require('discord.js');
 
 module.exports = class UltMsgCommand extends Command {
@@ -31,12 +32,10 @@ module.exports = class UltMsgCommand extends Command {
       .then(() => null);
 
     const embed = new Discord.MessageEmbed()
-        .setTitle(`Última mensagem de ${usuário.username}:`)
-        .setDescription('`' + uDB.lastMessageContent + '`')
-        .setThumbnail(`${usuário.avatarURL()}`)
+        .setDescription(shorten(uDB.lastMessageContent))
+        .setAuthor(usuário.tag, usuário.avatarURL())
         .addField('Enviado em:', `${client.channels.cache.find(channel => channel.id === uDB.lastMessageChannelID)}`, true)
         .setTimestamp(uDB.lastMessage)
-        .setFooter('Mensagem enviada: ', `${message.author.avatarURL()}`)
         .setImage(uDB.lastMessageAttachment ? uDB.lastMessageAttachment : undefined);
 
     await message.embed(embed);
