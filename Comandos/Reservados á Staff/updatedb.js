@@ -18,6 +18,7 @@ module.exports = class UpdatedbCommand extends Command {
     const { db } = require('../../index');
     let d = Date.now() - 10800000;
     let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
+    const client = message.client;
     
     console.log(hora, 'Iniciando update geral...');
     await message.channel.send(`${hora}Iniciando update geral...`);
