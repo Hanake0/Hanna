@@ -1,4 +1,3 @@
-const { usersOffDB } = require('../../index.js');
 const emojis = require('../JSON/emojis.json');
 const status = {
 	online: 'Disponível/Online',
@@ -41,12 +40,13 @@ module.exports.sim = sim;
 module.exports.nao = nao;
 
 module.exports = class Util {
-	static async comprar(nome, valor, canal, user, moeda) {
+	static async comprar(nome, valor, canal, user, moeda, uDB) {
 		const { verify } = require('./util.js');
-		if(usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() > valor) {
+		const mg = moeda === 'gems' ? 'gems' : 'money';
+		if(uDB[mg] > valor) {
 			canal.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Tem certeza que deseja comprar **${nome}** por ${valor} ${moeda} ?` }})
 		} else {
-			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | **${nome}**: Você não tem ${moeda} o suficiente(faltam ${usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() !== undefined ? valor - usersOffDB.get(user.id).get(moeda === 'gems' ? 'gems' : 'money').value() : valor} ${moeda})` }})
+			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | **${nome}**: Você não tem ${moeda} o suficiente(faltam ${uDB[mg] !== undefined ? valor - uDB[mg] : valor} ${moeda})` }})
 			return false
 		}
 		const sn = await verify(canal, user);

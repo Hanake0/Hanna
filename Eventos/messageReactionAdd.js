@@ -98,7 +98,7 @@ module.exports = async (client, reaction, user) => {
       }});
     // Caso não tenha essa cor
     else {
-      const compra = await comprar(cor.nome, valor, confirmação, user, gc);
+      const compra = await comprar(cor.nome, valor, confirmação, user, gc, uDB);
       cores.push(cor.rID);
       if(compra) 
         uDB['cores'] = cores;
@@ -108,7 +108,7 @@ module.exports = async (client, reaction, user) => {
   // Caso o id seja de um vip
   } else if(vip !== undefined) { 
     const valor = gc === 'gems' ? vip.valor/1000 : vip.valor;
-    const compra = await comprar(vip.nome, valor, confirmação, user, gc);
+    const compra = await comprar(vip.nome, valor, confirmação, user, gc, uDB);
 
     const timestamp = uDB.vip ? parseInt(uDB.vipUntil) + parseInt(vip.tempo) : d.valueOf() + parseInt(vip.tempo);
     if(compra) 
