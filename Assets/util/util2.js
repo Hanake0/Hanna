@@ -64,7 +64,7 @@ module.exports = class Util {
 	}
 
 	static shopEmbed(açãoNum, item, valor, moeda, user, uDB) {
-		const ação = açãoNum  === true ? 'Comprou' : ação === 0 ? 'Recebeu timeout/Já possui o item' : 'Não conseguiu comprar';
+		const ação = açãoNum  === true ? 'Comprou' : açãoNum === 0 ? 'Recebeu timeout/Já possui o item' : 'Não conseguiu comprar';
 		const cor = açãoNum === 1 ? emojis.successC : ação === 2 ? emojis.warningC : emojis.failC;
 		const embed = {
 			color: cor,
