@@ -136,12 +136,12 @@ module.exports = async (client, reaction, user) => {
 
   } else if(outro) {
     valor = gc === 'gems' ? outro.valor/1000 : outro.valor;
+    const compra = await comprar(outro.nome, valor, confirmação, user, gc, uDB);
+    shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
 
     switch(outro.mID){
       // Emoji
       case '754553933489373246':
-        const compra = await comprar(outro.nome, valor, confirmação, user, gc, uDB);
-        shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
         if(compra === true) {
           Wstore.channels.cache.get('750031689132277901').send(stripIndents`
           ${user} comprou um **EMOJI**, faz o bagulho lá meo <@&750084283481325671>
@@ -151,8 +151,6 @@ module.exports = async (client, reaction, user) => {
 
       // Tag
       case '754554148556505118':
-        const compra = await comprar(outro.nome, valor, confirmação, user, gc, uDB);
-        shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
         if(compra === true) {
           Wstore.channels.cache.get('750031689132277901').send(stripIndents`
           ${user} comprou uma **TAG**, faz o bagulho lá meo <@&750084283481325671>
@@ -162,8 +160,6 @@ module.exports = async (client, reaction, user) => {
 
       // Apartamento
       case '754554310620348426':
-        const compra = await comprar(outro.nome, valor, confirmação, user, gc, uDB);
-        shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
         if(compra === true) {
           const canal = {
             type: 'voice',
