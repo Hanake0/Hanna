@@ -114,13 +114,15 @@ class CommandDispatcher {
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
 		// Define as constantes pra facilitar depois
-		var { usersOffDB, invitesDB } = require('../../index.js');
-		if(!usersOffDB || !invitesDB) return;
+		const usersOffDB = message.client.usersData;
+		const iDB = message.client.invitesData;
+
+		if(!usersOffDB || !iDB) return;
 		const dbPressets = require('../../Assets/JSON/dbPressets.json');
 
 		const aID = message.author.id;
 		const aDB = usersOffDB.get(aID);
-		const aDBValue = aDB.value();
+		const aDBValue = aDB;
 		const wcID = '698560208309452810';
 		const aUsername = message.author.username;
 		const isWC = message.guild ? message.guild.id === wcID : false;
@@ -145,14 +147,12 @@ class CommandDispatcher {
 		let tempLM;
 
 		// Cria os pressets do db se não existem
-		if(!usersOffDB.has(aID).value()) {
-			usersOffDB
-				.set(aID, {
-					id: aID,
-					username: message.author.username
-				}).get(aID)
-				.assign(dbPressets)
-				.write();
+		if(!usersOffDB.has(aID)) {
+			usersOffDB.set(aID, {
+				id: aID,
+				username: message.author.username
+			})
+			.assign(dbPressets);
 
 			let tempLM = 0;
 		} else {
@@ -160,21 +160,17 @@ class CommandDispatcher {
 		}
 
 		// Atualiza os valores para "lastMsg"
-		aDB.assign({
-			lastMessage: `${message.createdAt.toISOString()}`,
-			lastMessageContent: `${message.content}`,
-			lastMessageChannelID: `${message.channel.id}`,
-			lastMessageAttachment: message.attachments.first() ? message.attachments.first().url : null
-		}).write();
+		aDB.lastMessage = `${message.createdAt.toISOString()}`;
+		aDB.lastMessageContent = `${message.content}`;
+		aDB.lastMessageChannelID = `${message.channel.id}`;
+		aDB.lastMessageAttachment = message.attachments.first() ? message.attachments.first().url : null;
 
 		// Caso o membro seja vip
 		if(aDBValue.vip) {
 			if(aDBValue.vipUntil < new Date()) {
-				aDB.assign({
-					vip: false,
-					vipUntil: null
-				}).write();
 				aWcMember.roles.remove(vipRole, 'VIP acaba de expirar');
+				aDB.vip = false;
+				aDB.vipUntil = null;
 			} else if(!hVip) aWcMember.roles.add(vipRole, 'Membro VIP');
 		} else if(hVip) aWcMember.roles.remove(vipRole, 'VIP expirado');
 
@@ -182,20 +178,18 @@ class CommandDispatcher {
 			// Verifica se é membro ativo
 			if(tempLM > 86400000) {
 				// Retira 25 de xp por minuto, se ficar 1 dia inativo
-				aDB.update('xp', num => num - (25 * Math.round(tempLM / 60000)))
-					.update('mensagens', num => num + 1)
-					.update('lastMessage', message.createdAt)
-					.write();
+				aDB.xp -= Math.floor(25 * Math.round(tempLM / 60000));
+				aDB.mensagens += 1;
+				aDB.lastMessage = message.createdAt;
 			} else {
 				// Atualiza xp e número de mensagens
-				aDB.update('xp', num => num + 5)
-					.update('mensagens', num => num + 1)
-					.write();
+				aDB.xp += 5;
+				aDB.mensagens += 1;
 			}
 
 			// Se username correto: add xp e cargo, se não tiver
 			if(aUsername.startsWith('!ʷᶜ') || aUsername.startsWith('!𝓦𝓒')) {
-				aDB.update('xp', xp => xp + 4).write();
+				aDB.xp += 4;
 				if(!hFamily) aWcMember.roles.add(familyRole, 'Username começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
 			// Se username errado: retira o cargo de família, se tiver
 			} else if(hFamily) aWcMember.roles.remove(familyRole, 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
@@ -206,14 +200,16 @@ class CommandDispatcher {
 				let incluidos = [];
 
 				// Filtra os convites permanentes e verifica se o status do autor inclui um deles
-				invitesDB.filter(inv => inv.maxAge === 0).value().forEach(inv => codes.push(inv.code));
+				iDB.forEach(inv => {
+					if(inv.maxAge === 0) codes.push(inv.code);
+				});
 				for(const code of codes) {
 					if(aCustomStatus.state.includes(code)) incluidos.push(code);
 				}
 
 				// Caso tenha convite permanente
 				if(incluidos.length > 0) {
-					aDB.update('money', num => num + 1).write();
+					aDB.money += 1;
 					// Caso não tenha a perm
 					if(!hChngNick) aWcMember.roles.add(chngNickRole, 'Convite permanente no status');
 

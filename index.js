@@ -6,20 +6,9 @@ const { Intents } = require('discord.js');
 const d = new Date();
 const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
 
-
-//inicializa o lowDB
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-
-const adpt1 = new FileSync('./usersOffDB.json');
-const usersOffDB = low(adpt1);
-const adpt2 = new FileSync('./invitesDB.json');
-const invitesDB = low(adpt2);
-
-
-//inicializa o banco de dados (firebase) e exporta o banco Online
-const firebase = require('firebase/app');
-const FieldValue = require('firebase-admin').firestore.FieldValue;
+// Inicializa o banco de dados (firebase) e exporta o banco Online
+//const firebase = require('firebase/app');
+//const FieldValue = require('firebase-admin').firestore.FieldValue;
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccount.json');
 
@@ -29,31 +18,6 @@ admin.initializeApp({
 
 let db = admin.firestore();
 module.exports.db = db;
-
-//guarda os dados localmente e exporta o banco Offline
-let usersOn = db.collection('usuarios').doc('usuarios');
-module.exports.usersOn = usersOn;
-
-usersOn.get().then(snap => {
-	var usersOff = new Map(Object.entries(snap.data()));
-
-    usersOff.forEach(user => {
-        usersOffDB.set(`${user.id}`, user).write();
-    });
-});
-module.exports.usersOffDB = usersOffDB;
-module.exports.invitesDB = invitesDB;
-
-setInterval(async () => {
-	console.log(hora, 'Iniciando update...')
-	try {
-		usersOn.update(usersOffDB.getState()).then( () => console.log(hora, 'Update concluído com sucesso !'));
-	} catch(err) {
-		client.guilds.cache.get('698560208309452810').channels.cache.get('732710544330457161').send(`Erro ao atualizar Firestore: ${err.name}: ${err.message}`)
-	}
-}, 900000);
-
-
 
 //cria um client do Comando
 const donos = new Set();
@@ -84,6 +48,49 @@ client.registry
 		['eventos', 'Relacionados a Eventos']
 	])
 	.registerCommandsIn(path.join(__dirname, 'Comandos'));
+
+
+// Guarda os dados localmente e exporta o banco Offline
+db.collection('usuarios').get().then(docs => docs.forEach(snap => {
+
+	var usersOff = new Map(Object.entries(snap.data()));
+
+  usersOff.forEach(user => {
+      client.usersData.set(`${user.id}`, user);
+	});
+	
+}));
+
+setInterval(async () => {
+	console.log(hora, 'Iniciando update geral...')
+	try {
+		let repeats = Math.ceil((usersData.size + 1)/250);
+		let now = 1;
+		
+		while(now <= repeats) {
+			let users = {};
+
+			usersData.forEach(user => {
+				if(user.num > ((now - 1) * 250) && user.num < (now * 250)) {
+					Object.defineProperty(users, user.id, {
+						value: user,
+						writable: true,
+						enumerable: true,
+						configurable: true
+					});
+				}
+			})
+			console.log(hora, `Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados`);
+			console.log(hora,`Iniciado update do doc ${now}...`);
+			await db2.collection('usuarios').doc(`${now}`).set(users);
+			console.log(hora,'Update concluído !');
+			now ++;
+		}
+	} catch(err) {
+		client.guilds.cache.get('698560208309452810').channels.cache.get('732710544330457161').send(`${hora}Erro ao atualizar Firestore: ${err.name}: ${err.message}`)
+	}
+	console.log(hora, 'Fim do Update geral.')
+}, 900000);
 
 
 //Event Handler(Project-A) && erros

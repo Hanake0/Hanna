@@ -55,9 +55,21 @@ class CommandoClient extends discord.Client {
 
 		/**
 		 * Collection of games being played
-		 * @type {a}
+		 * @type {Collection}
 		 */
 		this.games = new Collection();
+
+		/**
+		 * Collection of users
+		 * @type {Collection}
+		 */
+		this.usersData = new Map();
+
+		/**
+		 * Collection of invites
+		 * @type {Collection}
+		 */
+		this.invitesData = new Map();
 
 		/**
 		 * Internal global command prefix, controlled by the {@link CommandoClient#commandPrefix} getter/setter

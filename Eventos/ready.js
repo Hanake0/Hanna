@@ -1,4 +1,3 @@
-const { invitesDB } = require('../index.js');
 const d = new Date();
 const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
 
@@ -21,7 +20,7 @@ module.exports = async (client) => {
     
       WaifusClub.fetchInvites().then( invites => {
         invites.forEach( invite => {
-          invitesDB.set(invite.code, invite).write()
+          client.invitesData.set(invite.code, invite);
         })
       })
     } else {
