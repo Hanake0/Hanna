@@ -67,7 +67,7 @@ module.exports = class Util {
 		const money = moeda === 'gems' ? uDB.money : uDB.money - valor;
 		const gems = moeda === 'gems' ? uDB.gems - valor : uDB.gems;
 		const ação = açãoNum  === true ? 'Comprou' : açãoNum === 0 ? 'Recebeu timeout/Já possui o item' : 'Não conseguiu comprar';
-		const cor = açãoNum === 1 ? emojis.successC : ação === 2 ? emojis.warningC : emojis.failC;
+		const cor = açãoNum === true ? emojis.successC : açãoNum === 0 ? emojis.warningC : emojis.failC;
 		const embed = {
 			color: cor,
 			title: `${ação} ${item}`,
