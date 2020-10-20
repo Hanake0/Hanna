@@ -27,7 +27,7 @@ const donos = new Set();
 const client = new CommandoClient({
 	ws: { intents: Intents.ALL },
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-	commandPrefix: 't//',
+	commandPrefix: 'h',
 	unknownCommandResponse: false,
 	owner: donos,
 	disableEveryone: true
@@ -121,4 +121,4 @@ evtFiles.forEach(f => {
 	});
 
 //login && token
-client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.jGq5sbtN7wFitgpNSD1XvswcZss');
+client.login(process.env.AUTH_TOKEN);
