@@ -41,7 +41,8 @@ module.exports.sim = sim;
 module.exports.nao = nao;
 
 module.exports = class Util {
-	static async comprar(nome, valor, canal, user, moeda, uDB) {
+	static async comprar(nome, valor, canal, user, moeda, client) {
+		const uDB = client.usersData.get(user.id);
 		const { verify } = require('./util.js');
 		const mg = moeda === 'gems' ? 'gems' : 'money';
 		if(uDB[mg] > valor) {
@@ -52,6 +53,7 @@ module.exports = class Util {
 		}
 		const sn = await verify(canal, user);
 		if(sn === true ) {
+			uDB[mg] -= valor;
 			canal.send(`${user}`, {embed: { color: emojis.successC, description: `${emojis.success} | Compra concluída com sucesso.` }});
 			return true
 		} else if(sn === false ) {
@@ -64,8 +66,8 @@ module.exports = class Util {
 	}
 
 	static shopEmbed(açãoNum, item, valor, moeda, user, uDB) {
-		const money = moeda === 'gems' ? uDB.money : uDB.money - valor;
-		const gems = moeda === 'gems' ? uDB.gems - valor : uDB.gems;
+		const money = uDB.money;
+		const gems = uDB.gems;
 		const ação = açãoNum  === true ? 'Comprou' : açãoNum === 0 ? 'Recebeu timeout/Já possui o item' : 'Não conseguiu comprar';
 		const cor = açãoNum === true ? emojis.successC : açãoNum === 0 ? emojis.warningC : emojis.failC;
 		const embed = {

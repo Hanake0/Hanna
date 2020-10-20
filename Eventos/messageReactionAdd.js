@@ -111,33 +111,31 @@ module.exports = async (client, reaction, user) => {
    
       // Caso não tenha essa cor
     else {
-      const compra = await comprar(cor.nome, valor, confirmação, user, gc, uDB);
+      const compra = await comprar(cor.nome, valor, confirmação, user, gc, client);
       shopLog.send({ embed : shopEmbed(compra, cor.nome, valor, gc, user, uDB) });
       cores.push(cor.rID);
       
       // Caso compra sucedida
       if(compra === true) {
         uDB['cores'] = cores;
-        uDB[gc === 'gems' ? 'gems' : 'money'] -= valor;
       }
     }
 
   // Caso o id seja de um vip
   } else if(vip) { 
     const valor = gc === 'gems' ? vip.valor/1000 : vip.valor;
-    const compra = await comprar(vip.nome, valor, confirmação, user, gc, uDB);
+    const compra = await comprar(vip.nome, valor, confirmação, user, gc, client);
     shopLog.send({ embed : shopEmbed(compra, vip.nome, valor, gc, user, uDB) });
 
     const timestamp = uDB.vip ? parseInt(uDB.vipUntil) + parseInt(vip.tempo) : d.valueOf() + parseInt(vip.tempo);
     if(compra === true) {
       uDB.vip = true;
       uDB.vipUntil = timestamp;
-      uDB[gc === 'gems' ? 'gems' : 'money'] -= valor;
     }
 
   } else if(outro) {
     valor = gc === 'gems' ? outro.valor/1000 : outro.valor;
-    const compra = await comprar(outro.nome, valor, confirmação, user, gc, uDB);
+    const compra = await comprar(outro.nome, valor, confirmação, user, gc, client);
     shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
 
     switch(outro.mID){
