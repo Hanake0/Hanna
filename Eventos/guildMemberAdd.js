@@ -67,7 +67,7 @@ module.exports = async (client, membro) => {
           color: emojis.warningC,
           title: 'Uso de Convite:',
           author: {
-            name: `${invite.inviter.tag} (${iDB ? iDB.has('invites') ? iDB.invites : 0 : ''})`,
+            name: `${invite.inviter.tag} (${uDB ? uDB.has('invites') ? uDB.invites : 0 : ''})`,
             icon_url: invite.inviter.avatarURL()
           },
           description: stripIndents`
