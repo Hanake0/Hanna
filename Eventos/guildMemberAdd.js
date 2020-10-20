@@ -50,7 +50,7 @@ module.exports = async (client, membro) => {
         })
 
         // Atualiza as gems
-        if(!usersData.has(membro.id)) {
+        if(!usersData.has(membro.id) && !invite.inviter.bot) {
           if(iDB.invites && iDB.gems) {
             iDB.invites += 1;
             iDB.gems += 1;
@@ -67,7 +67,7 @@ module.exports = async (client, membro) => {
           color: emojis.warningC,
           title: 'Uso de Convite:',
           author: {
-            name: `${invite.inviter.tag} (${iDB.has('invites') ? iDB.invites : 0} invites)`,
+            name: `${invite.inviter.tag} (${iDB ? iDB.has('invites') ? iDB.invites : 0 : ''})`,
             icon_url: invite.inviter.avatarURL()
           },
           description: stripIndents`
