@@ -34,8 +34,7 @@ module.exports = class SetInvitesCommand extends Command {
 
 	async run(msg, { usuário, valor }) {
 
-		const { usersOffDB } = require('../../index');
-    const uDB = usersOffDB.get(usuário.id)
+    const uDB = msg.client.usersData.get(usuário.id);
     
     uDB.invites = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Invites de ${usuário} atualizados com sucesso para \`\`${valor}\`\`!`});

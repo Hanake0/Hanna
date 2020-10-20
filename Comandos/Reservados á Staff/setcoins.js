@@ -34,8 +34,7 @@ module.exports = class SetCoinsCommand extends Command {
 
 	async run(msg, { usuário, valor }) {
 
-		const { usersOffDB } = require('../../index');
-    const uDB = usersOffDB.get(usuário.id)
+    const uDB = msg.client.usersData.get(usuário.id);
     
     uDB.money = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Coins de ${usuário} atualizadas com sucesso para \`\`${valor}\`\`!`});

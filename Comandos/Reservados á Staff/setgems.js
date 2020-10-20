@@ -34,8 +34,7 @@ module.exports = class SetGemsCommand extends Command {
 
 	async run(msg, { usuário, valor }) {
 
-		const { usersOffDB } = require('../../index');
-    const uDB = usersOffDB.get(usuário.id)
+    const uDB = msg.client.usersData.get(usuário.id);
     
     uDB.gems = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Gems de ${usuário} atualizadas com sucesso para \`\`${valor}\`\`!`});

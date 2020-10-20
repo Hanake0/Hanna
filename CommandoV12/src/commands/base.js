@@ -376,7 +376,7 @@ class Command {
 
 		const invite = this.client.options.invite;
 		return message.embed({ color: emojis.warningC, description: stripIndents`
-			${emojis.warning} | Eu sei, tá tudo quebrado, vou arrumar isso depois...
+			${emojis.warning} | Ooopsie, parece que alguém fez caquinha...
 			Ocorreu um erro durante a execução do comando:\n \`${err.name}: ${err.message}\`\n
 			Por favor avise ${ownerList || 'meu dono'}${invite ? ` nesse servidor: ${invite}` : '.'}`});
 	}
