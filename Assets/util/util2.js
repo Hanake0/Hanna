@@ -1,4 +1,5 @@
 const emojis = require('../JSON/emojis.json');
+const { stripIndents } = require('common-tags');
 const status = {
 	online: 'Disponível/Online',
 	idle: 'Ausente',
@@ -50,15 +51,36 @@ module.exports = class Util {
 			return false
 		}
 		const sn = await verify(canal, user);
-		if(sn && sn !== 0 ) {
+		if(sn === true ) {
 			canal.send(`${user}`, {embed: { color: emojis.successC, description: `${emojis.success} | Compra concluída com sucesso.` }});
 			return true
-		} else if(sn !== 0) {
+		} else if(sn === false ) {
 			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Compra cancelada.` }});
 			return false
 		} else {
 			canal.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Tempo esgotado.` }});
-			return false
+			return 0;
 		}
+	}
+
+	static shopEmbed(açãoNum, item, valor, moeda, user, uDB) {
+		const ação = açãoNum  === true ? 'Comprou' : ação === 0 ? 'Recebeu timeout/Já possui o item' : 'Não conseguiu comprar';
+		const cor = açãoNum === 1 ? emojis.successC : ação === 2 ? emojis.warningC : emojis.failC;
+		const embed = {
+			color: cor,
+			title: `${ação} ${item}`,
+			author: {
+				name: user.tag,
+				icon_url: user.avatarURL()
+			},
+			description: stripIndents`
+			Usuário: **${user.tag} (${user.id})**
+			Valor: **${valor} ${moeda}**
+			Carteira: ${uDB.coins} Coins • ${uDB.gems} Gems`,
+			timestamp: Date.now(),
+			footer: {
+				text: `${ação} em `
+			}};
+		return embed;
 	}
 }

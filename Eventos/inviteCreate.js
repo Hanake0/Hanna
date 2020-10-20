@@ -1,4 +1,5 @@
 const { stripIndents } = require('common-tags');
+const emojis = require('../Assets/JSON/emojis.json');
 const d = Date.now() - 10800000;
 let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 
@@ -8,7 +9,7 @@ module.exports = async (client, invite) => {
   client.invitesData.set(invite.code, invite);
 
   client.guilds.cache.get('698560208309452810').channels.cache.get('751568642545680485').send({embed: {
-    color: '#24960e',
+    color: emojis.successC,
     title: 'Convite criado:',
     author: {
       name: invite.inviter.tag,

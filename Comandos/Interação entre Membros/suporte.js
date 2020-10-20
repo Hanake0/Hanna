@@ -40,7 +40,7 @@ module.exports = class SuporteCommand extends Command {
       ],
     }
     
-    const canalSuporte = await message.guild.channels.create(mencao, canal, "canal de denuncia");
+    const canalSuporte = await message.guild.channels.create(mencao, canal, "canal de denúncia");
     message.delete()
     canalSuporte.send(`Canal criado com sucesso ${message.author}.`);
     if (!motivo) return canalSuporte.send('Com o que podemos ajudar?');
