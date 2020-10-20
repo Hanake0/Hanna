@@ -49,13 +49,14 @@ module.exports = class CarteiraCommand extends Command {
       uDB.cores.forEach(cor => {
         compradas.push(wcRolesCache.get(cor));
       }) 
+      compradas = compradas.join(', ');
     } else compradas = '--';
 
     const embed = new Discord.MessageEmbed()
       .setColor(wcMember.displayColor)
       .setAuthor(msg.author.tag, msg.author.avatarURL())
 			.addField('Em uso:', `${atual}`)
-      .addField('Compradas: ', `${compradas.join(', ')}`, true)
+      .addField('Compradas: ', `${compradas}`, true)
     if(uDB.vip) {
       embed.addField('VIP:', `${VIPs.join(', ')}`, true);
     }
