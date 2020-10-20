@@ -19,10 +19,9 @@ module.exports = class CarteiraCommand extends Command {
 
 	async run(msg) {
 
-    const { usersOffDB } = require('../../index');
     const catálogo = require('../../Assets/JSON/catálogo.json');
 
-    const uDB = usersOffDB.get(msg.author.id);
+    const uDB = msg.client.usersData.get(msg.author.id);
     const wcRolesCache = msg.client.guilds.cache.get('698560208309452810').roles.cache;
     const wcMember = msg.client.guilds.cache.get('698560208309452810').members.cache.get(msg.author.id);
 
@@ -45,9 +44,9 @@ module.exports = class CarteiraCommand extends Command {
     const atual = emUso ? wcRolesCache.get(emUso) : wcRolesCache.get('740940572025552926');
 
     let compradas;
-    if(uDB.has('cores').value()) {
+    if(uDB.cores) {
       compradas = [];
-      uDB.value().cores.forEach(cor => {
+      uDB.cores.forEach(cor => {
         compradas.push(wcRolesCache.get(cor));
       }) 
     } else compradas = '--';
@@ -57,7 +56,7 @@ module.exports = class CarteiraCommand extends Command {
       .setAuthor(msg.author.tag, msg.author.avatarURL())
 			.addField('Em uso:', `${atual}`)
       .addField('Compradas: ', `${compradas.join(', ')}`, true)
-    if(uDB.value().vip) {
+    if(uDB.vip) {
       embed.addField('VIP:', `${VIPs.join(', ')}`, true);
     }
       msg.embed(embed);

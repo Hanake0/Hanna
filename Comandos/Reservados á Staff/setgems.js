@@ -37,13 +37,13 @@ module.exports = class SetGemsCommand extends Command {
 		const { usersOffDB } = require('../../index');
     const uDB = usersOffDB.get(usuário.id)
     
-    uDB.set('gems', valor).write();
+    uDB.gems = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Gems de ${usuário} atualizadas com sucesso para \`\`${valor}\`\`!`});
 
 		const member = msg.client.guilds.cache.get('698560208309452810').members.cache.get(usuário.id);
     
-    const coins = uDB.value().money;
-    const gems = uDB.has('gems').value() ? uDB.value().gems : '0';
+    const coins = uDB.money;
+    const gems = uDB.gems ? uDB.gems : '0';
 
     const embed = new Discord.MessageEmbed()
       .setColor( member ? member.displayColor : Math.floor(Math.random() * 16777214) + 1)

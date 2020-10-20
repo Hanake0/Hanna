@@ -37,7 +37,7 @@ module.exports = class SetInvitesCommand extends Command {
 		const { usersOffDB } = require('../../index');
     const uDB = usersOffDB.get(usuário.id)
     
-    uDB.set('invites', valor).write();
+    uDB.invites = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Invites de ${usuário} atualizados com sucesso para \`\`${valor}\`\`!`});
 		}
 };

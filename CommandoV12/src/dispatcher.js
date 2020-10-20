@@ -179,7 +179,6 @@ class CommandDispatcher {
 				// Retira 25 de xp por minuto, se ficar 1 dia inativo
 				aDB.xp -= Math.floor(25 * Math.round(tempLM / 60000));
 				aDB.mensagens += 1;
-				aDB.lastMessage = message.createdAt;
 			} else {
 				// Atualiza xp e número de mensagens
 				aDB.xp += 5;

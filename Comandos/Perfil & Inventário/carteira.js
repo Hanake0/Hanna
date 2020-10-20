@@ -26,15 +26,14 @@ module.exports = class CarteiraCommand extends Command {
 		});
 	}
 
-	async run(msg, { usuário }) {
+	run(msg, { usuário }) {
 
-		const { usersOffDB } = require('../../index');
-		const uDB = usersOffDB.get(usuário.id)
+		const uDB = msg.client.usersData.get(usuário.id)
 
 		const member = msg.client.guilds.cache.get('698560208309452810').members.cache.get(usuário.id);
     
-    const coins = uDB.value().money;
-    const gems = uDB.has('gems').value() ? uDB.value().gems : '0';
+    const coins = uDB.money;
+    const gems = uDB.gems ? uDB.gems : '0';
 
     const embed = new Discord.MessageEmbed()
       .setColor( member ? member.displayColor : Math.floor(Math.random() * 16777214) + 1)

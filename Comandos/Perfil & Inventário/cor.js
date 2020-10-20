@@ -26,10 +26,9 @@ module.exports = class SelecionarCorCommand extends Command {
 	}
 
 	async run(msg, { corS }) {
-    const { usersOffDB } = require('../../index');
     const catálogo = require('../../Assets/JSON/catálogo.json');
 
-    const uDB = usersOffDB.get(msg.author.id);
+    const uDB = msg.client.usersData.get(msg.author.id);
     const wcRolesCache = msg.client.guilds.cache.get('698560208309452810').roles.cache;
     const wcMember = msg.client.guilds.cache.get('698560208309452810').members.cache.get(msg.author.id);
 
@@ -54,8 +53,8 @@ module.exports = class SelecionarCorCommand extends Command {
       msg.react('738900367814819940')).then(() => null);
 
     if(corE.length === 0 ) return msg.channel.send(`${msg.author}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Essa cor não existe.` }});
-    if(uDB.has('cores').value() || uDB.value().vip) {
-      if(uDB.value().cores.includes(corE[0].rID) || uDB.value().vip) {
+    if(uDB.cores || uDB.vip) {
+      if(uDB.cores.includes(corE[0].rID) || uDB.vip) {
         if(emUso.length === 0) {
           wcMember.roles.add(wcRolesCache.get(corE[0].rID), 'Cor selecionada').then(() => 
             msg.react('738900367814819940'));
