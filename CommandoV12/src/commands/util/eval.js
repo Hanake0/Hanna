@@ -33,7 +33,7 @@ module.exports = class EvalCommand extends Command {
 	run(msg, args) {
 		// Make a bunch of helpers
 		/* eslint-disable no-unused-vars */
-		const { usersOffDB, usersOn, invitesDB } = require('../../../../index.js');
+		const { db } = require('../../../../index.js');
 		const catálogo = require('../../../../Assets/JSON/catálogo.json');
 		const message = msg;
 		const client = msg.client;

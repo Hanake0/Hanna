@@ -15,9 +15,43 @@ module.exports = class UpdatedbCommand extends Command {
   }
 
   async run(message) {
-    const { usersOffDB, usersOn } = require('../../index');
-    usersOn.update(usersOffDB.getState()).then(() => {
-        message.say('Banco de dados atualizado com suscesso.')
-    });
+    const { db } = require('../../index');
+    let d = Date.now() - 10800000;
+    let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
+    
+    console.log(hora, 'Iniciando update geral...');
+    await message.channel.send(`${hora}Iniciando update geral...`);
+    try {
+      let repeats = Math.ceil((client.usersData.size + 1)/250);
+      let now = 1;
+      
+      while(now <= repeats) {
+        let users = {};
+  
+        client.usersData.forEach(user => {
+          if(user.num > ((now - 1) * 250) && user.num < (now * 250)) {
+            Object.defineProperty(users, user.id, {
+              value: user,
+              writable: true,
+              enumerable: true,
+              configurable: true
+            });
+          }
+        })
+        console.log(hora, `Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados`);
+        await message.channel.send(`${hora}Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados`);
+        console.log(hora,`Iniciado update do doc ${now}...`);
+        await message.channel.send(`${hora}Iniciado update do doc ${now}...`);
+        await db.collection('usuarios').doc(`${now}`).set(users);
+        console.log(hora,`Update de doc ${now} concluído !`);
+        await message.channel.send(`${hora}Update de doc ${now} concluído !`);
+        now ++;
+      }
+    } catch(err) {
+      console.log(hora, `Erro durante update ${err.name}: ${err.message}`);
+      await message.channel.send(`${hora}Erro durante update ${err.name}: ${err.message}`);
+    }
+    console.log(hora, 'Fim do Update geral.')
+    await message.channel.send(`${hora}Fim do Update geral.`);
   }
 };

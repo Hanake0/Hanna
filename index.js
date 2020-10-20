@@ -3,8 +3,8 @@ const { CommandoClient} = require('./CommandoV12/src/index.js');
 const path = require('path');
 const { readdirSync } = require('fs');
 const { Intents } = require('discord.js');
-const d = new Date();
-const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
+const d = Date.now() - 10800000;
+let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 
 // Inicializa o banco de dados (firebase) e exporta o banco Online
 //const firebase = require('firebase/app');
@@ -27,7 +27,7 @@ const donos = new Set();
 const client = new CommandoClient({
 	ws: { intents: Intents.ALL },
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-	commandPrefix: 'h',
+	commandPrefix: 't//',
 	unknownCommandResponse: false,
 	owner: donos,
 	disableEveryone: true
@@ -62,15 +62,15 @@ db.collection('usuarios').get().then(docs => docs.forEach(snap => {
 }));
 
 setInterval(async () => {
-	console.log(hora, 'Iniciando update geral...')
+	console.log(hora, 'Iniciando update geral...');
 	try {
-		let repeats = Math.ceil((usersData.size + 1)/250);
+		let repeats = Math.ceil((client.usersData.size + 1)/250);
 		let now = 1;
 		
 		while(now <= repeats) {
 			let users = {};
 
-			usersData.forEach(user => {
+			client.usersData.forEach(user => {
 				if(user.num > ((now - 1) * 250) && user.num < (now * 250)) {
 					Object.defineProperty(users, user.id, {
 						value: user,
@@ -79,14 +79,15 @@ setInterval(async () => {
 						configurable: true
 					});
 				}
-			})
+			});
 			console.log(hora, `Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados`);
 			console.log(hora,`Iniciado update do doc ${now}...`);
-			await db2.collection('usuarios').doc(`${now}`).set(users);
-			console.log(hora,'Update concluído !');
+			await db.collection('usuarios').doc(`${now}`).set(users);
+			console.log(hora,`Update de doc ${now} concluído !`);
 			now ++;
 		}
 	} catch(err) {
+		console.log(hora, `Erro durante update ${err.name}: ${err.message}`);
 		client.guilds.cache.get('698560208309452810').channels.cache.get('732710544330457161').send(`${hora}Erro ao atualizar Firestore: ${err.name}: ${err.message}`)
 	}
 	console.log(hora, 'Fim do Update geral.')
@@ -120,4 +121,4 @@ evtFiles.forEach(f => {
 	});
 
 //login && token
-client.login(process.env.AUTH_TOKEN);
+client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.jGq5sbtN7wFitgpNSD1XvswcZss');
