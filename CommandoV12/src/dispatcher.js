@@ -121,6 +121,7 @@ class CommandDispatcher {
 		const dbPressets = require('../../Assets/JSON/dbPressets.json');
 
 		const aID = message.author.id;
+		let aDB = usersData.get(aID);
 		const wcID = '698560208309452810';
 		const aUsername = message.author.username;
 		const isWC = message.guild ? message.guild.id === wcID : false;
@@ -157,7 +158,7 @@ class CommandDispatcher {
 			let tempLM = new Date() - aDB.lastMessage.valueOf();
 		}
 
-		const aDB = usersData.get(aID);
+		aDB = usersData.get(aID);
 
 		// Atualiza os valores para "lastMsg"
 		aDB.lastMessage = `${message.createdAt.toISOString()}`;
