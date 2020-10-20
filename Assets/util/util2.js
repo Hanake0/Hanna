@@ -64,6 +64,8 @@ module.exports = class Util {
 	}
 
 	static shopEmbed(açãoNum, item, valor, moeda, user, uDB) {
+		const money = moeda === 'gems' ? uDB.money : uDB.money - valor;
+		const gems = moeda === 'gems' ? uDB.gems - valor : uDB.gems;
 		const ação = açãoNum  === true ? 'Comprou' : açãoNum === 0 ? 'Recebeu timeout/Já possui o item' : 'Não conseguiu comprar';
 		const cor = açãoNum === 1 ? emojis.successC : ação === 2 ? emojis.warningC : emojis.failC;
 		const embed = {
@@ -76,7 +78,7 @@ module.exports = class Util {
 			description: stripIndents`
 			Usuário: **${user.tag} (${user.id})**
 			Valor: **${valor} ${moeda}**
-			Carteira: ${uDB.coins} Coins • ${uDB.gems} Gems`,
+			Carteira: ${money} Coins • ${gems} Gems`,
 			timestamp: Date.now(),
 			footer: {
 				text: `${ação} em `

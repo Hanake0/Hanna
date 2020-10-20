@@ -4,6 +4,7 @@ const emojis = require('../Assets/JSON/emojis.json');
 const { comprar, shopEmbed } = require('../Assets/util/util2.js');
 const d = Date.now() - 10800000;
 let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
+const { Permissions } = require('discord.js');
 
 module.exports = async (client, reaction, user) => {
   if(user.id === client.user.id || user.bot) return;
@@ -167,7 +168,7 @@ module.exports = async (client, reaction, user) => {
             permissionOverwrites: [
               {
                 id: user.id,
-                allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_CHANNEL'],
+                allow: Permissions.ALL,
               },
               {
                 id: Wclub.id,
