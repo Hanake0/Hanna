@@ -1,10 +1,8 @@
 const catálogo = require('../Assets/JSON/catálogo.json');
 const emojis = require('../Assets/JSON/emojis.json');
-const { cor } = require('../Assets/util/inventário.js');
-const { usersOffDB } = require('../index.js');
 const { comprar } = require('../Assets/util/util2.js');
-const d = new Date();
-const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
+const d = Date.now() - 10800000;
+let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 
 module.exports = async (client, reaction, user) => {
   if(user.id === client.user.id || user.bot) return;
@@ -72,27 +70,28 @@ module.exports = async (client, reaction, user) => {
   // Verifica se a mensagem está dentre as da loja e aciona a função do item
   if(!mIDs.includes(id)) return;
 
-  if(!usersOffDB.has(user.id).value()) return;
-  const uDB = usersOffDB.get(user.id);
+  if(!client.usersData.get(user.id)) return;
+  const uDB = client.usersData.get(user.id);
 
   // Apaga a reação selecionada
-  await reaction.message.reactions.cache.forEach(async reaction => {
-    if(reaction.count > 1) {
+  await reaction.message.reactions.cache.forEach(async react => {
+    if(react.emoji.id = emojiId) {
       await reaction.remove()
         .catch(error => console.error('messageReactionAdd => Falha ao remover emoji: ', error))
     }
   });
   // Reage denovo
-  reaction.message.react(emojiId);
+  reaction.message.react(emojiId)
+    .catch(error => console.error('messageReactionAdd => Falha ao adicionar emoji: ', error))
 
 
   // Caso o id seja de uma cor
   if(cor !== undefined) {
     const valor = gc === 'gems' ? cor.valor/1000 : cor.valor;
-    let cores = uDB.value().cores ? uDB.value().cores : []; 
+    let cores = uDB.cores ? uDB.cores : []; 
 
     // Caso já tenha essa cor
-    if(uDB.value().cores.includes(cor.rID)) confirmação.send(`${user}`, 
+    if(uDB.cores.includes(cor.rID)) confirmação.send(`${user}`, 
       { embed: { 
         color: emojis.warningC,
         description: `${emojis.warning} | Você já possui a cor **${cor.nome}**`
@@ -101,10 +100,9 @@ module.exports = async (client, reaction, user) => {
     else {
       const compra = await comprar(cor.nome, valor, confirmação, user, gc);
       cores.push(cor.rID);
-      if(compra) uDB
-        .set('cores', cores)
-        .update(gc === 'gems' ? 'gems' : 'money', num => num - valor)
-        .write();
+      if(compra) 
+        uDB['cores'] = cores;
+        uDB[gc === 'gems' ? 'gems' : 'money'] -= valor;
     }
 
   // Caso o id seja de um vip
@@ -112,17 +110,13 @@ module.exports = async (client, reaction, user) => {
     const valor = gc === 'gems' ? vip.valor/1000 : vip.valor;
     const compra = await comprar(vip.nome, valor, confirmação, user, gc);
 
-    const timestamp = uDB.value().vip ? parseInt(uDB.value().vipUntil) + parseInt(vip.tempo) : d.valueOf() + parseInt(vip.tempo);
-    if(compra) uDB
-      .assign({
-        vip: true,
-        vipUntil: timestamp
-      })
-      .update(gc === 'gems' ? 'gems' : 'money', num => num - valor)
-      .write();
+    const timestamp = uDB.vip ? parseInt(uDB.vipUntil) + parseInt(vip.tempo) : d.valueOf() + parseInt(vip.tempo);
+    if(compra) 
+      uDB.vip = true;
+      uDB.vipUntil = timestamp;
+      uDB[gc === 'gems' ? 'gems' : 'money'] -= valor;
 
-    
   } else if(outros.find(item => item.mID === id) !== undefined) {
-    return
+    return;
   }
 }

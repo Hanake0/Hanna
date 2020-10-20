@@ -114,15 +114,14 @@ class CommandDispatcher {
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
 		// Define as constantes pra facilitar depois
-		const usersOffDB = message.client.usersData;
+		const usersData = message.client.usersData;
 		const iDB = message.client.invitesData;
 
-		if(!usersOffDB || !iDB) return;
+		if(!usersData || !iDB) return;
 		const dbPressets = require('../../Assets/JSON/dbPressets.json');
 
 		const aID = message.author.id;
-		const aDB = usersOffDB.get(aID);
-		const aDBValue = aDB;
+		const aDB = usersData.get(aID);
 		const wcID = '698560208309452810';
 		const aUsername = message.author.username;
 		const isWC = message.guild ? message.guild.id === wcID : false;
@@ -147,16 +146,16 @@ class CommandDispatcher {
 		let tempLM;
 
 		// Cria os pressets do db se não existem
-		if(!usersOffDB.has(aID)) {
-			usersOffDB.set(aID, {
+		if(!usersData.has(aID)) {
+			usersData.set(aID, {
 				id: aID,
-				username: message.author.username
-			})
-			.assign(dbPressets);
+				username: message.author.username,
+				...dbPressets
+			});
 
 			let tempLM = 0;
 		} else {
-			let tempLM = new Date() - aDBValue.lastMessage.valueOf();
+			let tempLM = new Date() - aDB.lastMessage.valueOf();
 		}
 
 		// Atualiza os valores para "lastMsg"
@@ -166,8 +165,8 @@ class CommandDispatcher {
 		aDB.lastMessageAttachment = message.attachments.first() ? message.attachments.first().url : null;
 
 		// Caso o membro seja vip
-		if(aDBValue.vip) {
-			if(aDBValue.vipUntil < new Date()) {
+		if(aDB.vip) {
+			if(aDB.vipUntil < new Date()) {
 				aWcMember.roles.remove(vipRole, 'VIP acaba de expirar');
 				aDB.vip = false;
 				aDB.vipUntil = null;

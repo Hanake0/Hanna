@@ -1,5 +1,5 @@
-const d = new Date();
-const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `
+const d = Date.now() - 10800000;
+let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 
 module.exports = async (client) => {
   console.log(hora, 'Evento \`ready\` emitido...');

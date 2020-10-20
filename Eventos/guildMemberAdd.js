@@ -1,12 +1,14 @@
-var { usersOffDB, invitesDB } = require('../index.js');
 const emojis = require('../Assets/JSON/emojis.json');
 const dbPressets= require('../Assets/JSON/dbPressets.json');
 const { stripIndents } = require('common-tags');
-const d = new Date();
-const hora = `${d.getHours() - 3}:${d.getMinutes()}:${d.getSeconds()} `;
+const d = Date.now() - 10800000;
+let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 
 module.exports = async (client, membro) => {
   console.log(hora, 'Evento \`guildMemberAdd\` emitido...');
+
+  const invitesData = client.invitesData;
+  const usersData = client.usersData;
 
   const id = membro.guild.id;
   
@@ -18,6 +20,8 @@ module.exports = async (client, membro) => {
   
   const roleID = '750073380711170142';
   const role = Wstore.roles.cache.get(roleID);
+
+  let iDB = {};
 
   // verifica em que servidor o membro entrou
   switch (id) {
@@ -33,35 +37,29 @@ module.exports = async (client, membro) => {
       }
 
       // Cria um mapa dos convites atuais
-      let invitesA = new Map();
-      invitesDB.forEach(invite => invitesA.set(invite.code, invite)).value()
+      const invitesA = invitesData;
 
       Wclub.fetchInvites().then(invitesN => {
 
-        invite = invitesN.find(i => invitesDB.get(i.code).value().uses < i.uses);
+        invite = invitesN.find(i => invitesA.get(i.code).uses < i.uses);
+        iDB = usersData.get(invite.inviter.id);
 
-        // Atualiza o db
+        // Atualiza os convites
         invitesN.forEach( invite => {
-          invitesDB.set(invite.code, invite).write()
+          invitesData.set(invite.code, invite);
         })
 
-        if(usersOffDB.get(invite.inviter.id).has('invites').value() && !usersOffDB.has(membro.id).value()) {
-          usersOffDB.get(invite.inviter.id)
-            .update('invites', num => num + 1) 
-            .update('gems', num => num + 1)
-            .write();
-          
-        } else if(!usersOffDB.has(membro.id).value()){
-          usersOffDB.get(invite.inviter.id)
-            .set('invites', 1)
-            .set('gems', 1)
-            .write();
-        } else if(!usersOffDB.get(invite.inviter.id).has('invites').value()) {
-          usersOffDB.get(invite.inviter.id)
-          .set('invites', 0)
-          .set('gems', 0)
-          .write();
-        }
+        // Atualiza as gems
+        if(!usersData.has(membro.id)) {
+          if(iDB.invites && iDB.gems) {
+            iDB.invites += 1;
+            iDB.gems += 1;
+          } else {
+            iDB.invites = 1;
+            iDB.gems = 1;
+          };
+
+        };
       }).then(() => {
 
         // Envia o embed
@@ -69,7 +67,7 @@ module.exports = async (client, membro) => {
           color: emojis.warningC,
           title: 'Uso de Convite:',
           author: {
-            name: `${invite.inviter.tag} (${usersOffDB.get(invite.inviter.id).has('invites').value() ? usersOffDB.get(invite.inviter.id).value().invites : 0} invites)`,
+            name: `${invite.inviter.tag} (${iDB.has('invites') ? iDB.invites : 0} invites)`,
             icon_url: invite.inviter.avatarURL()
           },
           description: stripIndents`
@@ -79,7 +77,7 @@ module.exports = async (client, membro) => {
           fields: [
             {
               name: `${membro.user.tag} (${membro.id})`,
-              value: usersOffDB.has(membro.id).value() ? `${emojis.fail} | Não é membro novo.` : `${emojis.success} | É membro novo.`
+              value: usersData.has(membro.id) ? `${emojis.fail} | Não é membro novo.` : `${emojis.success} | É membro novo.`
             }
           ],
           timestamp: invite.maxAge != 0 ? invite.createdTimestamp + (invite.maxAge * 1000) : invite.createdTimestamp,
@@ -89,15 +87,13 @@ module.exports = async (client, membro) => {
         }})
 
       }).then(() => {
-        if(!usersOffDB.has(membro.id).value()) {
-          usersOffDB
-          .set(membro.id, {
-            id: membro.id,
-            username: membro.user.username
-          })
-          .get(membro.id)
-          .assign(dbPressets)
-          .write();  
+        if(!usersData.has(membro.id)) {
+          usersData.set(membro.id, 
+            {
+              id: membro.id,
+              username: membro.user.username,
+              ...dbPressets
+            });
         }
       });
       break;

@@ -37,6 +37,7 @@ module.exports = class EvalCommand extends Command {
 		const catálogo = require('../../../../Assets/JSON/catálogo.json');
 		const message = msg;
 		const client = msg.client;
+		const { usersData, invitesData } = client;
 		const lastResult = this.lastResult;
 		const doReply = val => {
 			if(val instanceof Error) {
