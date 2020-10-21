@@ -25,11 +25,13 @@ module.exports = async (client, reaction, user) => {
 
   const WC = '698560208309452810';
   const Wclub = client.guilds.cache.get(WC);
+  const wcMember = Wclub.members.cache.get(user.id);
   const categApart = '754411415548199054';
 
   const emojiId = reaction.emoji.id;
   const id = reaction.message.id;
   const gc = emojiId === '750840705269891112' ? 'gems' : 'coins';
+  const gm = gc === 'gems' ? 'gems' : 'money';
 
   // Todos os id's (Array)
   let mIDs = [];
@@ -83,15 +85,17 @@ module.exports = async (client, reaction, user) => {
   const uDB = client.usersData.get(user.id);
 
   // Apaga a reação selecionada
-  await reaction.message.reactions.cache.forEach(async react => {
-    if(react.emoji.id == emojiId) {
-      await reaction.remove()
+  const reacts = reaction.message.reactions.cache;
+  await reacts.forEach(async react => {
+    if(react._emoji.name == reaction._emoji.name) {
+      await react.remove()
         .catch(error => console.error('messageReactionAdd => Falha ao remover emoji: ', error))
     }
   });
+
   // Reage denovo
-  reaction.message.react(emojiId)
-    .catch(error => console.error('messageReactionAdd => Falha ao adicionar emoji: ', error))
+  reaction.message.react(reaction._emoji)
+  .catch(error => console.error('messageReactionAdd => Falha ao adicionar emoji: ', error))
 
   // Caso o id seja de info
   if(info !== undefined) {
@@ -103,12 +107,13 @@ module.exports = async (client, reaction, user) => {
     let cores = uDB.cores ? uDB.cores : []; 
 
     // Caso já tenha essa cor
-    if(uDB.cores.includes(cor.rID)) confirmação.send(`${user}`, 
+
+    if(cores.includes(cor.rID)) confirmação.send(`${user}`, 
       { embed: { 
         color: emojis.warningC,
         description: `${emojis.warning} | Você já possui a cor **${cor.nome}**`
       }}).then(() => shopLog.send(shopEmbed(0, cor.nome, valor, gc, user, uDB)))
-   
+
       // Caso não tenha essa cor
     else {
       const compra = await comprar(cor.nome, valor, confirmação, user, gc, client);
@@ -151,8 +156,67 @@ module.exports = async (client, reaction, user) => {
       // Tag
       case '754554148556505118':
         if(compra === true) {
+          let cor = false;
+          let tentativas = 0;
+          let nome;
+          while(!cor && tentativas <= 5) {
+            confirmação.send(`${user}`,{embed: {color: emojis.warningC, description: stripIndents`${emojis.warning} | Escolha uma cor para sua tag:`} });
+            const filtro = res => {
+              const value = res.content.toLowerCase();
+              return (user ? res.author.id === user.id : true)
+                && (cores.some(cor => cor.aliases.includes(value)));
+            };
+            const verify = await confirmação.awaitMessages(filtro, {
+              max: 1,
+              time: 30000,
+            });
+            if (!verify.size) return confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Você não enviou uma cor válida a tempo, tente denovo: 
+            
+              • __As cores válidas são as disponíveis em <#754552398751596644>__`}});
+            cor = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(verify.first().content.toLowerCase())).rID).color;
+            tentativas ++;
+          }
+          if(cor) {
+            await confirmação.send(`${user}`, {embed: {color: cor, description: stripIndents`${emojis.success} | Cor selecionada com sucesso !`} });
+            confirmação.send(`${user}`, {embed: {color: emojis.warningC, description: stripIndents`${emojis.warning} | Agora, escolha o nome da sua tag:`} });
+            const filtro = res => {
+              return (user ? res.author.id === user.id : true);
+            };
+            const verify = await confirmação.awaitMessages(filtro, {
+              max: 1,
+              time: 60000,
+            });
+            if (!verify.size) return confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Você não enviou um nome a tempo, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
+              uDB[gm] += valor;
+              shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
+            })
+            nome = verify.first().content;
+            confirmação.send(`${user}`, {embed: {color: cor, description: stripIndents`${emojis.success} | Nome \`${nome}\` selecionado com sucesso ! Criando tag...`} });
+            Wclub.roles.create({
+              data: {
+                name: nome,
+                color: cor,
+                position: Wclub.roles.cache.get('750037696570851422').rawPosition - 1,
+                mentionable: true
+              },
+              reason: `Tag comprada por ${user.tag}`
+            }).then(tag => {
+              wcMember.roles.add(tag).then(() => {
+                confirmação.send(`${user}`, {embed: {color: emojis.successC, description: stripIndents`${emojis.success} | Sua tag já foi criada e adicionada ao seu usuário no server principal !`} });
+              }, () => confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
+                uDB[gm] += valor;
+                shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
+              }))
+            }, () => confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
+              uDB[gm] += valor;
+              shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) })}));
+          } else return confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Suas tentativas acabaram, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
+            uDB[gm] += valor;
+            shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
+          });
+
           Wstore.channels.cache.get('750031689132277901').send(stripIndents`
-          ${user} comprou uma **TAG**, faz o bagulho lá meo <@&750084283481325671>
+          <@&750084283481325671> ${user} comprou uma **TAG** com o nome \`${nome}\`, verifiquem lá...
           `)
         }
         break;

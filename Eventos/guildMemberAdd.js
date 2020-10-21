@@ -42,7 +42,7 @@ module.exports = async (client, membro) => {
       Wclub.fetchInvites().then(invitesN => {
 
         invite = invitesN.find(i => invitesA.get(i.code).uses < i.uses);
-        iDB = usersData.get(invite.inviter.id);
+        uDB = usersData.get(invite.inviter.id);
 
         // Atualiza os convites
         invitesN.forEach( invite => {
@@ -67,7 +67,7 @@ module.exports = async (client, membro) => {
           color: emojis.warningC,
           title: 'Uso de Convite:',
           author: {
-            name: `${invite.inviter.tag} (${uDB ? uDB.has('invites') ? uDB.invites : 0 : ''})`,
+            name: `${invite.inviter.tag} (${uDB ? uDB.invites ? uDB.invites : 0 : ''})`,
             icon_url: invite.inviter.avatarURL()
           },
           description: stripIndents`

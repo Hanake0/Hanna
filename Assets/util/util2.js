@@ -45,23 +45,28 @@ module.exports = class Util {
 		const uDB = client.usersData.get(user.id);
 		const { verify } = require('./util.js');
 		const mg = moeda === 'gems' ? 'gems' : 'money';
-		if(uDB[mg] > valor) {
+		if(uDB[mg] >= valor) {
 			canal.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Tem certeza que deseja comprar **${nome}** por ${valor} ${moeda} ?` }})
 		} else {
 			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | **${nome}**: Você não tem ${moeda} o suficiente(faltam ${uDB[mg] !== undefined ? valor - uDB[mg] : valor} ${moeda})` }})
 			return false
 		}
 		const sn = await verify(canal, user);
-		if(sn === true ) {
-			uDB[mg] -= valor;
-			canal.send(`${user}`, {embed: { color: emojis.successC, description: `${emojis.success} | Compra concluída com sucesso.` }});
-			return true
-		} else if(sn === false ) {
-			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Compra cancelada.` }});
+		if(uDB[mg] >= valor) {
+			if(sn === true ) {
+				uDB[mg] -= valor;
+				canal.send(`${user}`, {embed: { color: emojis.successC, description: `${emojis.success} | Compra concluída com sucesso.` }});
+				return true
+			} else if(sn === false ) {
+				canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Compra cancelada.` }});
+				return false
+			} else {
+				canal.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Tempo esgotado.` }});
+				return 0;
+			}
+		} else{
+			canal.send(`${user}`, {embed: { color: emojis.failC, description: `${emojis.fail} | **${nome}**: Você não tem ${moeda} o suficiente(faltam ${uDB[mg] !== undefined ? valor - uDB[mg] : valor} ${moeda})` }})
 			return false
-		} else {
-			canal.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Tempo esgotado.` }});
-			return 0;
 		}
 	}
 
