@@ -183,8 +183,8 @@ module.exports = async (client, reaction, user) => {
       };
 
       // Pergunta a cor da tag
-      corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
-      if(corM) cor = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(corM.content.toLowerCase())).rID).color;
+      const corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
+      if(corM) corSS = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(corM.content.toLowerCase())).rID).color;
       else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
 
       // Define as perguntas e respostas para o nome da tag
@@ -203,7 +203,7 @@ module.exports = async (client, reaction, user) => {
         const tag = await Wclub.roles.create({
           data: {
             name: nome,
-            color: cor,
+            color: corSS,
             permissions: 0,
             position: Wclub.roles.cache.get('750037696570851422').rawPosition - 1,
             mentionable: true
@@ -317,7 +317,7 @@ module.exports = async (client, reaction, user) => {
           filtro = res => { return (user ? res.author.id === user.id : true) };
           
           // Pergunta o nome da tag
-          nomeM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 2, 60000, filtro);
+          const nomeM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 2, 60000, filtro);
           if(nomeM) nome = nomeM.content;
           else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
           
