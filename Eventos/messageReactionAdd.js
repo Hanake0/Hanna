@@ -165,12 +165,10 @@ module.exports = async (client, reaction, user) => {
         Por enquanto todos podem ver seu canal, mas você pode mudar isso.
         
         Você tem permissão para modificar as permissões do seu canal e até apaga-lo se desejar(mas não espere que criemos outro pra você).`}});
-        shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
       } catch(err) {
           console.log(err);
           confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar seu canal, suas ${valor} ${gc} foram devolvidas`}});
           uDB[gm] += valor;
-          shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB)});
       }
 
       // Define as perguntas e respostas para a cor da tag
@@ -213,13 +211,11 @@ module.exports = async (client, reaction, user) => {
         });
         await wcMember.roles.add(tag);
         confirmação.send(`${user}`, {embed: {color: emojis.successC, description: stripIndents`${emojis.success} | Sua tag já foi criada e adicionada ao seu usuário no server principal !`} });
-        shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
       
       // Caso algo dê errado
       } catch(err) {
         console.log(err);
         uDB[gm] += valor;
-        shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
         confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}})
 
       }
