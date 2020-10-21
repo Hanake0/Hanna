@@ -42,6 +42,7 @@ module.exports = async (client, reaction, user) => {
   let falha = '';
   let falhaT = '';
   let filtro;
+  let corM;
 
   // Todos os id's (Array)
   let mIDs = [];
@@ -182,7 +183,7 @@ module.exports = async (client, reaction, user) => {
       };
 
       // Pergunta a cor da tag
-      const corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
+      corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
       if(corM) cor = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(corM.content.toLowerCase())).rID).color;
       else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
 
@@ -305,7 +306,7 @@ module.exports = async (client, reaction, user) => {
           };
 
           // Pergunta a cor da tag
-          const corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
+          corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
           if(corM) cor = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(corM.content.toLowerCase())).rID).color;
           else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
 
