@@ -28,11 +28,20 @@ module.exports = async (client, reaction, user) => {
   const Wclub = client.guilds.cache.get(WC);
   const wcMember = Wclub.members.cache.get(user.id);
   const categApart = '754411415548199054';
+  const categVip = '764628856883511346';
 
   const emojiId = reaction.emoji.id;
   const id = reaction.message.id;
   const gc = emojiId === '750840705269891112' ? 'gems' : 'coins';
   const gm = gc === 'gems' ? 'gems' : 'money';
+
+  let nome = false;
+  let nomeM = false;
+  let pergunta = '';
+  let sucesso = '';
+  let falha = '';
+  let falhaT = '';
+  let filtro;
 
   // Todos os id's (Array)
   let mIDs = [];
@@ -141,7 +150,7 @@ module.exports = async (client, reaction, user) => {
       // Cria o apartamento
       const canal = {
         type: 'voice',
-        parent: categApart,
+        parent: categVip,
         permissionOverwrites: [
           {
             id: user.id,
@@ -163,6 +172,60 @@ module.exports = async (client, reaction, user) => {
           uDB[gm] += valor;
           shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB)});
       }
+
+      // Define as perguntas e respostas para a cor da tag
+      pergunta = 'Escolha uma cor dentre as disponíveis em <#754552398751596644> para sua tag:\n\nEu só vou responder quando você responder com o nome de uma cor válida ou demorar demais...';
+      sucesso = `Cor selecionada com sucesso\!`;
+      falha = `Você não enviou uma cor válida a tempo, tente denovo:\n\nEu só vou responder quando você responder com o nome de uma cor válida ou demorar demais...\n\n • __As cores válidas são as disponíveis em <#754552398751596644>__`;
+      falhaT = `Suas tentativas acabaram, suas ${valor} ${gc} foram devolvidas`;
+      filtro = res => {
+        const value = res.content.toLowerCase();
+        return (user ? res.author.id === user.id : true) && (cores.some(cor => cor.aliases.includes(value)));
+      };
+
+      // Pergunta a cor da tag
+      const corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
+      if(corM) cor = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(corM.content.toLowerCase())).rID).color;
+      else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
+
+      // Define as perguntas e respostas para o nome da tag
+      pergunta = 'Agora, escolha o nome da sua tag:';
+      sucesso = `Nome selecionado com sucesso! Criando tag...`;
+      falha = `Você não enviou um nome válido a tempo, suas ${valor} ${gc} foram devolvidas`;
+      filtro = res => { return (user ? res.author.id === user.id : true) };
+      
+      // Pergunta o nome da tag
+      nomeM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 2, 60000, filtro);
+      if(nomeM) nome = nomeM.content;
+      else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
+      
+      // Criando e adicionando tag
+      try {
+        const tag = await Wclub.roles.create({
+          data: {
+            name: nome,
+            color: cor,
+            permissions: 0,
+            position: Wclub.roles.cache.get('750037696570851422').rawPosition - 1,
+            mentionable: true
+          },
+          reason: `Tag comprada por ${user.tag}`
+        });
+        await wcMember.roles.add(tag);
+        confirmação.send(`${user}`, {embed: {color: emojis.successC, description: stripIndents`${emojis.success} | Sua tag já foi criada e adicionada ao seu usuário no server principal !`} });
+        shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
+      
+      // Caso algo dê errado
+      } catch(err) {
+        console.log(err);
+        uDB[gm] += valor;
+        shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
+        confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}})
+
+      }
+      Wstore.channels.cache.get('750031689132277901').send(stripIndents`
+      <@&750084283481325671> ${user} criou uma **TAG** com o nome \`${nome}\`, verifiquem lá...
+      `)
     }
 
   } else if(outro) {
@@ -170,13 +233,6 @@ module.exports = async (client, reaction, user) => {
     const compra = await comprar(outro.nome, valor, confirmação, user, gc, client);
 
     if(compra === true) {
-      let nome = false;
-      let nomeM = false;
-      let pergunta = '';
-      let sucesso = '';
-      let falha = '';
-      let falhaT = '';
-      let filtro;
       switch(outro.mID){
         // Emoji
         case '754553933489373246':
