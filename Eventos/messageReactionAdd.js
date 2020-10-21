@@ -137,6 +137,32 @@ module.exports = async (client, reaction, user) => {
     if(compra === true) {
       uDB.vip = true;
       uDB.vipUntil = timestamp;
+
+      // Cria o apartamento
+      const canal = {
+        type: 'voice',
+        parent: categApart,
+        permissionOverwrites: [
+          {
+            id: user.id,
+            allow: Permissions.ALL,
+          }
+        ],
+      }
+      try { 
+        await Wclub.channels.create(`Apartamento de ${user.tag}`, canal, `Apartamento comprado por ${user.tag}`)
+        confirmação.send({embed: { color: emojis.successC , description: stripIndents`${emojis.success} | Canal criado com sucesso, agora basta personalizar ele como quiser.
+        
+        Por enquanto todos podem ver seu canal, mas você pode mudar isso.
+        
+        Você tem permissão para modificar as permissões do seu canal e até apaga-lo se desejar(mas não espere que criemos outro pra você).`}});
+        shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
+      } catch(err) {
+          console.log(err);
+          confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar seu canal, suas ${valor} ${gc} foram devolvidas`}});
+          uDB[gm] += valor;
+          shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB)});
+      }
     }
 
   } else if(outro) {
