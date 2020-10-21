@@ -153,10 +153,10 @@ class CommandDispatcher {
 				...dbPressets
 			});
 
-			let tempLM = 0;
-		} else {
-			let tempLM = new Date() - aDB.lastMessage.valueOf();
-		}
+			tempLM = 0;
+		} else if(aDB.lastMessage !== null) {
+			tempLM = new Date() - aDB.lastMessage.valueOf();
+		} else tempLM = 0;
 
 		aDB = usersData.get(aID);
 
