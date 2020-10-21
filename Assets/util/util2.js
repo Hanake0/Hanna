@@ -92,4 +92,27 @@ module.exports = class Util {
 			}};
 		return embed;
 	}
+
+	static async question(canal, user, pergunta, sucesso, falha, falhaT, tentativas = 3, timeout = 30000, filtro) {
+		let tent = 0;
+		let verify = [];
+		while(tent < tentativas) {
+			canal.send(`${user}`, {embed: {color: emojis.warningC, description: stripIndents`${emojis.warning} | ${pergunta}`} });
+			verify = await canal.awaitMessages(filtro, {
+				max: 1,
+				time: timeout
+			});
+			tent ++;
+			if (!verify.size && tentativas > 1) {
+				await canal.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | ${falha}`}});
+			} else break;
+		}
+		if(tent >= tentativas) {
+			await canal.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | ${falhaT}`}});
+			return false;
+		} else {
+			await canal.send(`${user}`, {embed: {color: emojis.successC, description: stripIndents`${emojis.success} | ${sucesso}`}});
+			return verify.first();
+		}
+	}
 }

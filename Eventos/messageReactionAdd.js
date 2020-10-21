@@ -1,7 +1,8 @@
 const { stripIndents } = require('common-tags');
+const probe = require('probe-image-size');
 const catálogo = require('../Assets/JSON/catálogo.json');
 const emojis = require('../Assets/JSON/emojis.json');
-const { comprar, shopEmbed } = require('../Assets/util/util2.js');
+const { comprar, shopEmbed, question } = require('../Assets/util/util2.js');
 const d = Date.now() - 10800000;
 let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 const { Permissions } = require('discord.js');
@@ -141,89 +142,137 @@ module.exports = async (client, reaction, user) => {
   } else if(outro) {
     valor = gc === 'gems' ? outro.valor/1000 : outro.valor;
     const compra = await comprar(outro.nome, valor, confirmação, user, gc, client);
-    shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
 
-    switch(outro.mID){
-      // Emoji
-      case '754553933489373246':
-        if(compra === true) {
-          Wstore.channels.cache.get('750031689132277901').send(stripIndents`
-          ${user} comprou um **EMOJI**, faz o bagulho lá meo <@&750084283481325671>
-          `)
-        }
-        break;
+    if(compra === true) {
+      let nome = false;
+      let nomeM = false;
+      let pergunta = '';
+      let sucesso = '';
+      let falha = '';
+      let falhaT = '';
+      let filtro;
+      switch(outro.mID){
+        // Emoji
+        case '754553933489373246':
+          nome = false;
+          let img = false;
 
-      // Tag
-      case '754554148556505118':
-        if(compra === true) {
-          let cor = false;
-          let tentativas = 0;
-          let nome;
-          while(!cor && tentativas <= 5) {
-            confirmação.send(`${user}`,{embed: {color: emojis.warningC, description: stripIndents`${emojis.warning} | Escolha uma cor para sua tag:`} });
-            const filtro = res => {
-              const value = res.content.toLowerCase();
-              return (user ? res.author.id === user.id : true)
-                && (cores.some(cor => cor.aliases.includes(value)));
-            };
-            const verify = await confirmação.awaitMessages(filtro, {
-              max: 1,
-              time: 30000,
-            });
-            if (!verify.size) return confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Você não enviou uma cor válida a tempo, tente denovo: 
-            
-              • __As cores válidas são as disponíveis em <#754552398751596644>__`}});
-            cor = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(verify.first().content.toLowerCase())).rID).color;
-            tentativas ++;
+          // Define as perguntas para o nome do emoji
+          pergunta = 'Escolha um nome para o emoji(pelomenos 2 caracteres):\n\nEu só vou responder quando você mandar um nome válido ou demorar demais...';
+          sucesso = `Nome selecionado com sucesso\!`;
+          falha = `Você não enviou um nome válido a tempo, tente denovo:\n\nEu só vou responder quando você mandar um nome válido ou demorar demais...\n\n • __O nome dos emojis tem que ter pelomenos 2 caracteres__\n • __O nome dos emojis só pode conter caracteres alfanuméricos e underlines__`;
+          falhaT = `Suas tentativas acabaram, suas ${valor} ${gc} foram devolvidas`;
+          filtro = res => {
+            const value = res.content.toLowerCase();
+            return (user ? res.author.id === user.id : true) &&
+            (value.length >= 2) && (value.match(/^[0-9a-zA-Z]*_*$/));
+          };
+
+          // Pergunta o nome do emoji
+          nomeM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 3, 30000, filtro);
+          if(nomeM) nome = nomeM.content;
+          else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
+
+          // Define as perguntas para o emoji
+          pergunta = 'Agora, envie uma imagem para ser usada como emoji (128x128):\n\nEu só vou responder quando você mandar uma imagem com um tamanho válido ou demorar demais...';
+          sucesso = `Imagem selecionada com sucesso\!`;
+          falha = `Você não enviou uma imagem válida a tempo, tente denovo:\n\nEu só vou responder quando você mandar uma imagem com um tamanho válido ou demorar demais...\n\n • __As imagens válidas tem que ter menos que 256kb e no máximo 128px x 128px__`;
+          falhaT = `Suas tentativas acabaram, suas ${valor} ${gc} foram devolvidas`;
+          filtro = async res => {
+            if(!res.attachments.first()) return false;
+            const img = res.attachments.first().url;
+            const probe = require('probe-image-size');
+            const dados = await probe(img);
+            return (user ? res.author.id === user.id : true) &&
+            (dados.width <= 128) && (dados.height <= 128);
           }
-          if(cor) {
-            await confirmação.send(`${user}`, {embed: {color: cor, description: stripIndents`${emojis.success} | Cor selecionada com sucesso !`} });
-            confirmação.send(`${user}`, {embed: {color: emojis.warningC, description: stripIndents`${emojis.warning} | Agora, escolha o nome da sua tag:`} });
-            const filtro = res => {
-              return (user ? res.author.id === user.id : true);
-            };
-            const verify = await confirmação.awaitMessages(filtro, {
-              max: 1,
-              time: 60000,
-            });
-            if (!verify.size) return confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Você não enviou um nome a tempo, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
-              uDB[gm] += valor;
-              shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
-            })
-            nome = verify.first().content;
-            confirmação.send(`${user}`, {embed: {color: cor, description: stripIndents`${emojis.success} | Nome \`${nome}\` selecionado com sucesso ! Criando tag...`} });
-            Wclub.roles.create({
+
+          // pergunta a imagem
+          const imgM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 3, 450000, filtro);
+          if(imgM) img = imgM.attachments.first().url;
+          else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
+
+          // Criando emoji
+          try {
+            const emoji = await Wclub.emojis.create(img, nome, {reason: `Emoji comprado por ${user.tag}`});
+            confirmação.send(`${user}`, {embed: {color: emojis.successC, description: stripIndents`${emojis.success} | ${emoji} criado com sucesso!`}});
+            shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
+
+          // Caso algo dê errado
+          } catch(err) {
+            console.log(err);
+            uDB[gm] += valor;
+            shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
+            confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}})
+          }
+
+          Wstore.channels.cache.get('750031689132277901').send(stripIndents`
+          <@&750084283481325671> ${user} comprou o **EMOJI** :${nome}:, olhem aí...
+          `)
+          break;
+
+        // Tag
+        case '754554148556505118':
+          let cor = false;
+          nome = false;
+
+          // Define as perguntas e respostas para a cor da tag
+          pergunta = 'Escolha uma cor dentre as disponíveis em <#754552398751596644> para sua tag:\n\nEu só vou responder quando você responder com o nome de uma cor válida ou demorar demais...';
+          sucesso = `Cor selecionada com sucesso\!`;
+          falha = `Você não enviou uma cor válida a tempo, tente denovo:\n\nEu só vou responder quando você responder com o nome de uma cor válida ou demorar demais...\n\n • __As cores válidas são as disponíveis em <#754552398751596644>__`;
+          falhaT = `Suas tentativas acabaram, suas ${valor} ${gc} foram devolvidas`;
+          filtro = res => {
+            const value = res.content.toLowerCase();
+            return (user ? res.author.id === user.id : true) && (cores.some(cor => cor.aliases.includes(value)));
+          };
+
+          // Pergunta a cor da tag
+          const corM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 5, 30000, filtro);
+          if(corM) cor = Wclub.roles.cache.get(cores.find(cor => cor.aliases.includes(corM.content.toLowerCase())).rID).color;
+          else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
+
+          // Define as perguntas e respostas para o nome da tag
+          pergunta = 'Agora, escolha o nome da sua tag:';
+          sucesso = `Nome selecionado com sucesso! Criando tag...`;
+          falha = `Você não enviou um nome válido a tempo, suas ${valor} ${gc} foram devolvidas`;
+          filtro = res => { return (user ? res.author.id === user.id : true) };
+          
+          // Pergunta o nome da tag
+          nomeM = await question(confirmação, user, pergunta, sucesso, falha, falhaT, 2, 60000, filtro);
+          if(nomeM) nome = nomeM.content;
+          else return shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) }).then(() => uDB[gm] += valor);
+          
+          // Criando e adicionando tag
+          try {
+            const tag = await Wclub.roles.create({
               data: {
                 name: nome,
                 color: cor,
+                permissions: 0,
                 position: Wclub.roles.cache.get('750037696570851422').rawPosition - 1,
                 mentionable: true
               },
               reason: `Tag comprada por ${user.tag}`
-            }).then(tag => {
-              wcMember.roles.add(tag).then(() => {
-                confirmação.send(`${user}`, {embed: {color: emojis.successC, description: stripIndents`${emojis.success} | Sua tag já foi criada e adicionada ao seu usuário no server principal !`} });
-              }, () => confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
-                uDB[gm] += valor;
-                shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
-              }))
-            }, () => confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
-              uDB[gm] += valor;
-              shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) })}));
-          } else return confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Suas tentativas acabaram, suas ${valor} ${gc} foram devolvidas`}}).then(() => {
+            });
+            await wcMember.roles.add(tag);
+            confirmação.send(`${user}`, {embed: {color: emojis.successC, description: stripIndents`${emojis.success} | Sua tag já foi criada e adicionada ao seu usuário no server principal !`} });
+            shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
+          
+          // Caso algo dê errado
+          } catch(err) {
+            console.log(err);
             uDB[gm] += valor;
             shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB) });
-          });
+            confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar sua tag, suas ${valor} ${gc} foram devolvidas`}})
 
+          }
           Wstore.channels.cache.get('750031689132277901').send(stripIndents`
           <@&750084283481325671> ${user} comprou uma **TAG** com o nome \`${nome}\`, verifiquem lá...
           `)
-        }
-        break;
+          break;
 
-      // Apartamento
-      case '754554310620348426':
-        if(compra === true) {
+        // Apartamento
+        case '754554310620348426':
           const canal = {
             type: 'voice',
             parent: categApart,
@@ -231,22 +280,27 @@ module.exports = async (client, reaction, user) => {
               {
                 id: user.id,
                 allow: Permissions.ALL,
-              },
-              {
-                id: Wclub.id,
-                deny: ['VIEW_CHANNEL'],
-              },
+              }
             ],
           }
-          await Wclub.channels.create(`Apartamento de ${user.tag}`, canal, 'Apartamento comprado.')
-          user.send(stripIndents`${emojis.success} | Canal criado com sucesso, agora basta personalizar ele como quiser.
+          try { 
+            await Wclub.channels.create(`Apartamento de ${user.tag}`, canal, `Apartamento comprado por ${user.tag}`)
+            confirmação.send({embed: { color: emojis.successC , description: stripIndents`${emojis.success} | Canal criado com sucesso, agora basta personalizar ele como quiser.
+            
+            Por enquanto todos podem ver seu canal, mas você pode mudar isso.
+            
+            Você tem permissão para modificar as permissões do seu canal e até apaga-lo se desejar(mas não espere que criemos outro pra você).`}});
+            shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
+          } catch(err) {
+              console.log(err);
+              confirmação.send(`${user}`, {embed: {color: emojis.failC, description: stripIndents`${emojis.fail} | Algo deu errado tentando criar seu canal, suas ${valor} ${gc} foram devolvidas`}});
+              uDB[gm] += valor;
+              shopLog.send({ embed : shopEmbed(false, outro.nome, valor, gc, user, uDB)});
+          }
           
-          Por enquanto apenas você tem permissão para ver este canal, mas você pode mudar isso.
-          
-          Você tem permissão para modificar as permissões do seu canal e até apaga-lo se desejar(mas não espere que criemos outro pra você).`);
-        }
-        break
+          break
 
-    }
+      }
+    } else return shopLog.send({ embed : shopEmbed(compra, outro.nome, valor, gc, user, uDB) });
   }
 }
