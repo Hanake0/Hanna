@@ -53,7 +53,7 @@ module.exports = class SelecionarCorCommand extends Command {
       msg.react('738900367814819940')).then(() => null);
 
     if(corE.length === 0 ) return msg.channel.send(`${msg.author}`, {embed: { color: emojis.failC, description: `${emojis.fail} | Essa cor não existe.` }});
-    if(uDB.cores && uDB.vip) {
+    if(uDB.cores) {
       if(uDB.cores.includes(corE[0].rID) || uDB.vip) {
         if(emUso.length === 0) {
           wcMember.roles.add(wcRolesCache.get(corE[0].rID), 'Cor selecionada').then(() => 
