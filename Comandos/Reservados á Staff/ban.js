@@ -5,7 +5,8 @@ const emojis = require('../../Assets/JSON/emojis.json');
 module.exports = class SetGemsCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'ban',
+      name: 'ban',
+      aliases: ['banir'],
 			group: 'adm',
 			memberName: 'ban',
 			description: 'Bane um usuário do server',
@@ -40,19 +41,23 @@ module.exports = class SetGemsCommand extends Command {
 
 	async run(msg, { usuário, motivo, tempoMensagens }) {
 
-    const membro = msg.guild.members.cache.get(usuário.id);
-    const CliMember = msg.guild.members.cache.get(msg.client.user.id);
-
     const logChannel = msg.client.channels.cache.get('719397962287022192');
+    const Wclub = msg.client.guilds.cache.get('698560208309452810');
 
-    if(msg.member.roles.highest.rawPosition <= membro.roles.highest.rawPosition) 
-      return msg.embed({color: emojis.failC, description: `${emojis.fail} | Você precisa de um cargo maior que o do membro pra bani-lo...`});
-    
-    if(CliMember.roles.highest.rawPosition <= membro.roles.highest.rawPosition)
-      return msg.embed({color: emojis.failC, description: `${emojis.fail} | Eu preciso de um cargo maior que o do membro pra bani-lo...`});
+    const membro = Wclub.members.cache.get(usuário.id);
+    const CliMember = Wclub.members.cache.get(msg.client.user.id);
+
+
+    if(membro) {
+      if(msg.member.roles.highest.rawPosition <= membro.roles.highest.rawPosition) 
+        return msg.embed({color: emojis.failC, description: `${emojis.fail} | Você precisa de um cargo maior que o do membro pra bani-lo...`});
+      
+      if(CliMember.roles.highest.rawPosition <= membro.roles.highest.rawPosition)
+        return msg.embed({color: emojis.failC, description: `${emojis.fail} | Eu preciso de um cargo maior que o do membro pra bani-lo...`});
+    };
 
     try {
-      await membro.ban({days: tempoMensagens, reason: motivo});
+      await Wclub.members.ban(usuário, {days: tempoMensagens, reason: `${msg.author.tag}(${msg.author.id}) Baniu ${usuário.tag}(${usuário.id}) com o motivo: ${motivo}`});
       await msg.embed({color: emojis.successC, description: `${emojis.success} | Membro banido.`});
     } catch(err) {
       await msg.embed({color: emojis.failC, description: `${emojis.fail} | Algo deu errado tentando banir esse membro: ${err.name}: ${err.message}`});
