@@ -7,8 +7,10 @@ const d = Date.now() - 10800000;
 let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 
 // Inicializa o banco de dados (firebase) e exporta o banco Online
-//const firebase = require('firebase/app');
-//const FieldValue = require('firebase-admin').firestore.FieldValue;
+/*
+const firebase = require('firebase/app');
+const FieldValue = require('firebase-admin').firestore.FieldValue;
+*/
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccount.json');
 
@@ -24,6 +26,7 @@ const donos = new Set();
   donos.add('380512056413257729');
   donos.add('348664615175192577');
   donos.add('398852531259965440');
+  donos.add('755067822086029424');
 const client = new CommandoClient({
 	ws: { intents: Intents.ALL },
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
