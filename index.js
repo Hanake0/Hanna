@@ -104,21 +104,21 @@ evtFiles.forEach(f => {
   client.on(eventName, event.bind(null, client));
 });
   client
-	.on('error', console.error)
-	.on('warn', console.warn)
-	.on('debug', (debug) => { if (!debug.includes('[WS => ')) console.log(hora, debug); })
-	.on('disconnect', () => { console.warn('Disconectado!'); })
-	.on('reconnecting', () => { console.warn('Reconectando...'); })
-	.on('commandError', (cmd, err) => {
-		if(err instanceof commando.FriendlyError) return;
-		console.error(hora, `Erro no comando ${cmd.groupID}:${cmd.memberName}`, err);
-	})
-	.on('commandBlocked', (msg, reason) => {
-		console.log(oneLine`
-			Comando ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
-			bloqueado; ${reason}
-		`);
-	});
+		.on('error', console.error)
+		.on('warn', console.warn)
+		.on('debug', (debug) => { if (!debug.includes('[WS => ')) console.log(hora, debug); })
+		.on('disconnect', () => { console.warn('Disconectado!'); })
+		.on('reconnecting', () => { console.warn('Reconectando...'); })
+		.on('commandError', (cmd, err) => {
+			if(err instanceof commando.FriendlyError) return;
+			console.error(hora, `Erro no comando ${cmd.groupID}:${cmd.memberName}`, err);
+		})
+		.on('commandBlocked', (msg, reason) => {
+			console.log(oneLine`
+				Comando ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
+				bloqueado; ${reason}
+			`);
+		});
 
 //login && token
 client.login(process.env.AUTH_TOKEN);

@@ -185,6 +185,7 @@ class CommandDispatcher {
 				// Atualiza xp e número de mensagens
 				aDB.xp += 5;
 				aDB.mensagens += 1;
+				aDB.money += 1;
 			}
 
 			// Se username correto: add xp e cargo, se não tiver

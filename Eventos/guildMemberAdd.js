@@ -51,12 +51,12 @@ module.exports = async (client, membro) => {
 
         // Atualiza as gems
         if(!usersData.has(membro.id) && !invite.inviter.bot) {
-          if(iDB.invites && iDB.gems) {
-            iDB.invites += 1;
-            iDB.gems += 1;
+          if(uDB.invites && uDB.gems) {
+            uDB.invites += 1;
+            uDB.gems += 1;
           } else {
-            iDB.invites = 1;
-            iDB.gems = 1;
+            uDB.invites = 1;
+            uDB.gems = 1;
           };
 
         };
@@ -92,6 +92,7 @@ module.exports = async (client, membro) => {
             {
               id: membro.id,
               username: membro.user.username,
+              num: usersData.size + 1,
               ...dbPressets
             });
         }
