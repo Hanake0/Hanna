@@ -24,16 +24,15 @@ module.exports = class SetGemsCommand extends Command {
 					bot: false
         },
         {
-          key: 'motivo',
-          prompt: 'Qual o motivo do banimento ?',
-          type: 'string'
+          key: 'tempoMensagens',
+          prompt: 'Apagar mensagens de quantos dias atrás? (0 para não apagar)\nOu, qual o motivo do banimento?',
+          type: 'string',
         },
         {
-          key: 'tempoMensagens',
-          prompt: 'Apagar mensagens de quanto tempo atrás?',
-          type: 'integer',
-          default: 0,
-          oneOf: [0, 1, 2, 3, 4, 5, 6, 7]
+          key: 'motivo',
+          prompt: 'Qual o motivo do banimento ?',
+          type: 'string',
+          default: ''
         }
 			],
 		});
@@ -47,6 +46,20 @@ module.exports = class SetGemsCommand extends Command {
     const membro = Wclub.members.cache.get(usuário.id);
     const CliMember = Wclub.members.cache.get(msg.client.user.id);
 
+    let tempo = tempoMensagens;
+    let motivoC = motivo;
+
+    if(Number.isInteger(Number(tempoMensagens)) || 0 > tempoMensagens || 7 < tempoMensagens && motivo) {
+      motivoC += tempoMensagens;
+      tempo = 0;
+    } else if(Number.isInteger(Number(tempoMensagens)) || 0 > tempoMensagens || 7 < tempoMensagens && !motivo) {
+      motivoC = motivo;
+      tempo = 0;
+    } else {
+      motivoC = 'sem motivo';
+      tempo = tempoMensagens;
+    }
+
 
     if(membro) {
       if(msg.member.roles.highest.rawPosition <= membro.roles.highest.rawPosition) 
@@ -57,10 +70,10 @@ module.exports = class SetGemsCommand extends Command {
     };
 
     try {
-      await Wclub.members.ban(usuário, {days: tempoMensagens, reason: `${msg.author.tag}(${msg.author.id}) Baniu ${usuário.tag}(${usuário.id}) com o motivo: ${motivo}`});
+      await Wclub.members.ban(usuário, {days: tempo, reason: `${msg.author.tag}(${msg.author.id}) Baniu ${usuário.tag}(${usuário.id}) com o motivo: ${motivoC}`});
       await msg.embed({color: emojis.successC, description: `${emojis.success} | Membro banido.`});
     } catch(err) {
-      await msg.embed({color: emojis.failC, description: `${emojis.fail} | Algo deu errado tentando banir esse membro: ${err.name}: ${err.message}`});
+      await msg.embed({color: emojis.failC, description: `${emojis.fail} | Algo deu errado tentando banir esse membro: \`${err.name}\`: \`${err.message}\``});
     };
   }
 };

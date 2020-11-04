@@ -42,7 +42,7 @@ module.exports = class SetGemsCommand extends Command {
       await Wclub.members.unban(usuário, `${msg.author.tag}(${msg.author.id}) Desbaniu ${usuário.tag}(${usuário.id}) com o motivo: ${motivo}`);
       await msg.embed({color: emojis.successC, description: `${emojis.success} | Membro desbanido.`});
     } catch(err) {
-      await msg.embed({color: emojis.failC, description: `${emojis.fail} | Algo deu errado tentando desbanir esse membro: ${err.name}: ${err.message}`});
+      await msg.embed({color: emojis.failC, description: `${emojis.fail} | Algo deu errado tentando desbanir esse membro: \`${err.name}\`: \`${err.message}\``});
     };
   }
 };
