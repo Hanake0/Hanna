@@ -63,13 +63,13 @@ class CommandoClient extends discord.Client {
 		 * Collection of users
 		 * @type {Collection}
 		 */
-		this.usersData = new Map();
+		this.usersData = new Collection();
 
 		/**
 		 * Collection of invites
 		 * @type {Collection}
 		 */
-		this.invitesData = new Map();
+		this.invitesData = new Collection();
 
 		/**
 		 * Internal global command prefix, controlled by the {@link CommandoClient#commandPrefix} getter/setter
@@ -103,6 +103,10 @@ class CommandoClient extends discord.Client {
 				}
 			});
 		}
+	}
+
+	getData(id) {
+		this.usersData.get(id);
 	}
 
 	/**

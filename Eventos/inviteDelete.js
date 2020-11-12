@@ -1,11 +1,16 @@
 const { invitesDB } = require('../index.js');
 const emojis = require('../Assets/JSON/emojis.json');
 const { stripIndents } = require('common-tags');
-const d = Date.now() - 10800000;
-let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
+
+function hora() {
+	const dataUTC = new Date(new Date().toUTCString());
+	const dataBR = new Date(dataUTC.getTime() - 10800000);
+	let hora = `${dataBR.toISOString().slice(11, -1)} `;
+	return hora
+}
 
 module.exports = async (client, invite) => {
-  console.log(hora, 'Evento \`inviteDelete\` emitido...');
+  console.log(hora(), 'Evento \`inviteDelete\` emitido...');
 
   const convite = client.invitesData.get(invite.code);
 

@@ -3,13 +3,19 @@ const probe = require('probe-image-size');
 const catálogo = require('../Assets/JSON/catálogo.json');
 const emojis = require('../Assets/JSON/emojis.json');
 const { comprar, shopEmbed, question } = require('../Assets/util/util2.js');
-const d = Date.now() - 10800000;
-let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
 const { Permissions } = require('discord.js');
+
+function hora() {
+	const dataUTC = new Date(new Date().toUTCString());
+	const dataBR = new Date(dataUTC.getTime() - 10800000);
+	let hora = `${dataBR.toISOString().slice(11, -1)}`;
+	return hora
+}
+
 
 module.exports = async (client, reaction, user) => {
   if(user.id === client.user.id || user.bot) return;
-  console.log(hora, 'Evento \`messageReactionAdd\` emitido...');
+  console.log(hora(), 'Evento \`messageReactionAdd\` emitido...');
 
   if (reaction.partial) {
 		try {

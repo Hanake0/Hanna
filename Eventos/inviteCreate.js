@@ -1,14 +1,20 @@
 const { stripIndents } = require('common-tags');
 const emojis = require('../Assets/JSON/emojis.json');
-const d = Date.now() - 10800000;
-let hora = `${new Date(d).getHours() - 3}:${new Date(d).getMinutes()}:${new Date(d).getSeconds()} `;
+
+function hora() {
+	const dataUTC = new Date(new Date().toUTCString());
+	const dataBR = new Date(dataUTC.getTime() - 10800000);
+	
+	let hora = `${dataBR.toISOString().slice(11, -1)} `;
+	return hora
+}
 
 module.exports = async (client, invite) => {
-  console.log(hora, 'Evento \`inviteCreate\` emitido...');
+  console.log(hora(), 'Evento \`inviteCreate\` emitido...');
 
   client.invitesData.set(invite.code, invite);
 
-  client.guilds.cache.get('698560208309452810').channels.cache.get('751568642545680485').send({embed: {
+  client.guilds.cache.get('698560208309452810').channels.cache.get('751568642545680485').send(`${invite.inviter} criou um convite \*\*${invite.maxAge === 0 ? 'permanente' : 'temporário'}\*\*`, {embed: {
     color: emojis.successC,
     title: 'Convite criado:',
     author: {

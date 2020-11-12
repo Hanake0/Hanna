@@ -295,8 +295,8 @@ class Command {
 
 		if(message.channel.type === 'text' && this.blackListed) {
 			if(this.blackListed.includes(message.channel.id)) {
-					return `${emojis.warning} | O comando \`${this.name}\` não pode ser usado no canal:${message.channel}`;
-				}
+				return `${emojis.warning} | O comando \`${this.name}\` não pode ser usado no canal:${message.channel}`;
+			}
 		}
 
 		return true;
@@ -352,8 +352,6 @@ class Command {
 			case 'throttling': {
 				if (this.throttling.respond !== false) return message.embed({ color: emojis.warningC, description: `${emojis.warning} | Aguarde ${data.remaining.toFixed(1)} segundos antes de usar o comando \`${this.name}\` denovo.`});
 			}
-			default:
-				return null;
 		}
 	}
 

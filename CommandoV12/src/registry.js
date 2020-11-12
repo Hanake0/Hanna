@@ -36,6 +36,12 @@ class CommandoRegistry {
 		this.types = new discord.Collection();
 
 		/**
+		 * Itens da loja, mapeados pelo ID da mensagem
+		 * @type {Collection<string, ArgumentType>}
+		 */
+		this.shopItens = new discord.Collection();
+
+		/**
 		 * Fully resolved path to the bot's commands directory
 		 * @type {?string}
 		 */
