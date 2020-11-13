@@ -88,7 +88,7 @@ export class CommandoRegistry {
 			 * @param {CommandoRegistry} registry - Registry that the group was registered to
 			 */
 			this.client.emit('groupRegister', group, this);
-			this.client.emit('debug', `Registered group ${group.id}.`);
+			this.client.emit('debug', `Grupo ${group.id} registrado.`);
 		}
 
 		return this;
@@ -163,7 +163,7 @@ export class CommandoRegistry {
 		 * @param {CommandoRegistry} registry - Registry that the command was registered to
 		 */
 		this.client.emit('commandRegister', command, this);
-		this.client.emit('debug', `Registered command ${group.id}:${command.memberName}.`);
+		this.client.emit('debug', `Comando ${group.id}:${command.memberName} registrado.`);
 
 		return this;
 	}
@@ -180,7 +180,7 @@ export class CommandoRegistry {
 			const valid = typeof command === 'function' || typeof command.default === 'function' ||
 				command instanceof Command || command.default instanceof Command;
 			if(ignoreInvalid && !valid) {
-				this.client.emit('warn', `Attempting to register an invalid command object: ${command}; skipping.`);
+				this.client.emit('warn', `Tentando registrar um comando inválido: ${command}; pulando.`);
 				continue;
 			}
 			this.registerCommand(command);
@@ -264,7 +264,7 @@ export class CommandoRegistry {
 		 * @param {CommandoRegistry} registry - Registry that the type was registered to
 		 */
 		this.client.emit('typeRegister', type, this);
-		this.client.emit('debug', `Registered argument type ${type.id}.`);
+		this.client.emit('debug', `Tipo de argumento ${type.id} registrado.`);
 
 		return this;
 	}
@@ -281,7 +281,7 @@ export class CommandoRegistry {
 			const valid = typeof type === 'function' || typeof type.default === 'function' ||
 				type instanceof ArgumentType || type.default instanceof ArgumentType;
 			if(ignoreInvalid && !valid) {
-				this.client.emit('warn', `Attempting to register an invalid argument type object: ${type}; skipping.`);
+				this.client.emit('warn', `Tentando registrar um tipo de argumento inválido: ${type}; pulando.`);
 				continue;
 			}
 			this.registerType(type);
@@ -441,7 +441,7 @@ export class CommandoRegistry {
 		 * @param {Command} oldCommand - Old command
 		 */
 		this.client.emit('commandReregister', command, oldCommand);
-		this.client.emit('debug', `Reregistered command ${command.groupID}:${command.memberName}.`);
+		this.client.emit('debug', `Comando ${command.groupID}:${command.memberName} reregistrado.`);
 	}
 
 	/**
@@ -459,7 +459,7 @@ export class CommandoRegistry {
 		 * @param {Command} command - Command that was unregistered
 		 */
 		this.client.emit('commandUnregister', command);
-		this.client.emit('debug', `Unregistered command ${command.groupID}:${command.memberName}.`);
+		this.client.emit('debug', `Comando ${command.groupID}:${command.memberName} desregistrado.`);
 	}
 
 	/**
