@@ -1,10 +1,10 @@
-const SettingProvider = require('./base');
+import { SettingProvider } from './base.js';
 
 /**
  * Uses an SQLite database to store settings with guilds
  * @extends {SettingProvider}
  */
-class SQLiteProvider extends SettingProvider {
+export class SQLiteProvider extends SettingProvider {
 	/**
 	 * @external SQLiteDatabase
 	 * @see {@link https://www.npmjs.com/package/sqlite}
@@ -246,4 +246,3 @@ class SQLiteProvider extends SettingProvider {
 	}
 }
 
-module.exports = SQLiteProvider;

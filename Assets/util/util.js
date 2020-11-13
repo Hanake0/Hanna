@@ -1,13 +1,14 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
+import { util } from '../../CommandoV12/src/index.js';
 const { SUCCESS_EMOJI_ID } = process.env;
-const { mesesN } = require('./util2');
+import { mesesN } from './util2.js';
 const yes = ['sim', 'yes', 'y', 's', 'ye', 'yeah', 'yup', 'yea', 'ya', 'hai', 'si', 'sí', 'oui', 'はい', 'correto', 'continuar', 'siis', 'simsim', 'sim sim'];
 const no = ['não', 'nao', 'no', 'n', 'nah', 'nope', 'nop', 'iie', 'いいえ', 'non', 'nom', 'se foder'];
 const inviteRegex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(\.gg|(app)?\.com\/invite|\.me)\/([^ ]+)\/?/gi;
 const botInvRegex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(app)?\.com\/(api\/)?oauth2\/authorize\?([^ ]+)\/?/gi;
 const mentionRegex = /<@&?!?(\d+)>/gi;
 
-module.exports = class Util {
+export default class Util {
 
 	static delay(ms) {
 		return new Promise(resolve => setTimeout(resolve, ms));
@@ -263,3 +264,17 @@ module.exports = class Util {
 		return clean;
 	}
 };
+
+const {
+	delay, data, diff, shuffle, list, shorten, randomRange, trimArray, removeDuplicates,
+	sortByName, firstUpperCase, formatNumber, formatNumberK, base64, hash, streamToArray,
+	percentColor, today, tomorrow, embedURL, stripInvites, stripMentions, verify, awaitPlayers,
+	cleanAnilistHTML
+} = Util;
+
+export {
+	delay, data, diff, shuffle, list, shorten, randomRange, trimArray, removeDuplicates,
+	sortByName, firstUpperCase, formatNumber, formatNumberK, base64, hash, streamToArray,
+	percentColor, today, tomorrow, embedURL, stripInvites, stripMentions, verify, awaitPlayers,
+	cleanAnilistHTML
+}

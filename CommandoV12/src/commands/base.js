@@ -1,13 +1,14 @@
-const path = require('path');
-const { escapeMarkdown } = require('discord.js');
-const { oneLine, stripIndents } = require('common-tags');
-const ArgumentCollector = require('./collector');
-const { permissions } = require('../util');
-const Discord = require('discord.js');
-const emojis = require('../../../Assets/JSON/emojis.json');
+import path from 'path';
+import { escapeMarkdown } from 'discord.js';
+import { oneLine, stripIndents } from 'common-tags';
+import { ArgumentCollector } from './collector.js';
+import { permissions } from '../util.js'
+import emojis from '../../../Assets/JSON/emojis.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 /** A command that can be run in a client */
-class Command {
+export class Command {
 	/**
 	 * @typedef {Object} ThrottlingOptions
 	 * @property {number} usages - Maximum number of usages of the command allowed in the time frame.
@@ -590,4 +591,3 @@ class Command {
 	}
 }
 
-module.exports = Command;

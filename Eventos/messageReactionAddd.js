@@ -1,9 +1,10 @@
-const { stripIndents } = require('common-tags');
-const probe = require('probe-image-size');
-const catálogo = require('../Assets/JSON/catálogo.json');
-const emojis = require('../Assets/JSON/emojis.json');
-const { comprar, shopEmbed, question } = require('../Assets/util/util2.js');
-const { Permissions } = require('discord.js');
+import { stripIndents } from 'common-tags';
+import probe from 'probe-image-size';
+import catálogo from '../Assets/JSON/catálogo.js';
+import emojis from '../Assets/JSON/emojis.js';
+import util2 from '../Assets/util/util2.js';
+const { comprar, shopEmbed, question } = util2;
+import { Permissions } from 'discord.js';
 
 function hora() {
 	const dataUTC = new Date(new Date().toUTCString());
@@ -13,7 +14,7 @@ function hora() {
 }
 
 
-module.exports = async (client, reaction, user) => {
+export default async (client, reaction, user) => {
   if(user.id === client.user.id || user.bot) return;
   console.log(hora(), 'Evento \`messageReactionAdd\` emitido...');
 

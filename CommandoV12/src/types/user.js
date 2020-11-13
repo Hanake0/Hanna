@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
-const ArgumentType = require('./base');
-const { disambiguation } = require('../util');
-const { escapeMarkdown } = require('discord.js');
-const emojis = require('../../../Assets/JSON/emojis.json');
+import { ArgumentType } from './base.js';
+import { disambiguation } from '../util.js';
+import { escapeMarkdown } from 'discord.js';
+import emojis from '../../../Assets/JSON/emojis.js';
 
-class UserArgumentType extends ArgumentType {
+export default class UserArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'user');
 	}
@@ -71,4 +71,3 @@ function memberFilterInexact(search) {
 		`${mem.user.username.toLowerCase()}#${mem.user.discriminator}`.includes(search);
 }
 
-module.exports = UserArgumentType;

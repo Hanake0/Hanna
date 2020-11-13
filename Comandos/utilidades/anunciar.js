@@ -1,6 +1,6 @@
-const { Command } = require('../../CommandoV12/src/index.js');
+import { Command } from '../../CommandoV12/src/index.js';
 
-module.exports = class AnunciarCommand extends Command {
+export default class AnunciarCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'anunciar',

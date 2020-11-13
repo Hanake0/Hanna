@@ -1,8 +1,7 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const { shorten } = require('../../Assets/util/util.js');
-const Discord = require('discord.js');
+import { Command } from '../../CommandoV12/src/index.js';
+import Discord from 'discord.js';
 
-module.exports = class UltMsgCommand extends Command {
+export default class UltMsgCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'ultmsg',
@@ -32,7 +31,7 @@ module.exports = class UltMsgCommand extends Command {
       .then(() => null);
 
     const embed = new Discord.MessageEmbed()
-        .setDescription(shorten(uDB.lastMessageContent))
+        .setDescription(DB.lastMessageContent)
         .setAuthor(usuário.tag, usuário.avatarURL())
         .addField('Enviado em:', `${client.channels.cache.find(channel => channel.id === uDB.lastMessageChannelID)}`, true)
         .setTimestamp(uDB.lastMessage)

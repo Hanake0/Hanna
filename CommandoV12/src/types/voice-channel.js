@@ -1,8 +1,8 @@
-const ArgumentType = require('./base');
-const { disambiguation } = require('../util');
-const { escapeMarkdown } = require('discord.js');
+import { ArgumentType } from './base.js';
+import { disambiguation } from '../util.js';
+import { escapeMarkdown } from 'discord.js';
 
-class VoiceChannelArgumentType extends ArgumentType {
+export default class VoiceChannelArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'voice-channel');
 	}
@@ -62,4 +62,3 @@ function channelFilterInexact(search) {
 	return chan => chan.type === 'voice' && chan.name.toLowerCase().includes(search);
 }
 
-module.exports = VoiceChannelArgumentType;

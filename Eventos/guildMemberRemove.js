@@ -6,7 +6,7 @@ function hora() {
 	return hora
 }
 
-module.exports = async (client, membro) => {
+export default async (client, membro) => {
   console.log(hora(), 'Evento \`guildMemberRemove\` emitido...');
 
   const id = membro.guild.id;

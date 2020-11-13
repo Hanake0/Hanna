@@ -1,7 +1,7 @@
-const Argument = require('./argument');
+import { Argument } from './argument.js';
 
 /** Obtains, validates, and prompts for argument values */
-class ArgumentCollector {
+export class ArgumentCollector {
 	/**
 	 * @param {CommandoClient} client - Client the collector will use
 	 * @param {ArgumentInfo[]} args - Arguments for the collector
@@ -102,4 +102,3 @@ class ArgumentCollector {
 	}
 }
 
-module.exports = ArgumentCollector;

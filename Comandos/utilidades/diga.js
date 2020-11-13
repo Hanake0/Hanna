@@ -1,7 +1,7 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const { stripMentions, stripInvites } = require('../../Assets/util/util')
+import { Command } from '../../CommandoV12/src/index.js';
+import { stripMentions, stripInvites } from '../../Assets/util/util.js';
 
-module.exports = class DigaCommand extends Command {
+export default class DigaCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'diga',

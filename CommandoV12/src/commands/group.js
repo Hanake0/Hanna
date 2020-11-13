@@ -1,7 +1,7 @@
-const discord = require('discord.js');
+import discord from 'discord.js';
 
 /** A group for commands. Whodathunkit? */
-class CommandGroup {
+export class CommandGroup {
 	/**
 	 * @param {CommandoClient} client - The client the group is for
 	 * @param {string} id - The ID for the group
@@ -86,4 +86,3 @@ class CommandGroup {
 	}
 }
 
-module.exports = CommandGroup;

@@ -1,4 +1,4 @@
-{
+export default {
   "emoji": {
     "nome": "Emoji Customizado",
     "valor": "10000",

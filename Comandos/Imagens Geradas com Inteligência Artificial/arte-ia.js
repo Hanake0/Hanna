@@ -1,8 +1,8 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const request = require('node-superfetch');
-const Discord = require('discord.js');
+import { Command } from '../../CommandoV12/src/index.js';
+import request from 'node-superfetch';
+import Discord from 'discord.js';
 
-module.exports = class ArteIaCommand extends Command {
+export default class ArteIaCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'arte-ia',

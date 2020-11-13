@@ -1,8 +1,7 @@
-const commando = require('./CommandoV12/src/index.js');
-const { CommandoClient} = require('./CommandoV12/src/index.js');
-const path = require('path');
-const { readdirSync } = require('fs');
-const { Intents } = require('discord.js');
+import * as commando from './CommandoV12/src/index.js';
+const { CommandoClient } = commando
+import { readdirSync } from 'fs';
+import { Intents } from 'discord.js';
 
 function hora() {
 	const dataUTC = new Date(new Date().toUTCString());
@@ -16,15 +15,14 @@ function hora() {
 const firebase = require('firebase/app');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 */
-const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccount.json');
+import admin from 'firebase-admin';
+import serviceAccount from './serviceAccount.js';
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount)
 });
 
-let db = admin.firestore();
-module.exports.db = db;
+export const db = admin.firestore();
 
 //cria um client do Comando
 const donos = new Set();
@@ -55,7 +53,7 @@ client.registry
 		['adm', 'Reservados á Staff'],
 		['eventos', 'Relacionados a Eventos']
 	])
-	.registerCommandsIn(path.join(__dirname, 'Comandos'));
+	.registerCommandsIn('./Comandos');
 
 
 // Guarda os dados localmente e exporta o banco Offline
@@ -105,9 +103,9 @@ setInterval(async () => {
 //Event Handler(Project-A) && erros
 const evtFiles = readdirSync('./Eventos/');
 console.log(hora(), `Carregando o total de ${evtFiles.length} eventos`);
-evtFiles.forEach(f => {
+evtFiles.forEach(async f => {
   const eventName = f.split('.')[0];
-  const event = require(`./Eventos/${f}`);
+  const { default: event } = await import(`./Eventos/${f}`);
 
   client.on(eventName, event.bind(null, client));
 });
@@ -117,9 +115,9 @@ const items = readdirSync('./Assets/Loja/Items');
 const shopItens = client.registry.shopItens;
 
 client.once('ready', () => { 
-	items.forEach(item => {
+	items.forEach(async item => {
 		const nome = item.split('.')[0];
-		let ação = require(`./Assets/Loja/Items/${nome}`);
+		let { default: ação } = await import(`./Assets/Loja/Items/${nome}.js`);
 		ação = new ação(client);
 		shopItens.set(ação.message.id, ação);
 	})
@@ -170,4 +168,4 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		});
 
 //login && token
-client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.O_aWG0d4WfVA3qhkznhuR4A-7w0');
+client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.SkyGNcY6-Tfjd0R0R55hejbz1iQ');

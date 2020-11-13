@@ -1,28 +1,18 @@
-module.exports = {
-	Client: require('./client'),
-	CommandoClient: require('./client'),
-	CommandoRegistry: require('./registry'),
-	CommandoGuild: require('./extensions/guild'),
-	CommandoMessage: require('./extensions/message'),
-	Command: require('./commands/base'),
-	CommandGroup: require('./commands/group'),
-	ArgumentCollector: require('./commands/collector'),
-	Argument: require('./commands/argument'),
-	ArgumentType: require('./types/base'),
-	FriendlyError: require('./errors/friendly'),
-	CommandFormatError: require('./errors/command-format'),
+export { CommandoClient as Client } from './client.js';
 
-	util: require('./util'),
-	version: require('../package').version,
+export { CommandoClient } from './client.js';
+export { CommandoRegistry } from './registry.js';
+export { CommandoGuild } from './extensions/guild.js';
+export { CommandoMessage } from './extensions/message.js';
+export { Command } from './commands/base.js';
+export { CommandGroup } from './commands/group.js';
+export { ArgumentCollector } from './commands/collector.js';
+export { Argument } from './commands/argument.js';
+export { ArgumentType } from './types/base.js';
+export { FriendlyError } from './errors/friendly.js';
+export { CommandFormatError } from './errors/command-format.js';
 
-	SettingProvider: require('./providers/base'),
-	get SQLiteProvider() {
-		return require('./providers/sqlite');
-	},
-	get SyncSQLiteProvider() {
-		return require('./providers/sqlite-sync');
-	}
-};
+export * as util from  './util.js';
 
 /**
  * @external Channel

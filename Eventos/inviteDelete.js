@@ -1,6 +1,5 @@
-const { invitesDB } = require('../index.js');
-const emojis = require('../Assets/JSON/emojis.json');
-const { stripIndents } = require('common-tags');
+import { stripIndents } from 'common-tags';
+import emojis from '../Assets/JSON/emojis.js';
 
 function hora() {
 	const dataUTC = new Date(new Date().toUTCString());
@@ -9,7 +8,7 @@ function hora() {
 	return hora
 }
 
-module.exports = async (client, invite) => {
+export default async (client, invite) => {
   console.log(hora(), 'Evento \`inviteDelete\` emitido...');
 
   const convite = client.invitesData.get(invite.code);

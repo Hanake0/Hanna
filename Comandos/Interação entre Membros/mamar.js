@@ -1,9 +1,7 @@
-const { Command } = require('../../CommandoV12/src/index.js');
+import { Command } from '../../CommandoV12/src/index.js';
+import Discord from 'discord.js';
 
-const Discord = require('discord.js');
-
-
-module.exports = class MamarCommand extends Command {
+export default class MamarCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'mamar',

@@ -1,6 +1,6 @@
-const Command = require('../base');
+import { Command } from '../base.js';
 
-module.exports = class UnknownCommandCommand extends Command {
+export default class UnknownCommandCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'unknown-command',

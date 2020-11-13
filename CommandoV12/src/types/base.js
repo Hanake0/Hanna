@@ -1,5 +1,5 @@
 /** A type for command arguments */
-class ArgumentType {
+export class ArgumentType {
 	/**
 	 * @param {CommandoClient} client - The client the argument type is for
 	 * @param {string} id - The argument type ID (this is what you specify in {@link ArgumentInfo#type})
@@ -64,4 +64,3 @@ class ArgumentType {
 	}
 }
 
-module.exports = ArgumentType;

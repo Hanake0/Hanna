@@ -1,6 +1,6 @@
-const ArgumentType = require('./base');
+import { ArgumentType } from './base.js';
 
-class FloatArgumentType extends ArgumentType {
+export default class FloatArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'float');
 	}
@@ -25,4 +25,4 @@ class FloatArgumentType extends ArgumentType {
 	}
 }
 
-module.exports = FloatArgumentType;
+

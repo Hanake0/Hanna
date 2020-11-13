@@ -1,7 +1,6 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const Discord = require('discord.js');
+import { Command } from '../../CommandoV12/src/index.js';
 
-module.exports = class WaifuIaCommand extends Command {
+export default  class WaifuIaCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'waifu-ia',

@@ -1,6 +1,6 @@
-const ArgumentType = require('./base');
+import { ArgumentType } from './base.js';
 
-class IntegerArgumentType extends ArgumentType {
+export default class IntegerArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'integer');
 	}
@@ -25,4 +25,3 @@ class IntegerArgumentType extends ArgumentType {
 	}
 }
 
-module.exports = IntegerArgumentType;

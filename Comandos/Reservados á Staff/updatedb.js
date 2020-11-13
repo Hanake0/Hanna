@@ -1,6 +1,6 @@
-const { Command } = require('../../CommandoV12/src/index.js');
+import { Command } from '../../CommandoV12/src/index.js';
 
-module.exports = class UpdatedbCommand extends Command {
+export default class UpdatedbCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'updatedb',

@@ -1,5 +1,5 @@
 /** Helper class to use {@link SettingProvider} methods for a specific Guild */
-class GuildSettingsHelper {
+export class GuildSettingsHelper {
 	/**
 	 * @param {CommandoClient} client - Client to use the provider of
 	 * @param {?CommandoGuild} guild - Guild the settings are for
@@ -66,5 +66,3 @@ class GuildSettingsHelper {
 		return this.client.provider.clear(this.guild);
 	}
 }
-
-module.exports = GuildSettingsHelper;

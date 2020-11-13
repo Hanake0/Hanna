@@ -1,7 +1,7 @@
-const { stripIndents, oneLine } = require('common-tags');
-const Command = require('../base');
+import { stripIndents, oneLine } from 'common-tags';
+import { Command } from '../base.js';
 
-module.exports = class PrefixCommand extends Command {
+export default class PrefixCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'prefix',

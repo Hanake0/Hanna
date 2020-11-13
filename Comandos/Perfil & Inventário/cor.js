@@ -1,8 +1,8 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const Discord = require('discord.js');
-const emojis = require('../../Assets/JSON/emojis.json');
+import { Command } from '../../CommandoV12/src/index.js';
+import emojis from '../../Assets/JSON/emojis.js';
+import catálogo from '../../Assets/JSON/catálogo.js';
 
-module.exports = class SelecionarCorCommand extends Command {
+export default class SelecionarCorCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'selecionar-cor',
@@ -26,7 +26,6 @@ module.exports = class SelecionarCorCommand extends Command {
 	}
 
 	async run(msg, { corS }) {
-    const catálogo = require('../../Assets/JSON/catálogo.json');
 
     const uDB = msg.client.usersData.get(msg.author.id);
     const wcRolesCache = msg.client.guilds.cache.get('698560208309452810').roles.cache;

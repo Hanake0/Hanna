@@ -1,11 +1,11 @@
-const { escapeMarkdown } = require('discord.js');
-const { oneLine, stripIndents } = require('common-tags');
-const ArgumentUnionType = require('../types/union');
-const Discord = require('discord.js');
-const emojis = require('../../../Assets/JSON/emojis.json');
+import { escapeMarkdown } from 'discord.js';
+import { oneLine, stripIndents } from 'common-tags';
+import ArgumentUnionType from '../types/union.js';
+import Discord from 'discord.js';
+import emojis from '../../../Assets/JSON/emojis.js';
 
 /** A fancy argument */
-class Argument {
+export class Argument {
 	/**
 	 * @typedef {Object} ArgumentInfo
 	 * @property {string} key - Key for the argument
@@ -446,4 +446,3 @@ class Argument {
 	}
 }
 
-module.exports = Argument;

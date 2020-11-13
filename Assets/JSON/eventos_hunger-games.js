@@ -1,4 +1,4 @@
-{
+export default {
 	"bloodbath": [
 		{
 			"text": "(Player1) grabs a shovel.",

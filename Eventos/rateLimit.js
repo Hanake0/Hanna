@@ -6,7 +6,7 @@ function hora() {
 	return hora
 }
 
-module.exports = async (client, info) => {
+export default async (client, info) => {
   console.log(hora(), 'Evento \`rateLimit\` emitido...');
   //console.log(info);
 }

@@ -5,7 +5,7 @@ function hora() {
 	return hora
 }
 
-module.exports = async (client) => {
+export default async (client) => {
   console.log(hora(), 'Evento \`ready\` emitido...');
 
   function ready() {

@@ -1,8 +1,7 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const Discord = require('discord.js');
-const emojis = require('../../Assets/JSON/emojis.json');
+import { Command } from '../../CommandoV12/src/index.js';
+import emojis from '../../Assets/JSON/emojis.js';
 
-module.exports = class ReactCommand extends Command {
+export default class ReactCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'react',

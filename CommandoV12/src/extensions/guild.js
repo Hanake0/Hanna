@@ -1,8 +1,8 @@
-const { Structures } = require('discord.js');
-const Command = require('../commands/base');
-const GuildSettingsHelper = require('../providers/helper');
+import { Structures } from 'discord.js';
+import { Command } from '../commands/base.js';
+import { GuildSettingsHelper } from '../providers/helper.js';
 
-module.exports = Structures.extend('Guild', Guild => {
+export const CommandoGuild = Structures.extend('Guild', Guild => {
 	/**
 	 * A fancier Guild for fancier people.
 	 * @extends Guild

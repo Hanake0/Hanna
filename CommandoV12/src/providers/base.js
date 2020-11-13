@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
-const { Guild } = require('discord.js');
+import { Guild } from 'discord.js';
 
 /**
  * Loads and stores settings associated with guilds
  * @abstract
  */
-class SettingProvider {
+export class SettingProvider {
 	constructor() {
 		if(this.constructor.name === 'SettingProvider') throw new Error('The base SettingProvider cannot be instantiated.');
 	}
@@ -76,4 +76,3 @@ class SettingProvider {
 	}
 }
 
-module.exports = SettingProvider;

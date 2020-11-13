@@ -1,10 +1,10 @@
-const ArgumentType = require('./base');
+import { ArgumentType } from './base.js';
 
 /**
  * A type for command arguments that handles multiple other types
  * @extends {ArgumentType}
  */
-class ArgumentUnionType extends ArgumentType {
+export default class ArgumentUnionType extends ArgumentType {
 	constructor(client, id) {
 		super(client, id);
 
@@ -44,4 +44,3 @@ class ArgumentUnionType extends ArgumentType {
 	}
 }
 
-module.exports = ArgumentUnionType;

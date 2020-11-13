@@ -1,6 +1,6 @@
-const ArgumentType = require('./base');
+import { ArgumentType } from './base.js';
 
-class MessageArgumentType extends ArgumentType {
+export default class MessageArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'message');
 	}
@@ -15,4 +15,3 @@ class MessageArgumentType extends ArgumentType {
 	}
 }
 
-module.exports = MessageArgumentType;

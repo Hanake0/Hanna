@@ -1,11 +1,11 @@
-const { Structures, escapeMarkdown, splitMessage, resolveString } = require('discord.js');
-const { oneLine } = require('common-tags');
-const Command = require('../commands/base');
-const FriendlyError = require('../errors/friendly');
-const CommandFormatError = require('../errors/command-format');
-const emojis = require('../../../Assets/JSON/emojis.json');
+import { Structures, escapeMarkdown, splitMessage, resolveString } from 'discord.js';
+import { oneLine } from 'common-tags';
+import { Command } from '../commands/base.js';
+import { FriendlyError } from '../errors/friendly.js';
+import { CommandFormatError } from '../errors/command-format.js';
+import emojis from '../../../Assets/JSON/emojis.js';
 
-module.exports = Structures.extend('Message', Message => {
+export const CommandoMessage = Structures.extend('Message', Message => {
 	/**
 	 * An extension of the base Discord.js Message class to add command-related functionality.
 	 * @extends Message

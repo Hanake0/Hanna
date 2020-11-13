@@ -1,8 +1,8 @@
-const ArgumentType = require('./base');
-const { disambiguation } = require('../util');
-const { escapeMarkdown } = require('discord.js');
+import { ArgumentType } from './base.js';
+import { disambiguation } from '../util.js';
+import { escapeMarkdown } from 'discord.js';
 
-class GroupArgumentType extends ArgumentType {
+export default class GroupArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'group');
 	}
@@ -21,4 +21,3 @@ class GroupArgumentType extends ArgumentType {
 	}
 }
 
-module.exports = GroupArgumentType;

@@ -1,10 +1,9 @@
-const { Command } = require('../../CommandoV12/src/index');
-const Discord = require('discord.js');
-const { stripIndents } = require('common-tags');
-const { shuffle, removeDuplicates, verify } = require('../../Assets/util/util');
-const eventos = require('../../Assets/JSON/eventos_hunger-games');
+import { Command } from '../../CommandoV12/src/index.js';
+import { stripIndents } from 'common-tags';
+import { shuffle, removeDuplicates, verify } from '../../Assets/util/util.js';
+import eventos from '../../Assets/JSON/eventos_hunger-games.js';
 
-module.exports = class HungerGamesCommand extends Command {
+export default class HungerGamesCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'hunger-games',

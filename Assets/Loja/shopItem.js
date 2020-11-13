@@ -1,6 +1,6 @@
-const emojis = require('../JSON/emojis.json');
+import emojis from '../JSON/emojis.js';
 
-module.exports = class ShopItem {
+export default class ShopItem {
   constructor(client, infos) {
 
     Object.defineProperty(this, 'client', { value: client });

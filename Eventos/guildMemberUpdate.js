@@ -1,3 +1,3 @@
-module.exports = async (client, mAntigo, mNovo) => {
+export default async (client, mAntigo, mNovo) => {
 
 }

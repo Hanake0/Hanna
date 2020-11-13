@@ -2,7 +2,11 @@
   "name": "hannabot",
   "version": "3.9.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "index.mjs",
+  "enginees": {
+    "node": "15.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"

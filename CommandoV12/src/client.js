@@ -1,14 +1,14 @@
-const discord = require('discord.js');
-const CommandoRegistry = require('./registry');
-const CommandDispatcher = require('./dispatcher');
-const GuildSettingsHelper = require('./providers/helper');
-const Collection = require('@discordjs/collection');
+import discord from 'discord.js';
+import { CommandoRegistry } from './registry.js';
+import { CommandDispatcher } from './dispatcher.js';
+import { GuildSettingsHelper } from './providers/helper.js';
+import Collection from '@discordjs/collection';
 
 /**
  * Discord.js Client with a command framework
  * @extends {Client}
  */
-class CommandoClient extends discord.Client {
+export class CommandoClient extends discord.Client {
 	/**
 	 * Options for a CommandoClient
 	 * @typedef {ClientOptions} CommandoClientOptions
@@ -195,4 +195,3 @@ class CommandoClient extends discord.Client {
 	}
 }
 
-module.exports = CommandoClient;

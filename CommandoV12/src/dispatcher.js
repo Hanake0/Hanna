@@ -4,11 +4,12 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable complexity */
-const { escapeRegex } = require('./util');
-const emojis = require('../../Assets/JSON/emojis.json');
+import { escapeRegex } from './util.js';
+import emojis from '../../Assets/JSON/emojis.js';
+import dbPressets from '../../Assets/JSON/dbPressets.js';
 
 /** Handles parsing messages and running commands from them */
-class CommandDispatcher {
+export class CommandDispatcher {
 	/**
 	 * @param {CommandoClient} client - Client the dispatcher is for
 	 * @param {CommandoRegistry} registry - Registry the dispatcher will use
@@ -118,7 +119,6 @@ class CommandDispatcher {
 		const iDB = message.client.invitesData;
 
 		if(!usersData || !iDB) return;
-		const dbPressets = require('../../Assets/JSON/dbPressets.json');
 
 		const aID = message.author.id;
 		let aDB = usersData.get(aID);
@@ -420,4 +420,3 @@ class CommandDispatcher {
 	}
 }
 
-module.exports = CommandDispatcher;

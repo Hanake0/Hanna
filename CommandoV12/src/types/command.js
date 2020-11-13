@@ -1,8 +1,8 @@
-const ArgumentType = require('./base');
-const { disambiguation } = require('../util');
-const { escapeMarkdown } = require('discord.js');
+import { ArgumentType } from './base.js';
+import { disambiguation } from '../util.js';
+import { escapeMarkdown } from 'discord.js';
 
-class CommandArgumentType extends ArgumentType {
+export default class CommandArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'command');
 	}
@@ -21,4 +21,3 @@ class CommandArgumentType extends ArgumentType {
 	}
 }
 
-module.exports = CommandArgumentType;

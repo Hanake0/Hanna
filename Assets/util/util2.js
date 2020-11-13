@@ -1,13 +1,15 @@
-const emojis = require('../JSON/emojis.json');
-const { stripIndents } = require('common-tags');
-const status = {
+import emojis from '../JSON/emojis.js';
+import { stripIndents } from 'common-tags';
+import { verify } from './util.js';
+
+export const status = {
 	online: 'Disponível/Online',
 	idle: 'Ausente',
 	dnd: 'Não perturbe/Indisponível',
 	offline: 'Offline/Invisível'
 };
 
-const activities = {
+export const activities = {
 	PLAYING: 'Jogando',
 	WATCHING: 'Assistindo',
 	LISTENING: 'Ouvindo',
@@ -15,7 +17,7 @@ const activities = {
 	CUSTOM_STATUS: 'Status customizado'
 };
 
-const mesesN = {
+export const mesesN = {
 	1: 'Janeiro',
 	2: 'Fevereiro',
 	3: 'Março',
@@ -30,7 +32,7 @@ const mesesN = {
 	12: 'Dezembro'
 };
 
-const mesesJS = {
+export const mesesJS = {
 	0: 'Janeiro',
 	1: 'Fevereiro',
 	2: 'Março',
@@ -45,20 +47,14 @@ const mesesJS = {
 	11: 'Dezembro'
 };
 
-const nao = ['sim', 'yes', 'y', 's', 'ye', 'yeah', 'yup', 'yea', 'ya', 'hai', 'si', 'sí', 'oui', 'はい', 'correto', 'continuar', 'siis', 'simsim', 'sim sim'];
+export const nao = ['sim', 'yes', 'y', 's', 'ye', 'yeah', 'yup', 'yea', 'ya', 'hai', 'si', 'sí', 'oui', 'はい', 'correto', 'continuar', 'siis', 'simsim', 'sim sim'];
 
-const sim = ['não', 'nao', 'no', 'n', 'nah', 'nope', 'nop', 'iie', 'いいえ', 'non', 'nom', 'se foder'];
+export const sim = ['não', 'nao', 'no', 'n', 'nah', 'nope', 'nop', 'iie', 'いいえ', 'non', 'nom', 'se foder'];
 
-module.exports.status = status;
-module.exports.activities = activities;
-module.exports.mesesN = mesesN;
-module.exports.sim = sim;
-module.exports.nao = nao;
 
-module.exports = class Util {
+export default class Util {
 	static async comprar(nome, valor, canal, user, moeda, client) {
 		const uDB = client.usersData.get(user.id);
-		const { verify } = require('./util.js');
 		const mg = moeda === 'gems' ? 'gems' : 'money';
 		if(uDB[mg] >= valor) {
 			canal.send(`${user}`, {embed: { color: emojis.warningC, description: `${emojis.warning} | Tem certeza que deseja comprar **${nome}** por ${valor} ${moeda} ?` }})
@@ -130,4 +126,12 @@ module.exports = class Util {
 			return verify.first();
 		}
 	}
+}
+
+const {
+	comprar, shopEmbed, question
+} = Util;
+
+export {
+	comprar, shopEmbed, question
 }

@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
-const { stripIndents, oneLine } = require('common-tags');
-const Command = require('../base');
-const { disambiguation } = require('../../util');
-const emojis = require('../../../../Assets/JSON/emojis.json');
+import { stripIndents, oneLine } from 'common-tags';
+import { Command } from '../base.js';
+import { disambiguation } from '../../util.js';
+import emojis from '../../../../Assets/JSON/emojis.js';
 
-module.exports = class AjudaCommand extends Command {
+export default class AjudaCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'ajuda',

@@ -1,6 +1,6 @@
-const ArgumentType = require('./base');
+import { ArgumentType } from './base.js';
 
-class BooleanArgumentType extends ArgumentType {
+export default class BooleanArgumentType extends ArgumentType {
 	constructor(client) {
 		super(client, 'boolean');
 		this.truthy = new Set(['verdadeiro', 'v', 'yep', 'sim', 's', 'on', 'ligar', 'ligado', '1', '+']);
@@ -20,4 +20,3 @@ class BooleanArgumentType extends ArgumentType {
 	}
 }
 
-module.exports = BooleanArgumentType;

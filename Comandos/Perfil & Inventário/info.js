@@ -1,9 +1,9 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const Discord = require('discord.js');
-const { data, diff } = require('../../Assets/util/util');
-const { status, activities} = require('../../Assets/util/util2');
+import { Command } from '../../CommandoV12/src/index.js';
+import Discord from 'discord.js';
+import { data, diff } from '../../Assets/util/util.js';
+import { status, activities} from '../../Assets/util/util2.js';
 
-module.exports = class InfoCommand extends Command {
+export default class InfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'info',

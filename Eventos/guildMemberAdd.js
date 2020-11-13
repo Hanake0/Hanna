@@ -1,6 +1,6 @@
-const emojis = require('../Assets/JSON/emojis.json');
-const dbPressets= require('../Assets/JSON/dbPressets.json');
-const { stripIndents } = require('common-tags');
+import emojis from '../Assets/JSON/emojis.js';
+import dbPressets from '../Assets/JSON/dbPressets.js';
+import { stripIndents } from 'common-tags';
 function hora() {
 	const dataUTC = new Date(new Date().toUTCString());
 	const dataBR = new Date(dataUTC.getTime() - 10800000);
@@ -8,7 +8,7 @@ function hora() {
 	return hora
 }
 
-module.exports = async (client, membro) => {
+export default async (client, membro) => {
   console.log(hora(), 'Evento \`guildMemberAdd\` emitido...');
 
   const invitesData = client.invitesData;

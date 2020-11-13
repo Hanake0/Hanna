@@ -1,7 +1,7 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const Discord = require('discord.js');
+import { Command } from '../../CommandoV12/src/index.js';
+import Discord from 'discord.js';
 
-module.exports = class SuporteCommand extends Command {
+export default class SuporteCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'suporte',

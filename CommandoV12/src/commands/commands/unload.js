@@ -1,7 +1,7 @@
-const { oneLine } = require('common-tags');
-const Command = require('../base');
+import { oneLine } from 'common-tags';
+import { Command } from '../base.js';
 
-module.exports = class UnloadCommandCommand extends Command {
+export default class UnloadCommandCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'unload',

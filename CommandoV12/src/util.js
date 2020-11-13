@@ -51,7 +51,7 @@ const permissions = {
 	USE_VAD: 'Usar detecção de voz'
 };
 
-module.exports = {
+export {
 	escapeRegex,
 	disambiguation,
 	paginate,

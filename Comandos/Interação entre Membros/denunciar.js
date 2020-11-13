@@ -1,8 +1,8 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const Discord = require('discord.js');
-const emojis = require('../../Assets/JSON/emojis.json');
+import { Command } from '../../CommandoV12/src/index.js';
+import Discord from 'discord.js';
+import emojis from '../../Assets/JSON/emojis.js';
 
-module.exports = class DenunciarCommand extends Command {
+export default class DenunciarCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'denunciar',

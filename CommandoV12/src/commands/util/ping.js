@@ -1,8 +1,8 @@
-const Command = require('../base');
-const Discord = require('discord.js');
-const emojis = require('../../../../Assets/JSON/emojis.json');
+import { Command } from '../base.js';
+import Discord from 'discord.js';
+import emojis from '../../../../Assets/JSON/emojis.js';
 
-module.exports = class PingCommand extends Command {
+export default class PingCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'ping',

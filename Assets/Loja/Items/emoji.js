@@ -1,7 +1,7 @@
-const ShopItem = require('../shopItem.js');
-const emojis = require('../../JSON/emojis.json');
+import ShopItem from '../shopItem.js';
+import * as emojis from '../../JSON/emojis.js';
 
-module.exports = class EmojiLoja extends ShopItem {
+export default class EmojiLoja extends ShopItem {
   constructor(client) {
     super(client, {
       nome: 'Emoji Customizado',

@@ -1,13 +1,13 @@
-const util = require('util');
-const discord = require('discord.js');
-const tags = require('common-tags');
-const { escapeRegex } = require('../../util');
-const Command = require('../base');
+import util from 'util';
+import discord from 'discord.js';
+import tags from 'common-tags';
+import { escapeRegex } from '../../util.js';
+import { Command } from '../base.js';
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');
 
-module.exports = class EvalCommand extends Command {
+export default class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'eval',
@@ -33,8 +33,6 @@ module.exports = class EvalCommand extends Command {
 	run(msg, args) {
 		// Make a bunch of helpers
 		/* eslint-disable no-unused-vars */
-		const { db } = require('../../../../index.js');
-		const catálogo = require('../../../../Assets/JSON/catálogo.json');
 		const message = msg;
 		const client = msg.client;
 		const { usersData, invitesData } = client;

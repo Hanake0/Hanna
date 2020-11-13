@@ -1,7 +1,6 @@
-const { Command } = require('../../CommandoV12/src/index.js');
-const Discord = require('discord.js');
+import { Command } from '../../CommandoV12/src/index.js';
 
-module.exports = class FurryIaCommand extends Command {
+export default class FurryIaCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'furry-ia',
