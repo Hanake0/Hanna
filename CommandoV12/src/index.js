@@ -3,6 +3,8 @@ export { CommandoClient as Client } from './client.js';
 export { CommandoClient } from './client.js';
 export { CommandoRegistry } from './registry.js';
 export { CommandoGuild } from './extensions/guild.js';
+export { CommandoTextChannel } from './extensions/textChannel.js';
+export { CommandoDMChannel } from './extensions/DMChannel.js';
 export { CommandoMessage } from './extensions/message.js';
 export { Command } from './commands/base.js';
 export { CommandGroup } from './commands/group.js';
@@ -11,6 +13,7 @@ export { Argument } from './commands/argument.js';
 export { ArgumentType } from './types/base.js';
 export { FriendlyError } from './errors/friendly.js';
 export { CommandFormatError } from './errors/command-format.js';
+export { FirebaseProvider } from './providers/firebase-async.js';
 
 export * as util from  './util.js';
 

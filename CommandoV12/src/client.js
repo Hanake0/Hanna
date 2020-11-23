@@ -71,6 +71,42 @@ export class CommandoClient extends discord.Client {
 		 */
 		this.invitesData = new Collection();
 
+		if(options.logChannels) {
+			const logCategories = {
+				channel: { channelCreate: null, channelDelete: null, ChannelUpdate: null },
+				emoji: { emojiCreate: null, emojiDelete: null, emojiUpdate: null },
+				ban: { guildBanAdd: null , guildBanRemove: null },
+				joinLeave: { guildMemberAdd: null, guildMemberRemove: null },
+				invite: { inviteCreate: null, inviteDelete: null },
+				message: { messageDelete: null, messageDeleteBulk: null, messageUpdate },
+				role: { roleCreate: null, roleDelete: null, roleUpdate: null },
+				user: { userUpdate: null }
+			};
+
+			// Coloca o id de cada canal para cada evento
+			for(const [entry, id] of Object.entries(options.logChannels)) {
+				if(Object.keys(logCategories).has(entry))
+					for(const evt of Object.keys(logCategories[entry])) logCategories[entry][evt] = id;
+				else for(const category of Object.values(logCategories)) {
+					for(const event of Object.values(logCategories[category])) {
+						if(entry === event) logCategories[category][event] = id;
+					}
+				}
+			}
+
+			// Quando o client fica pronto, configura cada evento de acordo com os ids
+			this.once('ready', () => {
+				for(const category of Object.keys(logCategories)) {
+					for(const [event, id] of Object.entries(logCategories[category])) {
+						import(`/logEmbeds/${event}.js`).then( ({ default: func }) => {
+							const channel = this.channels.cache.get(id);
+							this.on(event, func.bind(null, this, channel));
+						})
+					}
+				}
+			})
+		}
+
 		/**
 		 * Internal global command prefix, controlled by the {@link CommandoClient#commandPrefix} getter/setter
 		 * @type {?string}
@@ -105,9 +141,6 @@ export class CommandoClient extends discord.Client {
 		}
 	}
 
-	getData(id) {
-		this.usersData.get(id);
-	}
 
 	/**
 	 * Global command prefix. An empty string indicates that there is no default prefix, and only mentions will be used.
@@ -165,16 +198,16 @@ export class CommandoClient extends discord.Client {
 		this.provider = newProvider;
 
 		if(this.readyTimestamp) {
-			this.emit('debug', `Provider set to ${newProvider.constructor.name} - initialising...`);
+			this.emit('debug', `Provider configurado como ${newProvider.constructor.name} - inicializando...`);
 			await newProvider.init(this);
-			this.emit('debug', 'Provider finished initialisation.');
-			return undefined;
+			this.emit('debug', 'Provider terminou a inicialização.');
+			return this;
 		}
 
-		this.emit('debug', `Provider set to ${newProvider.constructor.name} - will initialise once ready.`);
+		this.emit('debug', `Provider configurado como ${newProvider.constructor.name} - inicializando assim que o client estiver pronto.`);
 		await new Promise(resolve => {
 			this.once('ready', () => {
-				this.emit('debug', `Initialising provider...`);
+				this.emit('debug', `Inicializando Provider...`);
 				resolve(newProvider.init(this));
 			});
 		});
@@ -185,7 +218,7 @@ export class CommandoClient extends discord.Client {
 		 * @param {SettingProvider} provider - Provider that was initialised
 		 */
 		this.emit('providerReady', provider);
-		this.emit('debug', 'Provider finished initialisation.');
+		this.emit('debug', 'Provider terminou a inicialização.');
 		return undefined;
 	}
 

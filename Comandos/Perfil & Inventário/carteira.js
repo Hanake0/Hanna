@@ -32,8 +32,8 @@ export default class CarteiraCommand extends Command {
 
 		const member = msg.client.guilds.cache.get('698560208309452810').members.cache.get(usuário.id);
     
-    const coins = uDB.money;
-    const gems = uDB.gems ? uDB.gems : '0';
+    const coins = uDB.wallet.coins;
+    const gems = uDB.wallet.gems;
 
     const embed = new Discord.MessageEmbed()
       .setColor( member ? member.displayColor : Math.floor(Math.random() * 16777214) + 1)

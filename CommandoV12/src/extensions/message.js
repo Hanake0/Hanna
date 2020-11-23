@@ -219,7 +219,7 @@ export const CommandoMessage = Structures.extend('Message', Message => {
 			if(throttle) throttle.usages++;
 			const typingCount = this.channel.typingCount;
 			try {
-				this.client.emit('debug', `Running command ${this.command.groupID}:${this.command.memberName}.`);
+				this.client.emit('debug', `Executando comando ${this.command.groupID}:${this.command.memberName}.`);
 				const promise = this.command.run(this, args, fromPattern, collResult);
 				/**
 				 * Emitted when running a command

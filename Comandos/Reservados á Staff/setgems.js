@@ -36,20 +36,9 @@ export default class SetGemsCommand extends Command {
 
     const uDB = msg.client.usersData.get(usuário.id);
     
-    uDB.gems = valor;
+    uDB.wallet.gems = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Gems de ${usuário} atualizadas com sucesso para \`\`${valor}\`\`!`});
 
-		const member = msg.client.guilds.cache.get('698560208309452810').members.cache.get(usuário.id);
-    
-    const coins = uDB.money;
-    const gems = uDB.gems ? uDB.gems : '0';
-
-    const embed = new Discord.MessageEmbed()
-      .setColor( member ? member.displayColor : Math.floor(Math.random() * 16777214) + 1)
-      .setAuthor(member.user.tag, member.user.avatarURL())
-			.addField('Coins', `<:hcoin:750754664026472549>${coins}`, true)
-      .addField('Gems', `<:hgem:750840705269891112>${gems} `, true)
-      .addField('Total', `:money_with_wings:${gems * 1000 + coins} `, true);
-		msg.embed(embed);
+		msg.client.registry.commands.get('carteira').run(msg, { usuário });
 		}
 };

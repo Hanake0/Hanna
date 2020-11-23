@@ -1,8 +1,8 @@
-const InventoryItem = require('./inventoryItem.js');
+import { InventoryItem } from './base.js';
 
-module.exports = class EternalItem extends InventoryItem {
-  constructor(client, infos) {
-    super(client, infos)
+export class PermanentItem extends InventoryItem {
+  constructor(infos) {
+    super(infos)
 
     this.quantidade = infos.quantidade;
 

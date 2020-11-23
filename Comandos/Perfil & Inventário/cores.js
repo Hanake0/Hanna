@@ -55,9 +55,9 @@ export default  class CarteiraCommand extends Command {
       .setColor(wcMember.displayColor)
       .setAuthor(msg.author.tag, msg.author.avatarURL())
 			.addField('Em uso:', `${atual}`)
-      .addField('Compradas: ', `${compradas}`, true)
+      .addField(':paintbrush: | Compradas: ', `${compradas}`)
     if(uDB.vip) {
-      embed.addField('VIP:', `${VIPs.join(', ')}`, true);
+      embed.addField('🏵 | VIP:', `${VIPs.join(', ')}`);
     }
       msg.embed(embed);
 		}

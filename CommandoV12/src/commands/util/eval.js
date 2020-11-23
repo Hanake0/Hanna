@@ -3,6 +3,7 @@ import discord from 'discord.js';
 import tags from 'common-tags';
 import { escapeRegex } from '../../util.js';
 import { Command } from '../base.js';
+import { db } from '../../../../index.js'
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');

@@ -2,6 +2,7 @@ import * as commando from './CommandoV12/src/index.js';
 const { CommandoClient } = commando
 import { readdirSync } from 'fs';
 import { Intents } from 'discord.js';
+import wcUser from './Assets/Custom Classes/user.js';
 
 function hora() {
 	const dataUTC = new Date(new Date().toUTCString());
@@ -17,9 +18,10 @@ const FieldValue = require('firebase-admin').firestore.FieldValue;
 */
 import admin from 'firebase-admin';
 import serviceAccount from './serviceAccount.js';
+import serviceAccount2 from './serviceAccount2.js';
 
 admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount)
+	credential: admin.credential.cert(serviceAccount2)
 });
 
 export const db = admin.firestore();
@@ -30,7 +32,7 @@ const donos = new Set();
   donos.add('348664615175192577');
   donos.add('398852531259965440');
   donos.add('755067822086029424');
-const client = new CommandoClient({
+export const client = new CommandoClient({
 	ws: { intents: Intents.ALL },
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 	commandPrefix: 't//',
@@ -38,6 +40,8 @@ const client = new CommandoClient({
 	owner: donos,
 	disableEveryone: true
 });
+
+client.setProvider( new commando.FirebaseProvider(db));
 
 
 //registra os comandos no client do Commando
@@ -58,13 +62,9 @@ client.registry
 
 // Guarda os dados localmente e exporta o banco Offline
 db.collection('usuarios').get().then(docs => docs.forEach(snap => {
-
-	var usersOff = new Map(Object.entries(snap.data()));
-
-  usersOff.forEach(user => {
-      client.usersData.set(`${user.id}`, user);
-	});
-	
+	for (const [id, data] of Object.entries(snap.data())) {
+		client.usersData.set(id, new wcUser(data))
+	}
 }));
 
 setInterval(async () => {
@@ -77,16 +77,11 @@ setInterval(async () => {
 			let users = {};
 
 			client.usersData.forEach(user => {
-				if(user.num > ((now - 1) * 250) && user.num < (now * 250)) {
-					Object.defineProperty(users, user.id, {
-						value: user,
-						writable: true,
-						enumerable: true,
-						configurable: true
-					});
+				if(user.num > ((now - 1) * 250) && user.num <= (now * 250)) {
+					users[user.id] = user.toFirestore();
 				}
 			});
-			console.log(hora(), `Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados`);
+			console.log(hora(), `Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados e convertidos`);
 			console.log(hora(),`Iniciado update do doc ${now}...`);
 			await db.collection('usuarios').doc(`${now}`).set(users);
 			console.log(hora(),`Update de doc ${now} concluído !`);
@@ -99,7 +94,6 @@ setInterval(async () => {
 	console.log(hora(), 'Fim do Update geral.')
 }, 900000);
 
-
 //Event Handler(Project-A) && erros
 const evtFiles = readdirSync('./Eventos/');
 console.log(hora(), `Carregando o total de ${evtFiles.length} eventos`);
@@ -111,21 +105,21 @@ evtFiles.forEach(async f => {
 });
 
 // Loja
-const items = readdirSync('./Assets/Loja/Items');
-const shopItens = client.registry.shopItens;
+client.once('ready', () => {
+	const items = readdirSync('./Assets/Loja/Items');
+	const shopItens = client.registry.shopItens; 
 
-client.once('ready', () => { 
 	items.forEach(async item => {
-		const nome = item.split('.')[0];
-		let { default: ação } = await import(`./Assets/Loja/Items/${nome}.js`);
-		ação = new ação(client);
-		shopItens.set(ação.message.id, ação);
+		let { default: itemConstructor } = await import(`./Assets/Loja/Items/${item}`);
+		item = new itemConstructor(client);
+		shopItens.set(item.message.id, item);
 	})
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
 	if(user.id === client.user.id) return;
 
+	const shopItens = client.registry.shopItens; 
 	const mID = reaction.message.id;
 	const item = shopItens.get(mID);
 
@@ -168,4 +162,4 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		});
 
 //login && token
-client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.SkyGNcY6-Tfjd0R0R55hejbz1iQ');
+client.login(process.env.AUTH_TOKEN);

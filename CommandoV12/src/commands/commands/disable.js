@@ -1,17 +1,18 @@
 import { oneLine } from 'common-tags';
+import emojis from '../../../../Assets/JSON/emojis.js';
 import { Command } from '../base.js';
 
 export default class DisableCommandCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'disable',
-			aliases: ['disable-command', 'cmd-off', 'command-off'],
+			aliases: ['disable-command', 'cmd-off', 'command-off', 'desabilitar'],
 			group: 'commands',
 			memberName: 'disable',
-			description: 'Disables a command or command group.',
+			description: 'Desabilita um comando ou grupo de comandos.',
 			details: oneLine`
-				The argument must be the name/ID (partial or whole) of a command or command group.
-				Only administrators may use this command.
+				O argumento tem que ser o nome/ID (parcial ou inteiro) de um comando ou grupo de comandos.
+				Apenas ADMs pode usar esse comando.
 			`,
 			examples: ['disable util', 'disable Utility', 'disable prefix'],
 			guarded: true,
@@ -20,7 +21,7 @@ export default class DisableCommandCommand extends Command {
 				{
 					key: 'cmdOrGrp',
 					label: 'command/group',
-					prompt: 'Which command or group would you like to disable?',
+					prompt: 'Que comando ou grupo de comandos você gostaria de desabilitar?',
 					type: 'group|command'
 				}
 			]
@@ -33,17 +34,19 @@ export default class DisableCommandCommand extends Command {
 	}
 
 	run(msg, args) {
-		if(!args.cmdOrGrp.isEnabledIn(msg.guild, true)) {
-			return msg.reply(
-				`The \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'} is already disabled.`
-			);
+		if(!args.cmdOrGrp.isEnabledIn(msg.guild ? msg.channel : null, true)) {
+			return msg.embed({color: emojis.warningC, description: 
+				`${emojis.warning} | O ${args.cmdOrGrp.group ? 'comando' : 'grupo'} \`${args.cmdOrGrp.name}\` já está desabilitado${msg.guild ? !args.cmdOrGrp.group.isEnabledIn() ? ' globalmente' : ' neste canal' : ' globalmente ou para você'}.`
+			});
 		}
 		if(args.cmdOrGrp.guarded) {
-			return msg.reply(
-				`You cannot disable the \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'}.`
-			);
+			return msg.embed({color: emojis.failC, description: 
+				`${emojis.fail} | O ${args.cmdOrGrp.group ? 'comando' : 'grupo'} \`${args.cmdOrGrp.name}\` não pode ser desabilitado.`
+			});
 		}
-		args.cmdOrGrp.setEnabledIn(msg.guild, false);
-		return msg.reply(`Disabled the \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'}.`);
+		args.cmdOrGrp.setEnabledIn(msg.guild ? msg.channel : null, false);
+		return msg.embed({color: emojis.successC, description: 
+			`${emojis.success} | Desabilitado o ${args.cmdOrGrp.group ? 'comando' : 'grupo'} \`${args.cmdOrGrp.name}\`${msg.guild ? ' globalmente' : ' neste canal' }.`
+		});
 	}
 };

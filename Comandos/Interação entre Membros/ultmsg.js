@@ -26,16 +26,13 @@ export default class UltMsgCommand extends Command {
     const uDB = client.usersData.get(usuário.id);
 
     if (!uDB) return message.embed({description: 'sem dados :/' })
-      .then(a => a.delete({ timeout: 5000 })
-      .then(message.delete({ timeout: 5000 })))
-      .then(() => null);
 
     const embed = new Discord.MessageEmbed()
-        .setDescription(DB.lastMessageContent)
+        .setDescription(uDB.lastMessage.content)
         .setAuthor(usuário.tag, usuário.avatarURL())
-        .addField('Enviado em:', `${client.channels.cache.find(channel => channel.id === uDB.lastMessageChannelID)}`, true)
-        .setTimestamp(uDB.lastMessage)
-        .setImage(uDB.lastMessageAttachment ? uDB.lastMessageAttachment : undefined);
+        .addField('Enviado em:', `${client.channels.cache.get(uDB.lastMessage.channel)}`, true)
+        .setTimestamp(uDB.lastMessage.createdAt)
+        .setImage(uDB.lastMessage.attachment ? uDB.lastMessage.attachment : undefined);
 
     await message.embed(embed);
     message.delete()

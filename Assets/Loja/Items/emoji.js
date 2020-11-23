@@ -1,5 +1,5 @@
 import ShopItem from '../shopItem.js';
-import * as emojis from '../../JSON/emojis.js';
+import emojis from '../../JSON/emojis.js';
 
 export default class EmojiLoja extends ShopItem {
   constructor(client) {
@@ -15,6 +15,8 @@ export default class EmojiLoja extends ShopItem {
   async run(client, reaction, user) {
 		this.changeCurrency(reaction.emoji.id)
 
+		console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+		/*
 		nome = false;
 		let img = false;
 
@@ -71,7 +73,7 @@ export default class EmojiLoja extends ShopItem {
 		<@&750084283481325671> ${user} comprou o **EMOJI** :${nome}:, olhem aí...
 		`)
 
-
+		*/
   }
 
 }

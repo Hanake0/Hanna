@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Guild } from 'discord.js';
+import { Channel } from 'discord.js';
 
 /**
  * Loads and stores settings associated with guilds
@@ -34,7 +35,7 @@ export class SettingProvider {
 	 * @return {*}
 	 * @abstract
 	 */
-	get(guild, key, defVal) { throw new Error(`${this.constructor.name} doesn't have a get method.`); }
+	get(guildOrChannel, key, defVal) { throw new Error(`${this.constructor.name} doesn't have a get method.`); }
 
 	/**
 	 * Sets a setting for a guild
@@ -44,7 +45,7 @@ export class SettingProvider {
 	 * @return {Promise<*>} New value of the setting
 	 * @abstract
 	 */
-	set(guild, key, val) { throw new Error(`${this.constructor.name} doesn't have a set method.`); }
+	set(guildOrChannel, key, val) { throw new Error(`${this.constructor.name} doesn't have a set method.`); }
 
 	/**
 	 * Removes a setting from a guild
@@ -53,7 +54,7 @@ export class SettingProvider {
 	 * @return {Promise<*>} Old value of the setting
 	 * @abstract
 	 */
-	remove(guild, key) { throw new Error(`${this.constructor.name} doesn't have a remove method.`); }
+	remove(guildOrChannel, key) { throw new Error(`${this.constructor.name} doesn't have a remove method.`); }
 
 	/**
 	 * Removes all settings in a guild
@@ -61,18 +62,18 @@ export class SettingProvider {
 	 * @return {Promise<void>}
 	 * @abstract
 	 */
-	clear(guild) { throw new Error(`${this.constructor.name} doesn't have a clear method.`); }
+	clear(guildOrChannel) { throw new Error(`${this.constructor.name} doesn't have a clear method.`); }
 
 	/**
 	 * Obtains the ID of the provided guild, or throws an error if it isn't valid
 	 * @param {Guild|string} guild - Guild to get the ID of
 	 * @return {string} ID of the guild, or 'global'
 	 */
-	static getGuildID(guild) {
-		if(guild instanceof Guild) return guild.id;
-		if(guild === 'global' || guild === null) return 'global';
-		if(typeof guild === 'string' && !isNaN(guild)) return guild;
-		throw new TypeError('Invalid guild specified. Must be a Guild instance, guild ID, "global", or null.');
+	static getGuildOrChannelID(guildOrChannel) {
+		if(guildOrChannel instanceof Guild || guildOrChannel instanceof Channel) return guildOrChannel.id;
+		if(guildOrChannel === 'global' || guildOrChannel === null) return 'global';
+		if(typeof guildOrChannel === 'string' && !isNaN(guildOrChannel)) return guild;
+		throw new TypeError('Invalid guildOrChannel specified. Must be a Guild or Channel instance, guild or channel ID, "global", or null.');
 	}
 }
 

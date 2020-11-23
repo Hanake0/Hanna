@@ -1,9 +1,9 @@
 
-module.exports = class InventoryItem {
-  constructor(client, infos) {
+export class InventoryItem {
+  constructor(infos) {
     this.nome = infos.nome;
 
-    this.descrição = infos.descrição;
+    this.description = infos.description;
 
   }
 

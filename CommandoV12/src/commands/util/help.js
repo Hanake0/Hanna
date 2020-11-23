@@ -38,10 +38,12 @@ export default class AjudaCommand extends Command {
 			if(commands.length === 1) {
 				let help = stripIndents`
 					${oneLine`
-						__Comando **${commands[0].name}**:__ ${commands[0].description}
+						${commands[0].isEnabledIn() && commands[0].isEnabledIn(msg.channel) ? emojis.success : emojis.fail} | 
+						__Comando **${commands[0].name}**:__
 						${commands[0].guildOnly ? ' (apenas no servidor)' : ''}
 						${commands[0].nsfw ? ' (NSFW)' : ''}
 					`}
+					${commands[0].description}
 
 					**Formato:** ${msg.anyUsage(`${commands[0].name}${commands[0].format ? ` ${commands[0].format}` : ''}`)}
 				`;
@@ -52,7 +54,7 @@ export default class AjudaCommand extends Command {
 
 				const messages = [];
 				try {
-					messages.push(await msg.embed({ color: msg.member ? msg.member.displayColor : Math.floor(Math.random() * 16777214) + 1, description: help }));
+					messages.push(await msg.embed({ color: commands[0].isEnabledIn() && commands[0].isEnabledIn(msg.channel) ? emojis.successC : emojis.failC, description: help }));
 					// If(msg.channel.type !== 'dm') messages.push(await msg.embed({ color: '#24960e', description: `${emojis.success} | Mandei no privado.` }));
 				} catch(err) {
 					// Messages.push(await msg.embed({ color: emojis.failC, description: `${emojis.fail} | Não consegui mandar no privado, você provavelmente tem ele fechado` }));
@@ -84,7 +86,7 @@ export default class AjudaCommand extends Command {
 
 					${groups.filter(grp => grp.commands.some(cmd => !cmd.hidden && (showAll || cmd.isUsable(msg))))
 						.map(grp => stripIndents`
-							__${grp.name}__
+						  ${commands[0].isEnabledIn() && commands[0].isEnabledIn(msg.channel) ? emojis.success : emojis.fail}__${grp.name}__
 							${grp.commands.filter(cmd => !cmd.hidden && (showAll || cmd.isUsable(msg)))
 								.map(cmd => `**${cmd.name}:** ${cmd.description}${cmd.nsfw ? ' (NSFW)' : ''}`).join('\n')
 							}

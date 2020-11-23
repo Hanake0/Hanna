@@ -53,17 +53,17 @@ export class CommandGroup {
 	 * @param {?GuildResolvable} guild - Guild to enable/disable the group in
 	 * @param {boolean} enabled - Whether the group should be enabled or disabled
 	 */
-	setEnabledIn(guild, enabled) {
-		if(typeof guild === 'undefined') throw new TypeError('Guild must not be undefined.');
+	setEnabledIn(guildOrChannel, enabled) {
+		if(typeof guildOrChannel === 'undefined') throw new TypeError('GuildOrChannel must not be undefined.');
 		if(typeof enabled === 'undefined') throw new TypeError('Enabled must not be undefined.');
 		if(this.guarded) throw new Error('The group is guarded.');
-		if(!guild) {
+		if(!guildOrChannel) {
 			this._globalEnabled = enabled;
 			this.client.emit('groupStatusChange', null, this, enabled);
 			return;
 		}
-		guild = this.client.guilds.resolve(guild);
-		guild.setGroupEnabled(this, enabled);
+		guildOrChannel = this.client.channels.resolve(guildOrChannel) || this.client.guilds.resolve(guildOrChannel);
+		guildOrChannel.setGroupEnabled(this, enabled);
 	}
 
 	/**
@@ -71,11 +71,11 @@ export class CommandGroup {
 	 * @param {?GuildResolvable} guild - Guild to check in
 	 * @return {boolean} Whether or not the group is enabled
 	 */
-	isEnabledIn(guild) {
+	isEnabledIn(guildOrChannel) {
 		if(this.guarded) return true;
-		if(!guild) return this._globalEnabled;
-		guild = this.client.guilds.resolve(guild);
-		return guild.isGroupEnabled(this);
+		if(!guildOrChannel) return this._globalEnabled;
+		guildOrChannel = this.client.channels.resolve(guildOrChannel) || this.client.guilds.resolve(guildOrChannel)
+		return guildOrChannel.isGroupEnabled(this);
 	}
 
 	/**

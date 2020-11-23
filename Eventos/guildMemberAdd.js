@@ -42,6 +42,7 @@ export default async (client, membro) => {
 
       // Cria um mapa dos convites atuais
       const invitesA = invitesData;
+      let invite, uDB;
 
       Wclub.fetchInvites().then(invitesN => {
 
@@ -55,14 +56,8 @@ export default async (client, membro) => {
 
         // Atualiza as gems
         if(!usersData.has(membro.id) && !invite.inviter.bot) {
-          if(uDB.invites && uDB.gems) {
-            uDB.invites += 1;
-            uDB.gems += 1;
-          } else {
-            uDB.invites = 1;
-            uDB.gems = 1;
-          };
-
+          uDB.wallet.gems++;
+          uDB.invites++;
         };
       }).then(() => {
 
@@ -71,7 +66,7 @@ export default async (client, membro) => {
           color: emojis.warningC,
           title: 'Uso de Convite:',
           author: {
-            name: `${invite.inviter.tag} (${uDB ? uDB.invites ? uDB.invites : 0 : ''})`,
+            name: `${invite.inviter.tag} (${uDB ? ~~uDB.invites : ''})`,
             icon_url: invite.inviter.avatarURL()
           },
           description: stripIndents`
@@ -91,15 +86,8 @@ export default async (client, membro) => {
         }})
 
       }).then(() => {
-        if(!usersData.has(membro.id)) {
-          usersData.set(membro.id, 
-            {
-              id: membro.id,
-              username: membro.user.username,
-              num: usersData.size + 1,
-              ...dbPressets
-            });
-        }
+        // Coloca o novo membro no db
+        client.dispatcher.resolveUserData(membro);
       });
       break;
   }
