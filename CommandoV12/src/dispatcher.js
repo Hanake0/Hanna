@@ -5,8 +5,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable complexity */
 import { escapeRegex } from './util.js';
-import emojis from '../../Assets/JSON/emojis.js';
-import wcUser from '../../Assets/Custom Classes/user.js';
 
 /** Handles parsing messages and running commands from them */
 export class CommandDispatcher {
@@ -103,67 +101,6 @@ export class CommandDispatcher {
 		return this.inhibitors.delete(inhibitor);
 	}
 
-	resolveUserData(user) {
-		let userData = this.client.usersData.get(user.id);
-		if(userData) return userData;
-		else {
-			userData = new wcUser({ num: this.client.usersData.size + 1, id: user.id });
-			this.client.usersData.set(user.id, userData);
-			return userData;
-		}
-	}
-
-	updateLastMessage(message, user) {
-		const aDB = this.client.usersData.get(user.id);
-		aDB.xp += 5;
-		aDB.messages++;
-		aDB.wallet.coins++;
-		aDB.lastMessage = {}
-		aDB.lastMessage.createdAt = `${message.createdAt.toISOString()}`;
-		aDB.lastMessage.content = `${message.content}`;
-		aDB.lastMessage.channel = `${message.channel.id}`;
-		aDB.lastMessage.attachment = message.attachments.first() ? message.attachments.first().url : null;
-	}
-
-	verifyItens(user) {
-		const uData = this.client.usersData.get(user.id);
-		for(const item of uData.inventory.temporary) {
-			if(item.validTime < Date.now()) item.expire(client, user)
-		}
-	}
-
-	verifyUsername(user) {
-		const wc = this.client.guilds.cache.get('698560208309452810');
-		const member = wc.members.cache.get(user.id);
-		const role = wc.roles.cache.get('750739449889030235');
-		const hRole = member._roles.includes('750739449889030235');
-
-		if(user.username.startsWith('!ʷᶜ') || user.username.startsWith('!𝓦𝓒')) {
-			this.client.usersData.get(user.id).xp += 4;
-			if(!hRole) aWcMember.roles.add(role, 'Username começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
-		} else if(hRole) aWcMember.roles.remove(role, 'Username NÃO começa com \'!ʷᶜ\' ou \'!𝓦𝓒\'');
-	}
-
-	verifyCustomActivities(user) {
-		const wc = this.client.guilds.cache.get('698560208309452810');
-		const wcMember = wc.members.cache.get(user.id);
-		const role = wc.roles.cache.get('735677045954314362');
-		const hRole = wcMember._roles.includes('735677045954314362');
-
-		if(user.presence) {
-			const customStatus = user.presence.activities.find(act => act.type === 'CUSTOM_STATUS');
-			const undefinedOrNull = customStatus === undefined ? true : customStatus.state === null;
-
-			if(!undefinedOrNull) {
-				const inclui = this.client.invitesData.some(i => customStatus.state.includes(i.code));
-				if(inclui) {
-					this.client.usersData.get(user.id).wallet.coins++;
-					if(!hRole) wcMember.roles.add(role, 'Convite permanente no status');
-				}
-			} else if(hRole) wcMember.roles.remove(role, 'Não tem convite permanente no Status');
-		} else if(hRole) wcMember.roles.remove(role, 'Não tem convite permanente no Status');
-	}
-
 	/**
 	 * Handle a new message or a message update
 	 * @param {Message} message - The message to handle
@@ -174,27 +111,6 @@ export class CommandDispatcher {
 	async handleMessage(message, oldMessage) {
 		/* eslint-disable max-depth */
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
-
-		if(!this.client.usersData || !this.client.invitesData) return;
-
-		const isWC = message.guild ? message.guild.id === '698560208309452810' : false;
-
-		// Cria os pressets do db se não existem
-		this.resolveUserData(message.author);
-
-		// Atualiza os valores para "lastMsg"
-		this.updateLastMessage(message, message.author);
-
-		// Verifica os itens expirados
-		this.verifyItens(message.author);
-
-		if(isWC) {
-			// Se username correto: add xp e cargo, se não tiver
-			this.verifyUsername(message.author)
-
-			// Verifica se tiver "CUSTOM_STATUS" com convite
-			this.verifyCustomActivities(message.author);
-		}
 
 		// Parse the message, and get the old result if it exists
 		let cmdMsg, oldCmdMsg;

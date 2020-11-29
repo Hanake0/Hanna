@@ -35,7 +35,7 @@ export default class PublicarCommand extends Command {
             const publicação = new Discord.MessageEmbed()
             .setColor( message.member ? message.member.displayColor : Math.floor(Math.random() * 16777214) + 1)
             .setTitle(título)
-            .setAuthor(message.author.username + '#' + message.author.discriminator, message.author.avatarURL())
+            .setAuthor(message.author.tag, message.author.avatarURL())
             .setImage(img.url)
             .setTimestamp()
             .setFooter('Não sabe como fazer suas publicações? hajuda publicar', message.client.user.avatarURL());

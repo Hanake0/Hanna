@@ -22,12 +22,13 @@ export default async (client) => {
         .catch(err => console.error());
       }, 15000);
     
+      /*
       WaifusClub.fetchInvites().then( invites => {
         invites.forEach( invite => {
           client.invitesData.set(invite.code, invite);
         })
       })
-
+      */
 
     } else {
       console.log(hora(), 'Client ainda não está pronto.')

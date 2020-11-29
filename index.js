@@ -1,8 +1,7 @@
 import * as commando from './CommandoV12/src/index.js';
-const { CommandoClient } = commando
+import { HannaClient } from './src/Classes/hannaClient.js';
 import { readdirSync } from 'fs';
 import { Intents } from 'discord.js';
-import wcUser from './Assets/Custom Classes/user.js';
 
 function hora() {
 	const dataUTC = new Date(new Date().toUTCString());
@@ -32,13 +31,23 @@ const donos = new Set();
   donos.add('348664615175192577');
   donos.add('398852531259965440');
   donos.add('755067822086029424');
-export const client = new CommandoClient({
+export const client = new HannaClient({
 	ws: { intents: Intents.ALL },
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 	commandPrefix: 't//',
 	unknownCommandResponse: false,
 	owner: donos,
-	disableEveryone: true
+	disableEveryone: true,
+
+	logChannels: {
+		guildMemberAdd: '779509870972895233',
+		guildMemberRemove: '779509870972895234',
+		messageUpdate: '779509870579810321',
+		messageDelete: '779509870579810320',
+		messageDeleteBulk: '779509870579810320',
+		ban: '779509870579810318',
+		channel: '779509870579810323',
+	}
 });
 
 client.setProvider( new commando.FirebaseProvider(db));
@@ -60,39 +69,12 @@ client.registry
 	.registerCommandsIn('./Comandos');
 
 
-// Guarda os dados localmente e exporta o banco Offline
-db.collection('usuarios').get().then(docs => docs.forEach(snap => {
-	for (const [id, data] of Object.entries(snap.data())) {
-		client.usersData.set(id, new wcUser(data))
-	}
-}));
+// Importa o Manager do firestore e inicializa ele
+import { FirestoreManager } from './src/Firestore/base.js';
+const FirestoreMngr = new FirestoreManager(client, db)
 
-setInterval(async () => {
-	console.log(hora(), 'Iniciando update geral...');
-	try {
-		let repeats = Math.ceil((client.usersData.size + 1)/250);
-		let now = 1;
-		
-		while(now <= repeats) {
-			let users = {};
+FirestoreMngr.init();
 
-			client.usersData.forEach(user => {
-				if(user.num > ((now - 1) * 250) && user.num <= (now * 250)) {
-					users[user.id] = user.toFirestore();
-				}
-			});
-			console.log(hora(), `Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados e convertidos`);
-			console.log(hora(),`Iniciado update do doc ${now}...`);
-			await db.collection('usuarios').doc(`${now}`).set(users);
-			console.log(hora(),`Update de doc ${now} concluído !`);
-			now ++;
-		}
-	} catch(err) {
-		console.log(hora(), `Erro durante update ${err.name}: ${err.message}`);
-		client.guilds.cache.get('698560208309452810').channels.cache.get('732710544330457161').send(`${hora()}Erro ao atualizar Firestore: ${err.name}: ${err.message}`)
-	}
-	console.log(hora(), 'Fim do Update geral.')
-}, 900000);
 
 //Event Handler(Project-A) && erros
 const evtFiles = readdirSync('./Eventos/');
@@ -104,13 +86,14 @@ evtFiles.forEach(async f => {
   client.on(eventName, event.bind(null, client));
 });
 
+/*
 // Loja
 client.once('ready', () => {
-	const items = readdirSync('./Assets/Loja/Items');
+	const items = readdirSync('./src/Loja/Items');
 	const shopItens = client.registry.shopItens; 
 
 	items.forEach(async item => {
-		let { default: itemConstructor } = await import(`./Assets/Loja/Items/${item}`);
+		let { default: itemConstructor } = await import(`./src/Loja/Items/${item}`);
 		item = new itemConstructor(client);
 		shopItens.set(item.message.id, item);
 	})
@@ -143,6 +126,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		}
 	};
 });
+*/
 
 	client
 		.on('error', console.error)
@@ -159,7 +143,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
 				Comando ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
 				bloqueado; ${reason}
 			`);
-		});
+		})
+		.on('firestoreDebug', (...infos) => console.log(infos.join('')));
 
 //login && token
-client.login(process.env.AUTH_TOKEN);
+client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.CafBt27SVuHAfLg3uWHJfDIj5IQ');
