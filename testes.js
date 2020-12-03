@@ -29,7 +29,7 @@ const objectUser = {
 
 const objectEmoji = {
   _type: 'EmojiN1',
-  _path: '../Inventário/Items/emoji1.js',
+  _path: '../Inventário/Items/Misc/emoji1.js',
   _userID: '380512056413257729',
   type: 'misc',
   emojiID: '747487589639913564',

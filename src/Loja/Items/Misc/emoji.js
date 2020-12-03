@@ -1,14 +1,17 @@
-import ShopItem from '../../shopItem.js';
+import ShopItem from '../../base.js';
 import emojis from '../../../../Assets/JSON/emojis.js';
 
 export default class EmojiLoja extends ShopItem {
   constructor(client) {
     super(client, {
       nome: 'Emoji Customizado',
-      valor: 10000,
-			descrição: 'Vale um slot de emoji customizado no WC por 1 semana',
-			channel: '750026820878991461',
-			message: '754553933489373246'
+			defValue: 10000,
+			type: 'misc',
+			position: 0,
+			descrição: 'Vale um slot de emoji customizado no WC pelo tempo escolhido',
+			temporary: true,
+			emoji: '🤡',
+			emojis: ['782745531352743936', '782771102102847528'],
     })
   }
 

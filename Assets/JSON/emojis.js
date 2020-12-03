@@ -9,3 +9,5 @@ export default {
   coin: "750754664026472549",
   gem: "750840705269891112"
 }
+export const gem = '750840705269891112';
+export const coin = '750754664026472549';

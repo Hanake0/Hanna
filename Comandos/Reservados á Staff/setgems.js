@@ -34,7 +34,7 @@ export default class SetGemsCommand extends Command {
 
 	async run(msg, { usuário, valor }) {
 
-    const uDB = msg.client.usersData.get(usuário.id);
+    const uDB = msg.client.data.users.cache.get(usuário.id);
     
     uDB.wallet.gems = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Gems de ${usuário} atualizadas com sucesso para \`\`${valor}\`\`!`});

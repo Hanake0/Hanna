@@ -23,15 +23,15 @@ export default class UltMsgCommand extends Command {
 
   async run(message, { usuário }) {
     const client = message.client;
-    const uDB = client.usersData.get(usuário.id);
+    const uDB = client.data.users.resolveUser(usuário);
 
     if (!uDB) return message.embed({description: 'sem dados :/' })
 
     const embed = new Discord.MessageEmbed()
         .setDescription(uDB.lastMessage.content)
         .setAuthor(usuário.tag, usuário.avatarURL())
-        .addField('Enviado em:', `${client.channels.cache.get(uDB.lastMessage.channel)}`, true)
         .setTimestamp(uDB.lastMessage.createdAt)
+        .setFooter('Enviado em:', `${client.channels.cache.get(uDB.lastMessage.channel)}`, this.client.user.avatarURL())
         .setImage(uDB.lastMessage.attachment ? uDB.lastMessage.attachment : undefined);
 
     await message.embed(embed);

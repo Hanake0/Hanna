@@ -28,7 +28,7 @@ export default class CarteiraCommand extends Command {
 
 	run(msg, { usuário }) {
 
-		const uDB = msg.client.usersData.get(usuário.id)
+		const uDB = msg.client.data.users.resolveUser(usuário)
 
 		const member = msg.client.guilds.cache.get('698560208309452810').members.cache.get(usuário.id);
     

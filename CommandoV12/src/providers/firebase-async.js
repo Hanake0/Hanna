@@ -70,7 +70,7 @@ export class FirebaseProvider extends SettingProvider {
 				this.setupGuildOrChannel(guild.id, settings);
 			})
 			.set('commandRegister', command => {
-				for(const [guildOrChannel, settings] of this.settings) {
+				for(let [guildOrChannel, settings] of this.settings) {
           if(guildOrChannel !== 'global' && (!client.guilds.cache.has(guildOrChannel) && !client.channels.cache.has(guildOrChannel))) continue;
           
           guildOrChannel = this.client.channels.cache.get(guildOrChannel) || this.client.guilds.cache.get(guildOrChannel) || null;
@@ -78,7 +78,7 @@ export class FirebaseProvider extends SettingProvider {
 				}
 			})
 			.set('groupRegister', group => {
-				for(const [guildOrChannel, settings] of this.settings) {
+				for(let [guildOrChannel, settings] of this.settings) {
           if(guildOrChannel !== 'global' && (!client.guilds.cache.has(guildOrChannel) && !client.channels.cache.has(guildOrChannel))) continue;
           
           guildOrChannel = this.client.channels.cache.get(guildOrChannel) || this.client.guilds.cache.get(guildOrChannel) || null;

@@ -29,5 +29,5 @@ export default async (client, invite) => {
     }
   }});
 
-  delete client.invitesData.delete(invite.code);
+  client.data.invites.delete(invite.code);
 }

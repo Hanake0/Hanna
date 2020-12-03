@@ -122,8 +122,8 @@ export class FirestoreManager {
 
     // Configura o timeout se dentro de um tempo razoável
     if(0 < item.remainingTime < 86400000) 
-      item.timeout = this.client.setTimeout(item.expire, item.remainingTime);
-    else if(item.remainingTime < 0) item.expire();
+      item.timeout = this.client.setTimeout(item.expire.bind(item), item.remainingTime);
+    else if(item.remainingTime < 0) item.expire.bind(item);
 
     // Adiciona ao inventario se necessário
     if(inventory) this.client.data.users.resolveUser({id: id}).inventory.temporary.push(item);

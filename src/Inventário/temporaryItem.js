@@ -50,9 +50,11 @@ export class TemporaryItem extends InventoryItem {
     const data = cache.get(this._userID);
 
     if(set) {
-      data.delete(this)
-    } else {
-      cache.remove(this._userID);
+      data.delete(this);
+      if(data.size === 0 )
+        cache.delete(this._userID);
+      } else {
+      cache.delete(this._userID);
     }
   }
 

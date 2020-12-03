@@ -147,4 +147,4 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		.on('firestoreDebug', (...infos) => console.log(infos.join('')));
 
 //login && token
-client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.CafBt27SVuHAfLg3uWHJfDIj5IQ');
+client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.ocKx6z1nH65fme7svGi8V7Yd_V4');

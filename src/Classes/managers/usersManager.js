@@ -21,7 +21,7 @@ export class UsersManager {
 
   // wcUser
   resolveUser(user) {
-		let newUser = this.cache.get(user.id);
+    let newUser = this.cache.get((typeof user) === 'string' ? user : user.id);
 		if(!newUser) {
 			newUser = new wcUser(this.client, { num: this.cache.size + 1, id: user.id });
 			this.cache.set(user.id, newUser);

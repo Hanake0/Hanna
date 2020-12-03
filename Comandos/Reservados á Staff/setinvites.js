@@ -33,7 +33,7 @@ export default class SetInvitesCommand extends Command {
 
 	async run(msg, { usuário, valor }) {
 
-    const uDB = msg.client.usersData.get(usuário.id);
+    const uDB = msg.client.data.users.cache.get(usuário.id);
     
     uDB.invites = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Invites de ${usuário} atualizados com sucesso para \`\`${valor}\`\`!`});

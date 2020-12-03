@@ -12,7 +12,7 @@ function hora() {
 export default async (client, invite) => {
   console.log(hora(), 'Evento \`inviteCreate\` emitido...');
 
-  client.invitesData.set(invite.code, invite);
+  client.data.invites.set(invite.code, invite);
 
   client.guilds.cache.get('698560208309452810').channels.cache.get('751568642545680485').send(`${invite.inviter} criou um convite \*\*${invite.maxAge === 0 ? 'permanente' : 'temporário'}\*\*`, {embed: {
     color: emojis.successC,

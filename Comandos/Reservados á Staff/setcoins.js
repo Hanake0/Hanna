@@ -34,7 +34,7 @@ export default class SetCoinsCommand extends Command {
 
 	async run(msg, { usuário, valor }) {
 
-    const uDB = msg.client.usersData.get(usuário.id);
+    const uDB = msg.client.data.users.cache.get(usuário.id);
     
     uDB.wallet.coins = valor;
     msg.embed({ color: '#24960e', description: `${emojis.success} | Coins de ${usuário} atualizadas com sucesso para \`\`${valor}\`\`!`});
