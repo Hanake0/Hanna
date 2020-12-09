@@ -33,14 +33,14 @@ export default class HungerGamesCommand extends Command {
 
 		//verifica se não tem nada de errado com os tributos.
 		if (tributos.length < 2) return msg.say(`...${tributos[0]} ganha, sendo o único tributo na arena.`);
-		if (tributos.length > 24) return msg.reply('Ihhh, ouuu, eu avisei né, não mais que 24 tributos.');
+		if (tributos.length > 24) return msg.inlineReply('Ihhh, ouuu, eu avisei né, não mais que 24 tributos.');
 		if (removeDuplicates(tributos).length !== tributos.length) {
-				return msg.reply('Ihhh, se você tivesse lido a ajuda saberia que não pode repetir tributo...');
+				return msg.inlineReply('Ihhh, se você tivesse lido a ajuda saberia que não pode repetir tributo...');
 		}
 
 		//verifica se nenhum jogo está acontecendo no canal
 		const current = this.client.games.get(msg.channel.id);
-		if (current) return msg.reply(`Por favor espere o fim do jogo de \`${current.name}\` neste canal.`);
+		if (current) return msg.inlineReply(`Por favor espere o fim do jogo de \`${current.name}\` neste canal.`);
 
 		this.client.games.set(msg.channel.id, { name: this.name });
 

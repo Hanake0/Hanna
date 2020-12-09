@@ -1,102 +1,104 @@
 import { InventoryItem } from './base.js';
 
 export class TemporaryItem extends InventoryItem {
-  constructor(client, infos) {
-    super(client, infos)
+	constructor(client, infos) {
+		super(client, infos);
 
-    this.type = infos.type;
+		this.aliases = infos.aliases;
 
-    this.defaultTime = infos.defaultTime;
+		this.type = infos.type;
 
-    this.timeout = null;
+		this.defaultTime = infos.defaultTime;
 
-    this.usable = infos.usable;
+		this.timeout = null;
 
-  }
+		this.usable = infos.usable;
 
-  get remainingTime() {
-    return (this.expiringTime - Date.now());
-  }
+	}
 
-  use() {
-    if(this.usable) {
-      throw new Error('Esse item não tem método de uso!');
-    } else return false;
-  }
+	get remainingTime() {
+		return (this.expiringTime - Date.now());
+	}
 
-  expire() {
-    throw new Error('Esse item não tem método de expiração!');
-  }
+	use() {
+		if(this.usable) {
+			throw new Error('Esse item não tem método de uso!');
+		} else return false;
+	}
 
-  removeFromInventory() {
-    const user =  this.client.data.users.resolveUser({id: this._userID});
-    const index = user.inventory.temporary.indexOf(this);
+	expire() {
+		throw new Error('Esse item não tem método de expiração!');
+	}
 
-    // Remove o item do inventário
-    if(index > -1) {
-      delete user.inventory.temporary[index]; 
-      user.inventory.temporary = this.removeUndefineds(user.inventory.temporary);
+	removeFromInventory() {
+		const user = this.client.data.users.resolveUser({ id: this._userID });
+		const index = user.inventory.temporary.indexOf(this);
 
-      return true;
-    } else return false;
-  }
+		// Remove o item do inventário
+		if(index > -1) {
+			delete user.inventory.temporary[index];
+			user.inventory.temporary = this.removeUndefineds(user.inventory.temporary);
 
-  removeUndefineds(array) {
-    return array.filter((i) => i !== undefined);
-  }
+			return true;
+		} else return false;
+	}
 
-  removeFromCache(set = this.type === 'misc') {
-    const cache = this.client.data[this.type].cache ? this.client.data[this.type].cache : this.client.data[this.type];
-    const data = cache.get(this._userID);
+	removeUndefineds(array) {
+		return array.filter((i) => i !== undefined);
+	}
 
-    if(set) {
-      data.delete(this);
-      if(data.size === 0 )
-        cache.delete(this._userID);
-      } else {
-      cache.delete(this._userID);
-    }
-  }
+	removeFromCache(set) {
+		const cache = this.client.data[this.type].cache ? this.client.data[this.type].cache : this.client.data[this.type];
+		const data = cache.get(this._userID);
 
-  remove(set = this.type === 'misc') {
-    this.removeFromCache(set);
-    this.removeFromInventory();
-  }
+		if(set) {
+			data.delete(this);
+			if(data.size === 0)
+				cache.delete(this._userID);
+		} else {
+			cache.delete(this._userID);
+		}
+	}
 
-  addTime(ms) {
-    const inventory = this.client.data.users.resolveUser(this._userID).inventory.temporary;
-    if(ms) {
-      if(this.type === 'misc') inventory.delete(this);
+	remove(set) {
+		this.removeFromCache(set);
+		this.removeFromInventory();
+	}
 
-      this.expiringTime += ms;
-      if(this.remainingTime + ms <= 1728000000)
-        this.timeout = this.client.setTimeout(this.expire, (this.remainingTime));
+	addTime(ms) {
+		const inventory = this.client.data.users.resolveUser(this._userID).inventory.temporary;
+		if(ms) {
+			if(this.type === 'misc') inventory.delete(this);
 
-      if(this.type === 'misc') inventory.add(this);
-      this.client.data[this.type].set(this._userID, this);
-      return true;
-    };
-    return false;
-  }
+			this.expiringTime += ms;
+			if(this.remainingTime + ms <= 1728000000)
+				this.timeout = this.client.setTimeout(this.expire.bind(this), (this.remainingTime));
 
-  expireIn(ms) {
-    const inventory = this.client.data.users.resolveUser(this._userID).inventory.temporary;
-    if(ms > 0) {
-      if(this.type === 'misc') inventory.delete(this);
+			if(this.type === 'misc') inventory.add(this);
+			this.client.data[this.type].set(this._userID, this);
+			return true;
+		}
+		return false;
+	}
 
-      this.expiringTime = Date.now() + ms;
-      if(ms <= 1728000000) 
-        this.timeout = this.client.setTimeout(this.expire, (this.remainingTime), client);
+	expireIn(ms) {
+		const inventory = this.client.data.users.resolveUser(this._userID).inventory.temporary;
+		if(ms > 0) {
+			if(this.type === 'misc') inventory.delete(this);
+
+			this.expiringTime = Date.now() + ms;
+			if(ms <= 1728000000)
+				this.timeout = this.client.setTimeout(this.expire.bind(this), (this.remainingTime));
 
 
-      if(this.type === 'misc') inventory.add(this);
-      this.client.data[this.type].set(this._userID, this);
-      return true;
-    } else if(ms) {
-      this.expire();
-      return true;
-    }
-    return false;
-  }
+			if(this.type === 'misc') inventory.add(this);
+			this.client.data[this.type].set(this._userID, this);
+			return true;
+		} else if(ms) {
+			this.expire();
+			return true;
+		}
+		return false;
+	}
 
 }

@@ -2,23 +2,25 @@ import ShopItem from '../../base.js';
 import emojis from '../../../../Assets/JSON/emojis.js';
 
 export default class EmojiLoja extends ShopItem {
-  constructor(client) {
-    super(client, {
-      nome: 'Emoji Customizado',
+	constructor(client) {
+		super(client, {
+			nome: 'Emoji Customizado',
+			icon: 'https://twemoji.maxcdn.com/2/72x72/1f921.png',
+			color: '#4289C1',
 			defValue: 10000,
 			type: 'misc',
 			position: 0,
-			descrição: 'Vale um slot de emoji customizado no WC pelo tempo escolhido',
+			description: 'Vale um slot de emoji customizado no WC\npelo tempo escolhido.\n\nSó pode ser comprado com vip lvl 2 ou mais',
 			temporary: true,
 			emoji: '🤡',
 			emojis: ['782745531352743936', '782771102102847528'],
-    })
-  }
+		});
+	}
 
-  async buy(currency, user) {
-		this.changeCurrency(reaction.emoji.id)
+	async buy(user, currency, tempo) {
+		this.changeCurrency(reaction.emoji.id);
 
-		console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+		console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 		/*
 		nome = false;
 		let img = false;
@@ -77,6 +79,12 @@ export default class EmojiLoja extends ShopItem {
 		`)
 
 		*/
-  }
+	}
+
+	canBuy(user) {
+		const vip = this.client.data.VIPs.isVIP(user);
+		if(vip >= 2) return true;
+		else return false;
+	}
 
 }

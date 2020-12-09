@@ -60,12 +60,12 @@ export default class LoadCommandCommand extends Command {
 			} catch(err) {
 				this.client.emit('warn', `Error when broadcasting command load to other shards`);
 				this.client.emit('error', err);
-				await msg.reply(`Loaded \`${command.name}\` command, but failed to load on other shards.`);
+				await msg.inlineReply(`Loaded \`${command.name}\` command, but failed to load on other shards.`);
 				return null;
 			}
 		}
 
-		await msg.reply(`Loaded \`${command.name}\` command${this.client.shard ? ' on all shards' : ''}.`);
+		await msg.inlineReply(`Loaded \`${command.name}\` command${this.client.shard ? ' on all shards' : ''}.`);
 		return null;
 	}
 };

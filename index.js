@@ -50,6 +50,8 @@ export const client = new HannaClient({
 		ban: '779509870579810318',
 		channel: '779509870579810323',
 	},
+
+	db: db,
 });
 
 client.setProvider(new commando.FirebaseProvider(db));
@@ -69,13 +71,6 @@ client.registry
 		['eventos', 'Relacionados a Eventos'],
 	])
 	.registerCommandsIn('./Comandos');
-
-
-// Importa o Manager do firestore e inicializa ele
-import { FirestoreManager } from './src/Firestore/base.js';
-const FirestoreMngr = new FirestoreManager(client, db);
-
-FirestoreMngr.init();
 
 
 // Event Handler(Project-A) && erros
@@ -149,4 +144,4 @@ client
 	.on('firestoreDebug', (...infos) => console.log(infos.join('')));
 
 // login && token
-client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.ocKx6z1nH65fme7svGi8V7Yd_V4');
+client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.ojzjG144V3RRi00brfD4OAxx1oE');

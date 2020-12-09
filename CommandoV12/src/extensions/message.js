@@ -1,4 +1,4 @@
-import { Structures, escapeMarkdown, splitMessage, resolveString } from 'discord.js';
+import { Structures, escapeMarkdown, splitMessage, resolveString, APIMessage } from 'discord.js';
 import { oneLine } from 'common-tags';
 import { Command } from '../commands/base.js';
 import { FriendlyError } from '../errors/friendly.js';
@@ -196,7 +196,7 @@ export const CommandoMessage = Structures.extend('Message', Message => {
 				if(collResult.cancelled) {
 					if(collResult.prompts.length === 0) {
 						const err = new CommandFormatError(this);
-						return this.reply(err.message);
+						return this.inlineReply(err.message);
 					}
 					/**
 					 * Emitted when a command is cancelled (either by typing 'cancel' or not responding in time)
@@ -208,7 +208,10 @@ export const CommandoMessage = Structures.extend('Message', Message => {
 					 * (if applicable - see {@link Command#run})
 					 */
 					this.client.emit('commandCancel', this.command, collResult.cancelled, this, collResult);
-					return this.embed({ color: '#24960e', description: `${emojis.fail} | cancelado` }).then(a => a.delete({ timeout: 5000 }))
+					return this.embed({
+						color: '#24960e',
+						description: `${emojis.fail} | cancelado`,
+					}).then(a => a.delete({ timeout: 5000 }));
 				}
 				args = collResult.values;
 			}
@@ -257,11 +260,47 @@ export const CommandoMessage = Structures.extend('Message', Message => {
 				this.client.emit('commandError', this.command, err, this, args, fromPattern, collResult);
 				if(this.channel.typingCount > typingCount) this.channel.stopTyping();
 				if(err instanceof FriendlyError) {
-					return this.reply(err.message);
+					return this.inlineReply(err.message);
 				} else {
 					return this.command.onError(err, this, args, fromPattern, collResult);
 				}
 			}
+		}
+
+		async inlineReply(content, options) {
+			const mentionRepliedUser =
+				typeof ((options || content || {}).allowedMentions || {}).repliedUser === 'undefined' ?
+				true : ((options || content).allowedMentions).repliedUser;
+			delete ((options || content || {}).allowedMentions || {}).repliedUser;
+
+			const apiMessage = content instanceof APIMessage ?
+				content.resolveData() : APIMessage.create(this.channel, content, options).resolveData();
+
+			// eslint-disable-next-line camelcase
+			Object.assign(apiMessage.data, { message_reference: { message_id: this.id } });
+
+			if(!apiMessage.data.allowed_mentions || Object.keys(apiMessage.data.allowed_mentions).length === 0) {
+				// eslint-disable-next-line camelcase
+				apiMessage.data.allowed_mentions = { parse: ['users', 'roles', 'everyone'] };
+			}
+
+			if(typeof apiMessage.data.allowed_mentions.replied_user === 'undefined') {
+				// eslint-disable-next-line camelcase
+				Object.assign(apiMessage.data.allowed_mentions, { replied_user: mentionRepliedUser });
+			}
+
+			if(Array.isArray(apiMessage.data.content)) {
+				return Promise.all(apiMessage.split().map(item => {
+					// eslint-disable-next-line camelcase
+					item.data.allowed_mentions = apiMessage.data.allowed_mentions;
+					return item;
+				}).map(this.inlineReply.bind(this)));
+			}
+
+			const { data, files } = await apiMessage.resolveFiles();
+			return this.client.api.channels[this.channel.id].messages
+					.post({ data, files })
+					.then(dt => this.client.actions.MessageCreate.handle(dt).message);
 		}
 
 		/**
@@ -270,6 +309,7 @@ export const CommandoMessage = Structures.extend('Message', Message => {
 		 * @return {Message|Message[]}
 		 * @private
 		 */
+		// eslint-disable-next-line complexity
 		respond({ type = 'reply', content, options, lang, fromEdit = false }) {
 			const shouldEdit = this.responses && !fromEdit;
 			if(shouldEdit) {

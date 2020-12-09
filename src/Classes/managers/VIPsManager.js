@@ -2,21 +2,21 @@ import { Collection } from 'discord.js';
 
 
 export class VIPsManager {
-  constructor(client) {
+	constructor(client) {
 
-    Object.defineProperty(this, 'client', { value: client });
+		Object.defineProperty(this, 'client', { value: client });
 
-    this.cache = new Collection();
-  }
+		this.cache = new Collection();
+	}
 
-  get(id) {
-    return this.cache.get(id);
-  }
+	get(id) {
+		return this.cache.get(id);
+	}
 
-  isVIP(user) {
-    if(this.cache.has(user.id)) return (
-      this.cache.get(user.id).tier
-    );
-    else return false;
-  }
+	isVIP(user) {
+		if(this.cache.has(user.id)) return (
+			this.cache.get(user.id).tier
+		);
+		else return false;
+	}
 }

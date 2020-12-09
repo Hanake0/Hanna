@@ -10,11 +10,11 @@ module.exports = {
 		allowImportExportEverywhere: true,
 	},
 	rules: {
-		'brace-style': ['error', 'stroustrup', { allowSingleLine: true }],
+		'brace-style': ['error', '1tbs', { allowSingleLine: true }],
 		'comma-dangle': ['error', 'always-multiline'],
 		'comma-spacing': 'error',
 		'comma-style': 'error',
-		'curly': ['error', 'multi-line', 'consistent'],
+		// 'curly': ['error', 'multi-or-nest'],
 		'dot-location': ['error', 'property'],
 		'handle-callback-err': 'off',
 		'indent': ['error', 'tab'],

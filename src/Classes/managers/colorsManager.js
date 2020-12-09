@@ -2,21 +2,24 @@ import { Collection } from 'discord.js';
 
 
 export class ColorsManager {
-  constructor(client) {
+	constructor(client) {
 
-    Object.defineProperty(this, 'client', { value: client });
+		Object.defineProperty(this, 'client', { value: client });
 
-    this.cache = new Collection();
-  }
+		this.cache = new Collection();
+	}
 
-  get(id) {
-    return this.cache.get(id);
-  }
+	get(id) {
+		return this.cache.get(id);
+	}
 
-  hasColor(user, color) {
-    if(this.cache.has(user.id)) return (
-      this.cache.get(user.id).some(color => color.aliases.includes(color))
-    );
-    else return false;
-  }
+	hasColor(user, color) {
+		const uDB = this.cache.get(user.id);
+		let has = false;
+		if(uDB)
+			for(const cor of uDB)
+				if(cor.aliases.includes(color))
+					has = cor;
+		return has;
+	}
 }

@@ -45,8 +45,8 @@ export default class PublicarCommand extends Command {
                 if (message.channel.id === '698678688153206915') message.delete();
                 pub.react('👍')
                     .then(() => pub.react('👎'));
-            }, err => message.reply(`algo deu errado...\n${err.name}:${err.name}`));
+            }, err => message.inlineReply(`algo deu errado...\n${err.name}:${err.name}`));
         }
-        else message.reply('cadê a image?');
+        else message.inlineReply('cadê a image?');
     }
 };

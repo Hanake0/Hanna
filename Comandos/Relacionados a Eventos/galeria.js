@@ -46,8 +46,8 @@ export default class InstagramCommand extends Command {
             await instagram.send({embed: publicação}).then(pub => {
                 message.react('738900367814819940')
                 pub.react('❤️')
-            }, err => message.reply(`algo deu errado...\n${err.name}:${err.name}`));
+            }, err => message.inlineReply(`algo deu errado...\n${err.name}:${err.name}`));
         }
-        else message.reply('cadê a image?');
+        else message.inlineReply('cadê a image?');
     }
 };
