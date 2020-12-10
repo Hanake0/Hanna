@@ -30,7 +30,7 @@ module.exports = class PayCommand extends Command {
 				{
 					key: 'moeda',
 					prompt: 'em que moeda?',
-					type: 'string	',
+					type: 'String	',
 					oneOf: ['coin', 'coins', 'gem', 'gems'],
 				},
 			],
