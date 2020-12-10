@@ -45,12 +45,7 @@ module.exports = class PayCommand extends Command {
 		
 		if(!uDB || !aDB) 
 			return msg.reply('ih mano, deu ruim aqui...');
-    
-    const aCoins = aDB.money;
-    const aGems = aDB.gems || 0;
-
-		const uCoins = uDB.money;
-		const uGems = uDB.gems || 0;
+   
 		
 		if(['coins', 'coin'].includes(moeda))
 			moeda = 'money';
@@ -62,12 +57,18 @@ module.exports = class PayCommand extends Command {
 		aDB[moeda] -= valor;
 		uDB[moeda] = uDB[moeda] + valor || valor;
 		
+		const aCoins = aDB.money;
+   		const aGems = aDB.gems || 0;
+
+		const uCoins = uDB.money;
+		const uGems = uDB.gems || 0;
+		
     const embed = new Discord.MessageEmbed()
       .setColor( member ? member.displayColor : Math.floor(Math.random() * 16777214) + 1)
       .setAuthor(msg.author.tag, msg.author.avatarURL())
-			.setTitle(`${valor} ${moeda} pagos a ${usuário}`)
+			.setTitle(`${valor} ${moeda} pagos a ${usuário.tag}`)
 			.addField('Carteira:', `<:hcoin:750754664026472549>${aCoins}\n<:hgem:750840705269891112>${aGems}`, true)
-      .addField('usuário.tag', `<:hcoin:750754664026472549>${uCoins}\n<:hgem:750840705269891112>${uGems}`, true)
+      .addField(usuário.tag, `<:hcoin:750754664026472549>${uCoins}\n<:hgem:750840705269891112>${uGems}`, true)
 		msg.replyEmbed(embed);
 		}
 };
