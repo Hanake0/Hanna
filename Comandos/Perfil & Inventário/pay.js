@@ -56,7 +56,7 @@ module.exports = class PayCommand extends Command {
 			moeda = 'money';
 		else moeda = 'gems';
 		
-		if(aDB[moeda] > valor)
+		if(aDB[moeda] < valor)
 			return msg.reply('Vish mano, parece que tu tá mei pobre pra pagar isso aí...');
 			
 		aDB[moeda] -= valor;
