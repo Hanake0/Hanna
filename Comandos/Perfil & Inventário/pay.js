@@ -63,7 +63,7 @@ module.exports = class PayCommand extends Command {
 		const uCoins = uDB.money;
 		const uGems = uDB.gems || 0;
 		
-		const moeda = moeda === 'gems' ? `gem${valor > 1 ? 's' : ''}` : `coin${valor > 1 ? 's' : ''}`;
+		moeda = moeda === 'gems' ? `gem${valor > 1 ? 's' : ''}` : `coin${valor > 1 ? 's' : ''}`;
 		
     const embed = new Discord.MessageEmbed()
       .setColor( member ? member.displayColor : Math.floor(Math.random() * 16777214) + 1)
