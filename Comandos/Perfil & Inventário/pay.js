@@ -53,8 +53,8 @@ module.exports = class PayCommand extends Command {
 		const uGems = uDB.gems || 0;
 		
 		if(['coins', 'coin'].includes(moeda))
-			moeda = money;
-		else moeda = gems;
+			moeda = 'money';
+		else moeda = 'gems';
 		
 		if(aDB[moeda] > valor)
 			return msg.reply('Vish mano, parece que tu tá mei pobre pra pagar isso aí...');
