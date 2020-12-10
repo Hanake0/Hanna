@@ -46,8 +46,8 @@ module.exports = class PayCommand extends Command {
 		if(!uDB || !aDB) 
 			return msg.reply('ih mano, deu ruim aqui...');
     
-    const acoins = aDB.money;
-    const agems = aDB.gems || 0;
+    const aCoins = aDB.money;
+    const aGems = aDB.gems || 0;
 
 		const uCoins = uDB.money;
 		const uGems = uDB.gems || 0;
@@ -66,8 +66,8 @@ module.exports = class PayCommand extends Command {
       .setColor( member ? member.displayColor : Math.floor(Math.random() * 16777214) + 1)
       .setAuthor(msg.author.tag, msg.author.avatarURL())
 			.setTitle(`${valor} ${moeda} pagos a ${usuário}`)
-			.addField('Carteira:', `<:hcoin:750754664026472549>${coins}\n<:hgem:750840705269891112>${gems}`, true)
-      .addField('usuário.tag', `<:hcoin:750754664026472549>${coins}\n<:hgem:750840705269891112>${gems}`, true)
+			.addField('Carteira:', `<:hcoin:750754664026472549>${aCoins}\n<:hgem:750840705269891112>${aGems}`, true)
+      .addField('usuário.tag', `<:hcoin:750754664026472549>${uCoins}\n<:hgem:750840705269891112>${uGems}`, true)
 		msg.replyEmbed(embed);
 		}
 };
