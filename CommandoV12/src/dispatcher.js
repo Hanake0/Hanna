@@ -1,9 +1,3 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-unused-vars */
-/* eslint-disable curly */
-/* eslint-disable max-len */
-/* eslint-disable camelcase */
-/* eslint-disable complexity */
 import { escapeRegex } from './util.js';
 
 /** Handles parsing messages and running commands from them */
@@ -109,7 +103,6 @@ export class CommandDispatcher {
 	 * @private
 	 */
 	async handleMessage(message, oldMessage) {
-		/* eslint-disable max-depth */
 		if(!this.shouldHandleMessage(message, oldMessage)) return;
 
 		// Parse the message, and get the old result if it exists
@@ -133,7 +126,7 @@ export class CommandDispatcher {
 
 			if(!inhibited) {
 				if(cmdMsg.command) {
-					//if(!cmdMsg.command.isEnabledIn(message.channel)) {
+					// If(!cmdMsg.command.isEnabledIn(message.channel)) {
 						/*
 						if(!cmdMsg.command.unknown) {
 							responses = await cmdMsg.embed({
@@ -145,11 +138,11 @@ export class CommandDispatcher {
 							responses = undefined;
 						}
 						*/
-					//} else if(!oldMessage || typeof oldCmdMsg !== 'undefined') {
-						responses = await cmdMsg.run();
-						if(typeof responses === 'undefined') responses = null;
-						if(Array.isArray(responses)) responses = await Promise.all(responses);
-					//}
+					// } else if(!oldMessage || typeof oldCmdMsg !== 'undefined') {
+					responses = await cmdMsg.run();
+					if(typeof responses === 'undefined') responses = null;
+					if(Array.isArray(responses)) responses = await Promise.all(responses);
+					// }
 				} else {
 					this.client.emit('unknownCommand', cmdMsg);
 					responses = undefined;
@@ -210,7 +203,7 @@ export class CommandDispatcher {
 				);
 				if(!valid) {
 					throw new TypeError(
-						`Inhibitor "${inhibitor.name}" had an invalid result; must be a string or an Inhibition object.`
+						`Inhibitor "${inhibitor.name}" had an invalid result; must be a string or an Inhibition object.`,
 					);
 				}
 
@@ -297,7 +290,7 @@ export class CommandDispatcher {
 		if(prefix) {
 			const escapedPrefix = escapeRegex(prefix);
 			pattern = new RegExp(
-				`^(<@!?${this.client.user.id}>\\s+(?:${escapedPrefix}\\s*)?|${escapedPrefix}\\s*)([^\\s]+)`, 'i'
+				`^(<@!?${this.client.user.id}>\\s+(?:${escapedPrefix}\\s*)?|${escapedPrefix}\\s*)([^\\s]+)`, 'i',
 			);
 		} else {
 			pattern = new RegExp(`(^<@!?${this.client.user.id}>\\s+)([^\\s]+)`, 'i');

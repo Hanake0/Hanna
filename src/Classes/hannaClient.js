@@ -3,8 +3,8 @@ import { UsersManager } from './managers/usersManager.js';
 import { VIPsManager } from './managers/VIPsManager.js';
 import { ColorsManager } from './managers/colorsManager.js';
 import { FirestoreManager } from '../Firestore/base.js';
-import Discord from 'discord.js';
-const { Collection, LimitedCollection } = Discord;
+import { SQLiteManager } from '../sqlite/base.js';
+import { Collection } from 'discord.js';
 
 export class HannaClient extends CommandoClient {
 	constructor(options) {
@@ -16,10 +16,12 @@ export class HannaClient extends CommandoClient {
 			colors: new ColorsManager(this),
 			misc: new Collection(),
 			invites: new Collection(),
-			deletedMessages: new LimitedCollection(200),
+			// deletedMessages: new LimitedCollection(200),
 		};
 
 		this.firestore = new FirestoreManager(this, options.db);
+
+		this.sqlite = new SQLiteManager(this);
 
 		this.games = new Collection();
 
@@ -38,30 +40,36 @@ export class HannaClient extends CommandoClient {
 		return this.guilds.cache.get(this._wcID);
 	}
 
-	handleMessage(message) {
+	async handleMessage(message) {
 		const uManager = this.data.users;
 		const author = message.author;
 
 		// Cria novo usuário se não existe
-		const uDB = uManager.resolveUser(author);
+		const wcUser = await uManager.resolveUser(author);
+
+		// Pega a última mensagem do db
+		const lastMessage = await this.sqlite.getLastMessage(author.id);
 
 		let shouldReceiveCoins = false;
-		if(uDB.lastMessage) {
-			const tempo = Date.now() - new Date(uDB.lastMessage.createdAt);
+		if(lastMessage) {
+			const tempo = Date.now() - new Date(lastMessage.timestamp);
+
 			if(tempo > 3500) shouldReceiveCoins = true;
 		}
 
 		// Atualiza o content de "lastMessage" e add coins e xp
-		uManager.updateLastMessage(message, author, !author.bot && shouldReceiveCoins);
+		await uManager.updateLastMessage(message, wcUser, !author.bot && shouldReceiveCoins);
 
-		// Verifica se tem "!wc" no username e add +4 xp
-		if(!author.bot) uManager.verifyUsername(author, true);
+		if(!author.bot) {
+			// Verifica se tem "!wc" no username e add +4 xp
+			await uManager.verifyUsername(author, wcUser, true);
 
-		// Verifica se tem convite permanente no status e add +1 coin
-		if(!author.bot) uManager.verifyCustomActivities(author, shouldReceiveCoins);
+			// Verifica se tem convite permanente no status e add +1 coin
+			await uManager.verifyCustomActivities(author, wcUser, shouldReceiveCoins);
 
-		// Verifica se é membro booster e add 15 coins a cada 1 semana
-		if(!author.bot) uManager.verifyBoosts(author, true);
+			// Verifica se é membro booster e add 15 coins a cada 1 semana
+			await uManager.verifyBoosts(author, wcUser, true);
+		}
 	}
 
 	prepareInvites() {

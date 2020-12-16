@@ -1,23 +1,74 @@
-client.on('raw', async dados => {
-  if (dados.t !== "MESSAGE_REACTION_ADD" && dados.t !== "MESSAGE_REACTION_REMOVE") return
-  if (dados.d.message_id != "780169693406429235") return
+import sqlite3 from 'sqlite3';
+const { Database } = sqlite3;
+sqlite3.verbose();
 
-  let servidor = client.guilds.cache.get("774274642520965180")
-  let membro = servidor.members.cache.get(dados.d.user_id);
+const db = new Database('./dbdeteste.db');
 
-  let cafet = servidor.roles.cache.get("<@&780176147681378335>"),
-      inkei = servidor.roles.cache.get("<@&780175676380414002>"),
-      mokuzai = servidor.roles.cache.get("<@&780175676380414002>");
-  if(dados.t === "MESSAGE_REACTION_ADD") {
-      if (dados.d.emoji.id === "774669881996083220") {
-          if (membro.roles.cache.has(cafet)) return
-          membro.roles.add(cafet);
-      } else if (dados.d.emoji.id === "775031385542885406") {
-          if (membro.roles.cache.has(inkei)) return
-          membro.roles.add(inkei);
-      } else if (dados.d.emoji.id === "774665913559023738") {
-          if (membro.roles.cache.has(mokuzai)) return
-          membro.roles.add(mokuzai);
-      }
-  }
-})
+class asyncDB {
+	constructor(db) {
+		this.db = db;
+
+		this._invites = 2;
+	}
+
+	async invites(num = undefined) {
+		const { invites: val } = await this.get(`SELECT invites FROM users WHERE id = ${this.id}`);
+
+		if(!num) return val;
+
+		if(typeof num === 'string') {
+			if(num.includes('val'))
+				num.replace('val', val);
+
+			num = Number(eval(num));
+		}
+
+		console.log(num);
+
+		return await this.updateUser(this.id, 'invites', num);
+	}
+
+	async updateUser(id, property, value) {
+		return this.run(`
+		UPDATE users
+		SET ${property} = ${value}
+		WHERE id = ?
+		`, [id]);
+	}
+
+	async run(sql, params = []) {
+		return new Promise((resolve, reject) => {
+			this.db.run(sql, params, err => {
+				if(err) reject(err);
+				else resolve();
+			});
+		});
+	}
+
+	async get(sql, params = []) {
+		return new Promise((resolve, reject) => {
+			this.db.get(sql, params, (err, row) => {
+				if(err) reject(err);
+				else resolve(row);
+			});
+		});
+	}
+
+	async all(sql, params = []) {
+		return new Promise((resolve, reject) => {
+			this.db.all(sql, params, (err, rows) => {
+				if(err) reject(err);
+				else resolve(rows);
+			});
+		});
+	}
+
+	async getUser(id) {
+		return this.get('SELECT * FROM users WHERE id = ?', [id]);
+	}
+
+}
+
+const adb = new asyncDB(db);
+
+adb.invites('val + 1').then(() => db.close());

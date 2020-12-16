@@ -1,3 +1,6 @@
 /nbproject/private/
 /.metadata/
 /node_modules/
+/.env
+/src/sqlite/sqlite3.db
+/TODO

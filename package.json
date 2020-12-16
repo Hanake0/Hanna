@@ -17,12 +17,14 @@
   "dependencies": {
     "common-tags": "^1.8.0",
     "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
     "escape-string-regexp": "^4.0.0",
     "eslint": "^7.14.0",
     "express": "^4.17.1",
     "firebase": "^7.24.0",
     "firebase-admin": "^9.2.0",
     "node-superfetch": "0.1.10",
-    "probe-image-size": "^5.0.0"
+    "probe-image-size": "^5.0.0",
+    "sqlite3": "^5.0.0"
   }
 }

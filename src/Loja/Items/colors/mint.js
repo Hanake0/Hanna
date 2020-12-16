@@ -16,7 +16,4 @@ export default class MintColor extends base {
     });
   }
 
-  buy() {
-
-  }
 }

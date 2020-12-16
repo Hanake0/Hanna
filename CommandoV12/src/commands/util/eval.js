@@ -3,7 +3,6 @@ import discord from 'discord.js';
 import tags from 'common-tags';
 import { escapeRegex } from '../../util.js';
 import { Command } from '../base.js';
-import { db } from '../../../../index.js'
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');
@@ -22,9 +21,9 @@ export default class EvalCommand extends Command {
 				{
 					key: 'script',
 					prompt: 'What code would you like to evaluate?',
-					type: 'string'
-				}
-			]
+					type: 'string',
+				},
+			],
 		});
 
 		this.lastResult = null;
@@ -36,7 +35,8 @@ export default class EvalCommand extends Command {
 		/* eslint-disable no-unused-vars */
 		const message = msg;
 		const client = msg.client;
-		const { usersData, invitesData } = client;
+		const { data } = client;
+		const { users } = client;
 		const lastResult = this.lastResult;
 		const doReply = val => {
 			if(val instanceof Error) {
@@ -110,4 +110,4 @@ export default class EvalCommand extends Command {
 		}
 		return this._sensitivePattern;
 	}
-};
+}

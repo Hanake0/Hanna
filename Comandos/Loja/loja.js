@@ -194,7 +194,7 @@ export default class LojaCommand extends Command {
 		// Define os Fields com os itens
 		for(const item of itens) {
 			embed.addField(stripIndents`
-				${item.canBuy(user) === true ? '' : '~~'}${item.emoji}${item.nome}${item.canBuy(user) === true ? '' : '~~'}    
+				${item.canBuy(user) === true ? '' : '🚫~~'}${item.emoji}${item.nome}${item.canBuy(user) === true ? '' : '~~🚫'}    
 			`, stripIndents`
 				\*\*${item.temporary ? 'Temporário' : 'Permanente'}\*\*
 				7 dias:
@@ -280,16 +280,18 @@ export default class LojaCommand extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(item.color)
-			.setAuthor(`${item.nome} ${ item.temporary ? '                                            ' : '                        '} (${now}/${max})`, item.icon)
+			.setAuthor(`${item.canBuy(user) === true ? '' : '🚫'}${item.nome}${item.canBuy(user) === true ? '' : '🚫'} ${ item.temporary ? '                                            ' : '                        '} (${now}/${max})`, item.icon)
 			.addField('Descrição', item.description)
 			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png')
 			.setTimestamp();
 
-		if(item.temporary) {
-			embed.addField('1 dia     ', `${emojis.coins} ${item.valorString(user, 'coins', 1)}\n${emojis.gems} ${item.valorString(user, 'gems', 1)}`, true);
-			embed.addField('3 dias    ', `${emojis.coins} ${item.valorString(user, 'coins', 3)}\n${emojis.gems} ${item.valorString(user, 'gems', 3)}`, true);
-			embed.addField('7 dias    ', `${emojis.coins} ${item.valorString(user, 'coins', 7)}\n${emojis.gems} ${item.valorString(user, 'gems', 7)}`, true);
-		} else embed.addField('﹃ Valor ﹄', `${emojis.coins} ${item.valorString(user, 'coins')}\n${emojis.gems} ${item.valorString(user, 'gems')}`);
+		if(item.canBuy(user)) {
+			if(item.temporary) {
+				embed.addField('1 dia     ', `${emojis.coins} ${item.valorString(user, 'coins', 1)}\n${emojis.gems} ${item.valorString(user, 'gems', 1)}`, true);
+				embed.addField('3 dias    ', `${emojis.coins} ${item.valorString(user, 'coins', 3)}\n${emojis.gems} ${item.valorString(user, 'gems', 3)}`, true);
+				embed.addField('7 dias    ', `${emojis.coins} ${item.valorString(user, 'coins', 7)}\n${emojis.gems} ${item.valorString(user, 'gems', 7)}`, true);
+			} else embed.addField('﹃ Valor ﹄', `${emojis.coins} ${item.valorString(user, 'coins')}\n${emojis.gems} ${item.valorString(user, 'gems')}`);
+		}
 
 		// Envia uma mensagem nova ou edita
 		let sentMsg;
@@ -336,9 +338,12 @@ export default class LojaCommand extends Command {
 
 			// Caso tenha escolhido iniciar a compra
 			if(nome === 'hcoin' || nome === 'hgem')
-				await item.buy(user, tempo)
-					.then(async () => await this.success(msg, user, item, `${nome.slice(1)}s`, tempo),
-						async (err) => await this.error(msg, user, item, err, tempo));
+				try {
+					await item.buy(user, tempo);
+					await this.success(msg, user, item, `${nome.slice(1)}s`, tempo);
+				} catch(err) {
+					await this.error(msg, user, item, err, tempo);
+				}
 
 			// Caso voltar
 			else if(nome === '⤴️') {

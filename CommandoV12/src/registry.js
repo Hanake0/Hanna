@@ -1,5 +1,5 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+//import { createRequire } from 'module';
+//const require = createRequire(import.meta.url);
 
 import { readdirSync } from 'fs';
 import path from 'path';
@@ -191,16 +191,6 @@ export class CommandoRegistry {
 	 * registry.registerCommandsIn(path.join(__dirname, 'commands'));
 	 */
 	async registerCommandsIn(options) {
-		/*
-		const obj = require('require-all')(options);
-		const commands = [];
-		for(const group of Object.values(obj)) {
-			for(let command of Object.values(group)) {
-				if(typeof command.default === 'function') command = command.default;
-				commands.push(command);
-			}
-		}
-		*/
 		if(typeof options === 'string' && !this.commandsPath) this.commandsPath = options;
 		else if(typeof options === 'object' && !this.commandsPath) this.commandsPath = options.dirname;
 
@@ -216,16 +206,6 @@ export class CommandoRegistry {
 			const classe = await import(command);
 			commands.push(classe.default);
 		}
-		
-		/*
-		readdirSync(this.commandsPath).forEach(async grupo => {
-			readdirSync(`${this.commandsPath}/${grupo}`).forEach(async arquivo => {
-				import(`../.${this.commandsPath}/${grupo}/${arquivo}`).then(async comando => {
-					commands.push(comando.default)
-				});
-			})
-		})
-		*/
 
 		return this.registerCommands(commands, true);
 

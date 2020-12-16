@@ -2,7 +2,6 @@ import discord from 'discord.js';
 import { CommandoRegistry } from './registry.js';
 import { CommandDispatcher } from './dispatcher.js';
 import { GuildSettingsHelper } from './providers/helper.js';
-import Collection from '@discordjs/collection';
 
 /**
  * Discord.js Client with a command framework
@@ -150,7 +149,8 @@ export class CommandoClient extends discord.Client {
 			return this;
 		}
 
-		this.emit('debug', `Provider configurado como ${newProvider.constructor.name} - inicializando assim que o client estiver pronto.`);
+		this.emit('debug',
+		`Provider configurado como ${newProvider.constructor.name} - inicializando assim que o client estiver pronto.`);
 		await new Promise(resolve => {
 			this.once('ready', () => {
 				this.emit('debug', `Inicializando Provider...`);

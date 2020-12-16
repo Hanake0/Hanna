@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import * as commando from './CommandoV12/src/index.js';
 import { HannaClient } from './src/Classes/hannaClient.js';
 import { readdirSync } from 'fs';
@@ -25,7 +28,7 @@ admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount2),
 });
 
-export const db = admin.firestore();
+const db = admin.firestore();
 
 // Cria um client do Comando
 const donos = new Set();
@@ -33,6 +36,7 @@ donos.add('380512056413257729');
 donos.add('348664615175192577');
 donos.add('398852531259965440');
 donos.add('755067822086029424');
+donos.add('780210259284328458');
 export const client = new HannaClient({
 	ws: { intents: Intents.ALL },
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
@@ -144,4 +148,4 @@ client
 	.on('firestoreDebug', (...infos) => console.log(infos.join('')));
 
 // login && token
-client.login('NzQzOTgwMzgwNzU4OTk5MDgx.XzcjuQ.ojzjG144V3RRi00brfD4OAxx1oE');
+client.login(process.env.AUTH_TOKEN);

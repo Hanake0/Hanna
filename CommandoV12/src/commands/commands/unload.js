@@ -21,9 +21,9 @@ export default class UnloadCommandCommand extends Command {
 				{
 					key: 'command',
 					prompt: 'Which command would you like to unload?',
-					type: 'command'
-				}
-			]
+					type: 'command',
+				},
+			],
 		});
 	}
 
@@ -46,4 +46,4 @@ export default class UnloadCommandCommand extends Command {
 		await msg.inlineReply(`Unloaded \`${args.command.name}\` command${this.client.shard ? ' on all shards' : ''}.`);
 		return null;
 	}
-};
+}

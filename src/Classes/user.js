@@ -9,53 +9,59 @@ export class wcUser {
 
 		this.id = data.id;
 
-		this.invites = data.invites || 0;
+		this._invites = data.invites || 0;
 
-		this.boosting = data.boosting || false;
+		this._boosting = data.boosting || null;
 
-		this.wallet = data.wallet || { coins: 0, gems: 0 };
+		this._coins = data.coins || 0;
 
-		this.messages = data.messages || 0;
+		this._gems = data.gems || 0;
 
-		this.xp = data.xp || 0;
+		this._messages = data.messages || 0;
 
-		this.lastMessage = data.lastMessage || null;
+		this._xp = data.xp || 0;
 
-		const buddy = data.buddy || {};
-		this.buddy = {
-			hat: buddy['hat'] || null,
-			glasses: buddy['glasses'] || null,
-			shirt: buddy['shirt'] || null,
-			gloves: buddy['gloves'] || null,
-			pants: buddy['pants'] || null,
-			shoes: buddy['shoes'] || null,
-			base: buddy['base'] || null,
-			pet: buddy['pet'] || null,
-		};
-
-		this.inventory = { permanent: [], temporary: [] };
-
-		// Converte os itens do inventário em suas respectivas classes
-		if(data.inventory) if(Object.keys(data.inventory).length > 0) {
-			for(const [itemType, itemTypeData] of Object.entries(data.inventory)) {
-				this.inventory[itemType] = [];
-
-				if(itemTypeData.length > 0) for(const itemData of itemTypeData) {
-					this.importThing(itemData).then(item => this.inventory[itemType].push(item));
-				}
-			}
-		}
-
-		this.jobs = {};
-
-		// Converte os trabalhos em suas respectivas classes
-		if(data.jobs) if(Object.keys(data.jobs).length > 0) {
-			for(const [jobNum, jobData] of Object.entries(data.jobs)) {
-				this.importThing(jobData).then(job => this.jobs[jobNum] = job);
-			}
-		}
 	}
 
+	async changeProperty(property, num = undefined) {
+		const row = await this.client.sqlite.get(`SELECT ${property} FROM users WHERE id = ${this.id}`);
+		const val = row[property];
+
+		if(!num) return val;
+
+		if(typeof num === 'string') {
+			if(num.includes('val'))
+				num.replace('val', val);
+
+			num = Number(eval(num));
+		}
+
+		return await this.client.sqlite.updateUser(this.id, property, num);
+	}
+
+	invites(num = undefined) {
+		return this.changeProperty('invites', num);
+	}
+
+	boosting(num = undefined) {
+		return this.changeProperty('boosting', num);
+	}
+
+	coins(num = undefined) {
+		return this.changeProperty('coins', num);
+	}
+
+	gems(num = undefined) {
+		return this.changeProperty('gems', num);
+	}
+
+	messages(num = undefined) {
+		return this.changeProperty('messages', num);
+	}
+
+	xp(num = undefined) {
+		return this.changeProperty('xp', num);
+	}
 
 	async importThing(thingData) {
 		const { default: thingConstructor } = await import(`${thingData._path}`);

@@ -1,14 +1,13 @@
-
 export class InventoryItem {
-  constructor(client, infos) {
+	constructor(client, infos) {
 
-    Object.defineProperty(this, 'client', { value: client });
+		Object.defineProperty(this, 'client', { value: client });
 
-    this._userID = infos._userID;
+		this._userID = infos._userID;
 
-    this.nome = infos.nome;
+		this.nome = infos.nome;
 
-    this.description = infos.description;
+		this.description = infos.description;
 
-  }
+	}
 }
