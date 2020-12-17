@@ -68,38 +68,19 @@ export class wcUser {
 		return new thingConstructor(this.client, thingData);
 	}
 
-	toFirestore() {
-		const userData = {
-			num: this.num,
-			id: this.id,
-			invites: this.invites,
-			boosting: this.boosting,
-			wallet: this.wallet,
-			messages: this.messages,
-			xp: this.xp,
-			buddy: this.buddy,
-			inventory: {},
-			jobs: {},
-			lastMessage: this.lastMessage,
+	async toFirestore() {
+		const sqlite = this.client.sqlite;
+		const data = await sqlite.exportThing('users', this.id);
+		const buddy = await sqlite.exportThing('buddys', this.id);
+		const lastMessage = await sqlite.exportThing('lastmessages', this.id);
+		const jobs = await sqlite.exportThing('jobs', this.id);
+
+		return {
+			users: data,
+			buddys: buddy,
+			lastmessages: lastMessage,
+			jobs: jobs,
 		};
-
-		// Coloca cada tipo de item em seu respectivo lugar no inventário e converte eles
-		if(Object.keys(this.inventory).length > 0) {
-			for(const itemType of Object.keys(this.inventory)) {
-				userData.inventory[itemType] = [];
-				for(const item of this.inventory[itemType]) {
-					userData.inventory[itemType].push(item.toFirestore());
-				}
-			}
-		}
-
-		// Guarda as informações de trabalho e converte
-		if(Object.keys(this.jobs).length > 0) {
-			for(const jobNum of Object.keys(this.jobs)) {
-				userData.jobs[jobNum] = this.jobs[jobNum].toFirestore();
-			}
-		}
-		return userData;
 	}
 
 	static fromFirestore(data) {

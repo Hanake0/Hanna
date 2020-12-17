@@ -1,6 +1,6 @@
 import { hora } from '../util.js';
-import { wcUser } from '../Classes/user.js';
-import { Buddy } from '../Classes/buddy.js';
+import { wcUser } from '../classes/user.js';
+import { Buddy } from '../classes/buddy.js';
 import sqlite3 from 'sqlite3';
 const { Database } = sqlite3;
 sqlite3.verbose();
@@ -21,16 +21,19 @@ export class SQLiteManager {
 		this.itens = undefined;
 	}
 
+	// Promise => undefined
 	async init() {
 		return new Promise((resolve, reject) => {
 			this.createUsersTable()
 				.then(this.createBuddysTable(), err => reject(err))
 				.then(this.createItensTable(), err => reject(err))
-				.then(this.createLastMessagesTable(), err => reject(err));
+				.then(this.createLastMessagesTable(), err => reject(err))
+				.then(this.createJobsTable(), err => reject(err));
 		});
 	}
 
-	// db.run() mas promisified
+	// -----------------------------------> base <-----------------------------------
+	// Promise => undefined ( db.run() mas promisified )
 	async run(sql, params = []) {
 		return new Promise((resolve, reject) => {
 			try {
@@ -44,7 +47,7 @@ export class SQLiteManager {
 		});
 	}
 
-	// db.get() mas promisified
+	// Promise => undefined ( db.get() mas promisified )
 	async get(sql, params = []) {
 		return new Promise((resolve, reject) => {
 			try {
@@ -58,7 +61,7 @@ export class SQLiteManager {
 		});
 	}
 
-	// db.all() mas promisified
+	// Promise => undefined ( db.all() mas promisified )
 	async all(sql, params = []) {
 		return new Promise((resolve, reject) => {
 			try {
@@ -71,37 +74,54 @@ export class SQLiteManager {
 			}
 		});
 	}
+	// -----------------------------------> base <-----------------------------------
 
-
-	// Reconstroi um usuário do banco de dados
+	// ----------------------------------> getters <---------------------------------
+	// wcUser/false
 	async getUser(id) {
 		const userData = await this.get('SELECT * FROM users WHERE id = ?', [id]);
 		if(userData) return new wcUser(this.client, userData);
 		return false;
 	}
 
-	// Reconstroi um buddy do banco de dados
+	// Buddy/false
 	async getBuddy(id) {
 		const buddyData = await this.get('SELECT * FROM buddys WHERE id = ?', [id]);
 		if(buddyData) return new Buddy(buddyData);
 		return false;
 	}
 
-	// Todos os itens do usuário
+	// rows/false
 	async getItens(id) {
 		const rows = await this.all('SELECT * FROM itens WHERE id = ?', [id]);
 		if(rows.length > 0) return rows;
 		return false;
 	}
 
-	// JSON simplificado da mensagem
+	// JSON/null
 	async getLastMessage(id) {
 		return await this.get(`
 			SELECT * FROM lastmessages WHERE id = ?
 		`, [id]);
 	}
 
-	// Cria um usuário se não existe
+	// rows/false
+	async getJobs(id) {
+		const rows = await this.all('SELECT * FROM jobs WHERE id = ?', [id]);
+		if(rows.length > 0) return rows;
+		return false;
+	}
+
+	async getItem(id, classname) {
+		const itens = await this.getItens(id);
+		for(const item in itens)
+			if(item.classname === classname) {
+				const { default: itemConstructor } = await import(item._path);
+				return new itemConstructor(item);
+			}
+	}
+
+	// wcUser/false
 	async resolveUser(id, data = {}) {
 		const user = await this.getUser(id);
 		if(user) return user;
@@ -124,44 +144,84 @@ export class SQLiteManager {
 
 		return this.getUser(id);
 	}
+	// ----------------------------------> getters <---------------------------------
 
+	// ----------------------------------> setters <---------------------------------
+	// Promise => undefined ( deve ser usado pela classe wcUser )
 	async updateUser(id, property, value) {
-		return this.run(`
+		return await this.run(`
 		UPDATE users
 		SET ${property} = ?
 		WHERE id = ?
 		`, [value, id]);
 	}
 
+	// Promise => undefined ( deve ser usado pela classe Buddy )
 	async updateBuddy(id, property, value) {
-		return this.run(`
+		return await this.run(`
 		UPDATE users
 		SET ${property} = ?
 		WHERE id = ?
 		`, [value, id]);
 	}
 
+	// Promise => undefined ( deve ser usado pela classe UserInventoryManager )
 	async updateItem(id, itemClass, property, value) {
-		return this.run(`
+		return await this.run(`
 		UPDATE users
 		SET ${property} = ?
 		WHERE id = ? AND class = ?
 		`, [value, id, itemClass]);
 	}
 
+	// Promise => undefined
 	async updateLastMessage(id, message) {
-		return this.run(`
-		REPLACE INTO lastmessages (id, content, attachment, timestamp, channelid)
+		return await this.run(`
+		REPLACE INTO lastmessages (num, id, content, attachment, timestamp, channelid)
 		VALUES (
+			(SELECT num FROM lastmessages WHERE id = ${`'${id}'`}),
 			?,
-			${message.content ? `'${message.content}'` : null},
-			${message.attachments.first() ? `'${message.attachments.first().url}'` : null},
-			${`'${message.createdAt.toISOString()}'`},
+			?,
+			?,
+			${message.createdAt.valueOf()},
 			${`'${message.channel.id}'`}
 		)
-		`, [id]);
+		`, [id, message.content || null, message.attachments.first() ? `'${message.attachments.first().url}'` : null]);
+	}
+	// ----------------------------------> setters <---------------------------------
+
+	// --------------------------------> import/export <-----------------------------
+	// Promise => undefined
+	async importThing(dbName, data) {
+		const keyArray = [],
+			valueArray = [];
+		for(const [key, value] of Object.entries(data)) {
+			keyArray.push(key);
+			valueArray.push(value);
+		}
+
+		await this.run(`
+			REPLACE INTO ${dbName} (num, ${keyArray.join()})
+			VALUES ((SELECT num FROM ${dbName} WHERE id = ${`'${data.id}'`}),${valueArray.map((val => {
+	if(typeof val === 'string')
+		return `'${val}'`;
+	return val;
+}))})
+		`);
 	}
 
+	// Promise => data/false
+	async exportThing(dbName, id) {
+		const data = await this.all(`
+		SELECT * FROM ${dbName} WHERE id = ?
+		`, [id]);
+		if(data) return data;
+		return false;
+	}
+	// --------------------------------> import/export <-----------------------------
+
+	// -----------------------------------> init <-----------------------------------
+	// Promise => undefined
 	async createUsersTable() {
 		return new Promise((resolve, reject) => {
 			this.run(`
@@ -179,6 +239,7 @@ export class SQLiteManager {
 		});
 	}
 
+	// Promise => undefined
 	async createBuddysTable() {
 		return new Promise((resolve, reject) => {
 			this.run(`
@@ -204,6 +265,7 @@ export class SQLiteManager {
 		});
 	}
 
+	// Promise => undefined
 	async createItensTable() {
 		return new Promise((resolve, reject) => {
 			this.run(`
@@ -211,7 +273,13 @@ export class SQLiteManager {
 					num INTEGER PRIMARY KEY,
 					id TEXT NOT NULL,
 			
+					classname TEXT NOT NULL,
 					quantity INTEGER NOT NULL,
+					expiringtime INTEGER NOT NULL,
+					timeout INTEGER,
+					_path TEXT NOT NULL,
+					id1 TEXT,
+					id2 TEXT,
 			
 					FOREIGN KEY (id)
 					REFERENCES users (id)
@@ -221,16 +289,17 @@ export class SQLiteManager {
 		});
 	}
 
+	// Promise => undefined
 	async createLastMessagesTable() {
 		return new Promise((resolve, reject) => {
 			this.run(`
 				CREATE TABLE IF NOT EXISTS lastmessages (
 					num INTEGER PRIMARY KEY,
-					id TEXT NOT NULL,
+					id TEXT NOT NULL UNIQUE,
 
 					content TEXT,
 					attachment TEXT,
-					timestamp TEXT NOT NULL,
+					timestamp INTEGER NOT NULL,
 					channelid TEXT NOT NULL,
 
 					FOREIGN KEY (id)
@@ -240,5 +309,28 @@ export class SQLiteManager {
 				)`).then(resolve(), err => reject(err));
 		});
 	}
+
+	// Promise => undefined
+	async createJobsTable() {
+		return new Promise((resolve, reject) => {
+			this.run(`
+				CREATE TABLE IF NOT EXISTS jobs (
+					num INTEGER PRIMARY KEY,
+					id TEXT NOT NULL,
+
+					works INTEGER NOT NULL,
+					wage TEXT NOT NULL,
+					profit INTEGER NOT NULL,
+					lastwork TEXT,
+					lastworkchannelid TEXT,
+
+					FOREIGN KEY (id)
+					REFERENCES users (id)
+						ON UPDATE CASCADE
+						ON DELETE CASCADE
+				)`).then(resolve(), err => reject(err));
+		});
+	}
+	// -----------------------------------> init <-----------------------------------
 
 }

@@ -1,5 +1,5 @@
 import { hora } from '../util.js';
-import { wcUser } from '../Classes/user.js';
+import { TemporaryItem } from '../inventory/temporaryItem.js';
 
 export class FirestoreManager {
 	constructor(client, db) {
@@ -10,126 +10,122 @@ export class FirestoreManager {
 
 	init() {
 		this.initUsers();
-		this.initExpiringItens();
+		this.initItens();
 	}
 
-	initUsers() {
+	initUsers(interval = 900000) {
 		// Baixa os dados e armazena no cache
 		this.importUsers();
 
 		// Configura updates a cada 15 min
-		this.client.setInterval(this.exportUsers.bind(this), 900000);
+		this.client.setInterval(this.exportUsers.bind(this), interval);
 	}
 
 	// Baixa os dados e armazena no cache
-	importUsers() {
-		this.db.collection('usuarios').get()
-			.then(docs => docs.forEach(snap => {
-				for (const [id, data] of Object.entries(snap.data())) {
-					this.client.data.users.cache.set(id, new wcUser(this.client, data));
-				}
-			}));
+	async importUsers() {
+		const docs = await this.db.collection('usuarios').get();
+		docs.forEach(async snap => {
+			const data = snap.data().data;
+			for (const userData in data)
+				for(const [key, value] of Object.entries(userData))
+					await this.client.sqlite.importThing(key, value);
+		});
 	}
 
 	// Exporta todos os usuários para o Firestore
 	async exportUsers() {
 		this.client.emit('firestoreDebug', hora(), 'Iniciando update de usuários...');
 		try {
-			const repeats = Math.ceil((this.client.data.users.cache.size) / 250);
+			const sqlite = this.client.sqlite;
+			const { 'MAX (num)': size } = await sqlite.get('SELECT MAX (num) FROM users');
+			const repeats = Math.ceil(size / 250);
 			let now = 1;
 
 			while(now <= repeats) {
-				const users = {};
+				const users = [];
 
-				this.client.data.users.cache.forEach(user => {
-					if(user.num > ((now - 1) * 250) && user.num <= (now * 250)) {
-						users[user.id] = user.toFirestore();
-					}
-				});
+				const rows = await sqlite.all(`SELECT * FROM users WHERE num BETWEEN ${(now - 1) * 250} AND ${now * 250}`);
+				for(const user of rows) {
+					const wcUser = await sqlite.resolveUser(user.id);
+					users.push = await wcUser.toFirestore();
+				}
+
 				this.client.emit('firestoreDebug', hora(), `Usuários de ${(now - 1) * 250} a ${(now * 250)} filtrados e convertidos`);
 				this.client.emit('firestoreDebug', hora(), `Iniciado update do doc ${now}...`);
-				await this.db.collection('usuarios').doc(`${now}`).set(users);
+				await this.db.collection('usuarios').doc(`${now}`).set({ data: users });
 				this.client.emit('firestoreDebug', hora(), `Update de doc ${now} concluído !`);
 				now++;
 			}
 		} catch(err) {
 			this.client.emit('firestoreDebug', hora(), `Erro durante update dos usuários ${err.name}: ${err.message}`);
 			this.client.waifusClub.channels.cache.get('732710544330457161')
-				.send(`${hora()}Erro durante update dos usuários: ${err.name}: ${err.message}`);
+				.send(`${hora()}Erro durante update dos usuários: ${err}`);
 		}
 		this.client.emit('firestoreDebug', hora(), 'Fim do update de usuários.');
 	}
 
-	initExpiringItens() {
+	initItens(interval = 900000) {
 		// Baixa os dados e armazena no cache
-		this.importExpiringItens();
+		this.importItens();
 
 		// Configura updates a cada 15 min
-		this.client.setInterval(this.exportExpiringItens.bind(this), 900000);
+		this.client.setInterval(this.exportItens.bind(this), interval);
 	}
 
 	// Baixa os dados e armazena no cache
-	importExpiringItens() {
-		this.db.collection('expiring').get()
-			.then(docs => docs.forEach(async snap => {
-				for (const [idType, data] of Object.entries(snap.data())) {
-					const id = idType.slice(0, 18);
-					const type = idType.slice(id.length);
-
-					if(type === 'misc') await this.setupItem(id, type, data, true, true);
-					else if(type === 'colors') await this.setupItem(id, type, data, false, true);
-					else await this.setupItem(id, type, data);
-				}
-			}));
+	async importItens() {
+		const docs = await this.db.collection('itens').get();
+		docs.forEach(async snap => {
+			const data = snap.data().data;
+			for (const item in data) {
+				await this.client.sqlite.importThing('itens', data);
+				const itemClass = await this.client.sqlite.getItem(item.id, item.classname);
+				await this.setTimeout(itemClass);
+			}
+		});
 	}
 
 	// Exporta todos os itens temporários para o Firestore
-	async exportExpiringItens() {
+	async exportItens() {
 		this.client.emit('firestoreDebug', hora(), 'Iniciando update de itens temporários...');
 		try {
-			const data = this.client.data;
-
-			// Junta todos os itens em um map só
-			const totalItens = new Map();
-			for(const category of Object.keys(data)) {
-				if(!['users', 'invites', 'deletedMessages'].includes(category)) {
-					const collection = data[category].cache ? data[category].cache : data[category];
-
-					collection.forEach((itens, id) => {
-						if(itens instanceof Set) itens.forEach(item => totalItens.set(`${id}${category}`, item));
-						else totalItens.set(`${id}${category}`, itens);
-					});
-				}
-			}
-			const keys = Array.from(totalItens.keys());
-
-			const repeats = Math.ceil(totalItens.size / 250);
+			const sqlite = this.client.sqlite;
+			const { 'MAX (num)': size } = await sqlite.get('SELECT MAX (num) FROM itens');
+			const repeats = Math.ceil(size / 250);
 			let now = 1;
 
-			// Divide em docs com 250 itens
-			do {
-				const itensObject = {};
-
-				for(let i = 1; i < 250; i++) {
-					// Define o ID/Tipo e remove do array com as keys
-					const idType = keys.pop();
-
-					// Define o ID/Tipo no objecto com os itens
-					if(idType) itensObject[idType] = totalItens.get(idType).toFirestore();
-				}
+			while(now <= repeats) {
+				const itens = await sqlite.all(`SELECT * FROM itens WHERE num BETWEEN ${(now - 1) * 250} AND ${now * 250}`);
 
 				this.client.emit('firestoreDebug', hora(), `Itens temporários de ${(now - 1) * 250} a ${(now * 250)} filtrados e convertidos`);
 				this.client.emit('firestoreDebug', hora(), `Iniciado update do doc ${now}...`);
-				await this.db.collection('expiring').doc(`${now}`).set(itensObject);
+				await this.db.collection('expiring').doc(`${now}`).set({ data: itens });
 				this.client.emit('firestoreDebug', hora(), `Update de doc ${now} concluído !`);
 				now++;
 			} while(now < repeats);
 		} catch(err) {
 			this.client.emit('firestoreDebug', hora(), `Erro durante update dos itens temporários ${err.name}: ${err.message}`);
 			this.client.waifusClub.channels.cache.get('732710544330457161')
-				.send(`${hora()}Erro durante update dos itens temporários: ${err.name}: ${err.message}`);
+				.send(`${hora()}Erro durante update dos itens temporários: ${err}`);
 		}
 		this.client.emit('firestoreDebug', hora(), 'Fim do update de itens temporários.');
+	}
+
+	async setTimeout(item) {
+		if(item instanceof TemporaryItem) {
+			const expiringtime = await item.expiringtime();
+			let timeout = await item.timeout();
+
+			if(timeout)
+				this.client.clearTimeout(timeout);
+
+			const remTime = expiringtime - Date.now();
+			if(remTime > 0 && remTime < 86400000) {
+				timeout = this.client.setTimeout(item.expire.bind(item), remTime);
+				await item.timeout(timeout[Symbol.toPrimitive]);
+			} else if(remTime <= 0)
+				await item.expire();
+		}
 	}
 
 	// Configura um item específico vindo do Firestore

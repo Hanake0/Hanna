@@ -26,8 +26,6 @@ export class UsersManager {
 
 	// Undefined
 	async updateLastMessage(message, wcUser, updateCoins = false) {
-		console.log(wcUser);
-
 		if(updateCoins) {
 			await wcUser.xp('val + 5');
 			await wcUser.coins('val + 1');

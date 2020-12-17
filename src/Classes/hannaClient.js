@@ -2,7 +2,7 @@ import { CommandoClient } from '../../CommandoV12/src/index.js';
 import { UsersManager } from './managers/usersManager.js';
 import { VIPsManager } from './managers/VIPsManager.js';
 import { ColorsManager } from './managers/colorsManager.js';
-import { FirestoreManager } from '../Firestore/base.js';
+import { FirestoreManager } from '../firestore/base.js';
 import { SQLiteManager } from '../sqlite/base.js';
 import { Collection } from 'discord.js';
 
@@ -52,9 +52,9 @@ export class HannaClient extends CommandoClient {
 
 		let shouldReceiveCoins = false;
 		if(lastMessage) {
-			const tempo = Date.now() - new Date(lastMessage.timestamp);
+			const tempo = Date.now() - lastMessage.timestamp;
 
-			if(tempo > 3500) shouldReceiveCoins = true;
+			if(tempo > 3250) shouldReceiveCoins = true;
 		}
 
 		// Atualiza o content de "lastMessage" e add coins e xp

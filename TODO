@@ -7,20 +7,32 @@ Migrar db para SQLite:
 		☐ Carteira
 		☐ SetCoins, gems e invites
 		☐ LastMessage
+	✘ Consertar eventos quebrados @cancelled(20-12-17 19:17) -Hanake
+		✔ Logembed de guildmemberAdd @done(20-12-17 19:17) -Hanake
 
-	☐ Importar dados do Firestore @started(20-12-16 22:51) -Hanake
-	☐ Exportar dados para o Firestore
+	✔ Importar dados do Firestore @started(20-12-17 17:09) @done(20-12-17 18:37) @lasted(1h28m2s) -Hanake
+	✔ Exportar dados para o Firestore @started(20-12-17 13:56) @done(20-12-17 18:37) @lasted(4h41m5s) -Hanake
 
 
 Economia:
 	☐ Criar comando para pagar as pessoas
 	☐ Criar trabalhos
 		Trabalhos:
-			☐ Acrescentar trabalhos ao db
+			✔ Acrescentar trabalhos ao db @started(20-12-17 14:56) @done(20-12-17 15:06) @lasted(10m31s) -Hanake
 			☐ Acrescentar classes de trabalho
 			☐ Criar mini-games de cada profissão
 			☐ Criar trabalhos especiais pagos pelos ADMs
 
+
+Logs:
+	☐ channel
+	☐ emoji
+	☐ ban
+	☐ Join/Leave
+	✔ invite @started(20-12-17 18:49) @done(20-12-17 19:10) @lasted(21m20s) -Hanake
+	☐ menssage
+	☐ role
+	☐ userUpdate
 
 
 Loja:
@@ -39,8 +51,9 @@ Inventário:
 
 
 Buddy:
-	☐ Adicionar funcionalidade do Buddy no SQLite e Firestore @started(20-12-16 10:24) -Hanake
+	✔ Adicionar funcionalidade do Buddy no SQLite e Firestore @started(20-12-16 10:24) @done(20-12-17 18:39) @lasted(1d8h16m) -Hanake
 	☐ Adicionar comando para ver Buddy
+	☐ Adicionar comando para trocar as roupas do Buddy
 	☐ Adicionar Peças de roupa de Buddy na loja
 
 

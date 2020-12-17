@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import * as commando from './CommandoV12/src/index.js';
-import { HannaClient } from './src/Classes/hannaClient.js';
+import { HannaClient } from './src/classes/hannaClient.js';
 import { readdirSync } from 'fs';
 import { Intents } from 'discord.js';
 import { oneLine } from 'common-tags';
