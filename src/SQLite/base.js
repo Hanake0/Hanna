@@ -94,7 +94,7 @@ export class SQLiteManager {
 		return false;
 	}
 
-	// JSON dsimplificado da mensagem
+	// JSON simplificado da mensagem
 	async getLastMessage(id) {
 		return await this.get(`
 			SELECT * FROM lastmessages WHERE id = ?

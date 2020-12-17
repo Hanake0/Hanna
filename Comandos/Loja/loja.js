@@ -69,7 +69,7 @@ export default class LojaCommand extends Command {
 			.setFooter('Esperando reações', 'https://garticbot.gg/images/icons/time.png')
 			.setImage('https://cdn.discordapp.com/attachments/750026820878991461/754553827524476938/dividelinewaifusstore2.png')
 			.setTimestamp()
-			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
+			.setFooter(await this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
 
 		// Define os Fields com as categorias
 		for(const category in this.itens)
@@ -187,7 +187,7 @@ export default class LojaCommand extends Command {
 			.setAuthor(`${this.itens[cat].nome} ${ max === 3 ? '                                            ' : '                        '} (${now}/${max})`, `https://cdn.discordapp.com/emojis/${this.itens[cat].emoji}.png`)
 			.setFooter('Esperando reações', 'https://garticbot.gg/images/icons/time.png')
 			.setTimestamp()
-			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
+			.setFooter(await this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
 
 		if(itens[0]) embed.setColor(itens[0].color);
 
@@ -282,7 +282,7 @@ export default class LojaCommand extends Command {
 			.setColor(item.color)
 			.setAuthor(`${item.canBuy(user) === true ? '' : '🚫'}${item.nome}${item.canBuy(user) === true ? '' : '🚫'} ${ item.temporary ? '                                            ' : '                        '} (${now}/${max})`, item.icon)
 			.addField('Descrição', item.description)
-			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png')
+			.setFooter(await this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png')
 			.setTimestamp();
 
 		if(item.canBuy(user)) {
@@ -304,10 +304,12 @@ export default class LojaCommand extends Command {
 	}
 
 	async confirm(msg, item, user, tempo = 7) {
-		const uDB = this.client.data.users.resolveUser(user);
+		const uDB = await this.client.data.users.resolveUser(user);
+		const coins = await uDB.coins();
+		const gems = await uDB.gems();
 
-		if(uDB.wallet.gems < item.valor(user, 'gems', tempo)
-			&& uDB.wallet.coins < item.valor(user, 'coins', tempo))
+		if(gems < item.valor(user, 'gems', tempo)
+			&& coins < item.valor(user, 'coins', tempo))
 			return await this.reject(msg, user, item, tempo);
 
 		const sentMsg = await this.sendConfirm(msg, item, user, tempo);
@@ -315,9 +317,9 @@ export default class LojaCommand extends Command {
 		// Configura os emojis
 		let itens = [];
 
-		if(uDB.wallet.gems >= item.valor(user, 'gems', tempo))
+		if(gems >= item.valor(user, 'gems', tempo))
 			itens = [{ emoji: gem }, ...itens];
-		if(uDB.wallet.coins >= item.valor(user, 'coins', tempo))
+		if(coins >= item.valor(user, 'coins', tempo))
 			itens = [{ emoji: coin }, ...itens];
 
 		itens = [{ emoji: '⤴️' }, ...itens];
@@ -364,7 +366,7 @@ export default class LojaCommand extends Command {
 			\*\*Nome:\*\* ${item.nome}${item.temporary ? `\n**Validade:** ${tempo} dia${tempo > 1 ? 's' : ''}` : ''}
 			\*\*Valor${item.temporary ? `(${tempo} dia${tempo > 1 ? 's' : ''})` : ''}:\*\* ${emojis.coins} ${item.valorString(user, 'coins', tempo)}  ${emojis.gems} ${item.valorString(user, 'gems', tempo)}
 				`)
-			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png')
+			.setFooter(await this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png')
 			.setTimestamp();
 
 		// Envia uma mensagem nova ou edita
@@ -397,8 +399,8 @@ export default class LojaCommand extends Command {
 	}
 
 	async success(msg, user, item, currency, tempo = 7) {
-		const uDB = this.client.data.users.resolveUser(user);
-		uDB.wallet[currency] -= item.valor(user, currency, tempo);
+		const uDB = await this.client.data.users.resolveUser(user);
+		await uDB[currency](`val - ${item.valor(user, currency, tempo)}`);
 
 		const valorG = item.valorString(user, 'gems', tempo);
 		const valorC = item.valorString(user, 'coins', tempo);
@@ -414,7 +416,7 @@ export default class LojaCommand extends Command {
 				\*\*Valor:\*\* ${emojis.coins} ${valorC} • ${emojis.gems} ${valorG}
 			`)
 			.setTimestamp()
-			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
+			.setFooter(await this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
 
 		// Envia uma mensagem nova ou edita
 		let sentMsg;
@@ -448,9 +450,12 @@ export default class LojaCommand extends Command {
 
 	// => handleItens() / => end()
 	async reject(msg, user, item, tempo = 7) {
-		const uDB = this.client.data.users.resolveUser(user);
+		const uDB = await this.client.data.users.resolveUser(user);
 		const valorG = item.valorString(user, 'gems', tempo);
 		const valorC = item.valorString(user, 'coins', tempo);
+
+		const coins = await uDB.coins();
+		const gems = await uDB.gems();
 
 		const embed = new MessageEmbed()
 			.setColor('#FF8484')
@@ -461,10 +466,10 @@ export default class LojaCommand extends Command {
 
 				\*\*Item:\*\* ${item.nome} ${item.temporary ? `(${tempo} dia${tempo > 1 ? 's' : ''})` : ''}
 				\*\*Valor:\*\* ${emojis.coins} ${valorC} • ${emojis.gems} ${valorG}
-				\*\*Faltam:\*\* ${emojis.coins} ${item.valor(user, 'coins', tempo) - uDB.wallet.coins} • ou • ${emojis.gems} ${item.valor(user, 'gems', tempo) - uDB.wallet.gems}
+				\*\*Faltam:\*\* ${emojis.coins} ${item.valor(user, 'coins', tempo) - coins} • ou • ${emojis.gems} ${item.valor(user, 'gems', tempo) - gems}
 			`)
 			.setTimestamp()
-			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
+			.setFooter(await this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
 
 		// Envia uma mensagem nova ou edita
 		let sentMsg;
@@ -510,7 +515,7 @@ export default class LojaCommand extends Command {
 				${err.lineNumber ? `     Linha: ${err.lineNumber}` : ''}
 			`)
 			.setTimestamp()
-			.setFooter(this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
+			.setFooter(await this.wallet(user), 'https://twemoji.maxcdn.com/2/72x72/1f4b0.png');
 
 		// Envia uma mensagem nova ou edita
 		if(msg.author.id === this.client.user.id) {
@@ -528,9 +533,9 @@ export default class LojaCommand extends Command {
 		msg.edit(embed);
 	}
 
-	wallet(user) {
-		const uDB = this.client.data.users.resolveUser(user);
-		return `Carteira: 💵 ${uDB.wallet.coins} • 💎 ${uDB.wallet.gems}`;
+	async wallet(user) {
+		const uDB = await this.client.data.users.resolveUser(user);
+		return `Carteira: 💵 ${await uDB.coins()} • 💎 ${await uDB.gems()}`;
 	}
 
 }
