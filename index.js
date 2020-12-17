@@ -7,7 +7,7 @@ import { readdirSync } from 'fs';
 import { Intents } from 'discord.js';
 import { oneLine } from 'common-tags';
 
-function hora() {
+export function hora() {
 	const dataUTC = new Date(new Date().toUTCString());
 	const dataBR = new Date(dataUTC.getTime() - 10800000);
 	const horaString = `${dataBR.toISOString().slice(11, -1)} `;

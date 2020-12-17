@@ -1,5 +1,6 @@
 import emojis from '../../Assets/JSON/emojis.js';
 import { stripIndents } from 'common-tags';
+
 export default function(client, logChannel, invite) {
 	logChannel.send(`${invite.inviter} criou um convite **${invite.maxAge === 0 ? 'permanente' : 'temporário'}**`, { embed: {
 		color: emojis.successC,
