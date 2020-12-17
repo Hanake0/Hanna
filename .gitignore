@@ -4,4 +4,3 @@
 /.env
 /src/sqlite/sqlite3.db
 /src/sqlite/sqlite3.db-journal
-/TODO

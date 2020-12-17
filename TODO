@@ -1,0 +1,51 @@
+
+Migrar db para SQLite:
+	✔ Implementação básica dos inventários, usuários, etc... @done(20-12-16 18:42) -Hanake
+	✔ Refazer client @done(20-12-16 20:23) -Hanake
+	☐ Consertar comandos quebrados
+		✔ Loja @done(20-12-16 22:48) -Hanake
+		☐ Carteira
+		☐ SetCoins, gems e invites
+		☐ LastMessage
+
+	☐ Importar dados do Firestore @started(20-12-16 22:51) -Hanake
+	☐ Exportar dados para o Firestore
+
+
+Economia:
+	☐ Criar comando para pagar as pessoas
+	☐ Criar trabalhos
+		Trabalhos:
+			☐ Acrescentar trabalhos ao db
+			☐ Acrescentar classes de trabalho
+			☐ Criar mini-games de cada profissão
+			☐ Criar trabalhos especiais pagos pelos ADMs
+
+
+
+Loja:
+	☐ Criar as classes dos itens com descrição e imagens
+	☐ Criar métodos de compra dos itens ( buy() )
+
+
+
+Inventário:
+	☐ Criar as classes dos itens disponíveis na loja
+	☐ Comando para acessar inventário
+	☐ Comando para usar item do inventário
+	☐ Comando para trocar itens com players
+	☐ Comando para vender itens
+
+
+
+Buddy:
+	☐ Adicionar funcionalidade do Buddy no SQLite e Firestore @started(20-12-16 10:24) -Hanake
+	☐ Adicionar comando para ver Buddy
+	☐ Adicionar Peças de roupa de Buddy na loja
+
+
+
+Mensagens Apagadas:
+	☐ Criar "limitedCollection" para cache limitado
+	☐ Criar comando para acessar mensagens apagadas
+		☐ criar versão para staff e para membros
