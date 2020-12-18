@@ -2,8 +2,8 @@ import { CommandoClient } from '../../CommandoV12/src/index.js';
 import { UsersManager } from './managers/usersManager.js';
 import { VIPsManager } from './managers/VIPsManager.js';
 import { ColorsManager } from './managers/colorsManager.js';
-import { FirestoreManager } from '../firestore/base.js';
-import { SQLiteManager } from '../sqlite/base.js';
+import { FirestoreManager } from '../Firestore/base.js';
+import { SQLiteManager } from '../SQLite/base.js';
 import { Collection } from 'discord.js';
 
 export class HannaClient extends CommandoClient {
@@ -109,7 +109,7 @@ export class HannaClient extends CommandoClient {
 			// Configura cada evento para criar os embeds
 			for(const category of Object.values(logCategories)) {
 				for(const [event, id] of Object.entries(category)) {
-					import(`../logEmbeds/${event}.js`).then(({ default: func }) => {
+					import(`../logEmbeds/${event.charAt(0).toLowerCase() + event.slice(1)}.js`).then(({ default: func }) => {
 						const channel = this.channels.cache.get(id);
 						this.on(event, func.bind(null, this, channel));
 					});
