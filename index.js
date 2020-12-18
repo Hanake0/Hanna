@@ -78,11 +78,11 @@ client.registry
 
 
 // Event Handler(Project-A) && erros
-const evtFiles = readdirSync('./Eventos/');
+const evtFiles = readdirSync('./events/');
 console.log(hora(), `Carregando o total de ${evtFiles.length} eventos`);
 evtFiles.forEach(async f => {
 	const eventName = f.split('.')[0];
-	const { default: event } = await import(`./Eventos/${f}`);
+	const { default: event } = await import(`./events/${f}`);
 
 	client.on(eventName, event.bind(null, client));
 });

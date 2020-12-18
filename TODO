@@ -4,15 +4,13 @@ Migrar db para SQLite:
 	✔ Refazer client @done(20-12-16 20:23) -Hanake
 	☐ Consertar comandos quebrados
 		✔ Loja @done(20-12-16 22:48) -Hanake
-		☐ Carteira
-		☐ SetCoins, gems e invites
+		✔ Carteira @done(20-12-18 16:19) -Hanake
+		✔ SetCoins, gems e invites @done(20-12-18 16:16) -Hanake
 		☐ LastMessage
 	✘ Consertar eventos quebrados @cancelled(20-12-17 19:17) -Hanake
 		✔ Logembed de guildmemberAdd @done(20-12-17 19:17) -Hanake
-
 	✔ Importar dados do Firestore @started(20-12-17 17:09) @done(20-12-17 18:37) @lasted(1h28m2s) -Hanake
 	✔ Exportar dados para o Firestore @started(20-12-17 13:56) @done(20-12-17 18:37) @lasted(4h41m5s) -Hanake
-
 
 Economia:
 	☐ Criar comando para pagar as pessoas
@@ -23,6 +21,9 @@ Economia:
 			☐ Criar mini-games de cada profissão
 			☐ Criar trabalhos especiais pagos pelos ADMs
 
+Idéias de Comandos:
+	☐ hrules
+	✘ Mensagem de boas vindas @cancelled(20-12-18 10:21) -King
 
 Logs:
 	☐ channel
@@ -34,12 +35,11 @@ Logs:
 	☐ role
 	☐ userUpdate
 
-
 Loja:
+	✔ Reestruturar sistema de implementação de itens @started(20-12-17 21:39) @done(20-12-17 22:39) @lasted(1h28s) -Hanake
+	✔ Otimizar comando (apagar código reutilizado) @started(20-12-17 21:39) @done(20-12-18 16:08) @lasted(18h29m55s) -Hanake
 	☐ Criar as classes dos itens com descrição e imagens
 	☐ Criar métodos de compra dos itens ( buy() )
-
-
 
 Inventário:
 	☐ Criar as classes dos itens disponíveis na loja
@@ -48,15 +48,11 @@ Inventário:
 	☐ Comando para trocar itens com players
 	☐ Comando para vender itens
 
-
-
 Buddy:
 	✔ Adicionar funcionalidade do Buddy no SQLite e Firestore @started(20-12-16 10:24) @done(20-12-17 18:39) @lasted(1d8h16m) -Hanake
 	☐ Adicionar comando para ver Buddy
 	☐ Adicionar comando para trocar as roupas do Buddy
 	☐ Adicionar Peças de roupa de Buddy na loja
-
-
 
 Mensagens Apagadas:
 	☐ Criar "limitedCollection" para cache limitado

@@ -112,6 +112,15 @@ export class SQLiteManager {
 		return false;
 	}
 
+	async getJob(id, jobName) {
+		const jobs = await this.getJobs(id);
+		for(const job in jobs)
+			if(job.name === jobName) {
+				const { default: jobConstructor } = await import(job._path);
+				return new jobConstructor(job);
+			}
+	}
+
 	async getItem(id, classname) {
 		const itens = await this.getItens(id);
 		for(const item in itens)
@@ -318,6 +327,9 @@ export class SQLiteManager {
 					num INTEGER PRIMARY KEY,
 					id TEXT NOT NULL,
 
+					classname TEXT NOT NULL,
+					_path TEXT NOT NULL,
+					cooldown INTEGER,
 					works INTEGER NOT NULL,
 					wage TEXT NOT NULL,
 					profit INTEGER NOT NULL,
