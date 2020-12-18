@@ -1,6 +1,6 @@
 import { hora } from '../util.js';
-import { wcUser } from '../classes/user.js';
-import { Buddy } from '../classes/buddy.js';
+import { wcUser } from '../Classes/user.js';
+import { Buddy } from '../Classes/buddy.js';
 import sqlite3 from 'sqlite3';
 const { Database } = sqlite3;
 sqlite3.verbose();
