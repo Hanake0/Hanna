@@ -6,7 +6,7 @@ Migrar db para SQLite:
 		✔ Loja @done(20-12-16 22:48) -Hanake
 		✔ Carteira @done(20-12-18 16:19) -Hanake
 		✔ SetCoins, gems e invites @done(20-12-18 16:16) -Hanake
-		☐ LastMessage
+		✔ LastMessage @done(20-12-18 16:59) -Hanake
 	✘ Consertar eventos quebrados @cancelled(20-12-17 19:17) -Hanake
 		✔ Logembed de guildmemberAdd @done(20-12-17 19:17) -Hanake
 	✔ Importar dados do Firestore @started(20-12-17 17:09) @done(20-12-17 18:37) @lasted(1h28m2s) -Hanake

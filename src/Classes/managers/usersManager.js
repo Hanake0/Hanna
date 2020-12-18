@@ -32,7 +32,7 @@ export class UsersManager {
 		}
 
 		await wcUser.messages('val + 1');
-		await this.client.sqlite.updateLastMessage(wcUser.id, message);
+		if(!message.author.bot) await this.client.sqlite.updateLastMessage(wcUser.id, message);
 	}
 
 	// Boolean

@@ -195,7 +195,7 @@ export class SQLiteManager {
 			${message.createdAt.valueOf()},
 			${`'${message.channel.id}'`}
 		)
-		`, [id, message.content || null, message.attachments.first() ? `'${message.attachments.first().url}'` : null]);
+		`, [id, message.content, message.attachments.first() ? message.attachments.first().url : null]);
 	}
 	// ----------------------------------> setters <---------------------------------
 
