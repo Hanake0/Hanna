@@ -17,17 +17,11 @@ export default class AlmondColorLoja extends base {
 	}
 
 	async buy(user, tempo) {
-		let expiringTime;
-		const cor = this.client.data.colors.hasColor(user, this.nome);
+		const cor = await this.client.inventory.getItem(user.id, 'almond');
 
-		if(cor) expiringTime = cor.expiringTime + (86400000 * tempo);
-		else expiringTime = Date.now() + (86400000 * tempo);
+		const expiringTime = (cor ? await cor.expiringTime() : Date.now()) + (86400000 * tempo);
 
-		await this.client.firestore.setupItem(user.id, 'colors', {
-			_type: 'AlmondColor',
-			_path: '../Inventário/Items/Colors/almond.js',
-			_userID: user.id,
-			expiringTime: expiringTime,
-		}, false, true);
+		await this.client.inventory.addItem(user.id, 'almond', { expiringtime: expiringTime })
+			.then(res => { if(res === false) throw new Error('Algo deu errado...');});
 	}
 }

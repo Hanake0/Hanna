@@ -37,6 +37,7 @@ donos.add('348664615175192577');
 donos.add('398852531259965440');
 donos.add('755067822086029424');
 donos.add('780210259284328458');
+donos.add('315277337405161472');
 export const client = new HannaClient({
 	ws: { intents: Intents.ALL },
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
@@ -53,6 +54,7 @@ export const client = new HannaClient({
 		messageDeleteBulk: '779509870579810320',
 		ban: '779509870579810318',
 		channel: '779509870579810323',
+		invites: '779509870972895235',
 	},
 
 	db: db,

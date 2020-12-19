@@ -121,13 +121,11 @@ export class SQLiteManager {
 			}
 	}
 
-	async getItem(id, classname) {
+	async getItem(id, name) {
 		const itens = await this.getItens(id);
 		for(const item in itens)
-			if(item.classname === classname) {
-				const { default: itemConstructor } = await import(item._path);
-				return new itemConstructor(item);
-			}
+			if(item.name === name)
+				return item;
 	}
 
 	// wcUser/false
@@ -175,12 +173,12 @@ export class SQLiteManager {
 	}
 
 	// Promise => undefined ( deve ser usado pela classe UserInventoryManager )
-	async updateItem(id, itemClass, property, value) {
+	async updateItem(id, itemName, property, value) {
 		return await this.run(`
-		UPDATE users
+		UPDATE itens
 		SET ${property} = ?
-		WHERE id = ? AND class = ?
-		`, [value, id, itemClass]);
+		WHERE id = ? AND name = ?
+		`, [value, id, itemName]);
 	}
 
 	// Promise => undefined
@@ -282,11 +280,10 @@ export class SQLiteManager {
 					num INTEGER PRIMARY KEY,
 					id TEXT NOT NULL,
 			
-					classname TEXT NOT NULL,
-					quantity INTEGER NOT NULL,
+					name TEXT NOT NULL,
+					quantity INTEGER,
 					expiringtime INTEGER NOT NULL,
 					timeout INTEGER,
-					_path TEXT NOT NULL,
 					id1 TEXT,
 					id2 TEXT,
 			

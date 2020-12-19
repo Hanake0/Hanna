@@ -27,16 +27,8 @@ export default class LojaCommand extends Command {
 
 		this.itens = [];
 
-		client.once('ready', async () => {
-			const cArray = readdirSync('./src/shop/itens/');
-
-			cArray.forEach(async iName => {
-				const { default: itemConstructor } = await import(`../../src/shop/itens/${iName}`);
-				const item = new itemConstructor(client);
-
-				this.itens.push(item);
-			});
-		});
+		if(client.readyAt) this.importItens();
+		else client.once('ready', () => this.importItens());
 	}
 
 	async run(msg) {
@@ -44,7 +36,18 @@ export default class LojaCommand extends Command {
 	}
 
 	// -----------------------------------> base <-----------------------------------
-	async sendEmbed(msg, user, data = {}, emojis = [], mention = hanake) {
+	async importItens() {
+		const cArray = readdirSync('./src/shop/itens/');
+
+		cArray.forEach(async iName => {
+			const { default: itemConstructor } = await import(`../../src/shop/itens/${iName}`);
+			const item = new itemConstructor(this.client);
+
+			this.itens.push(item);
+		});
+	}
+
+	async sendEmbed(msg, user, data = {}, emojis = [], mention = '') {
 		const embed = new MessageEmbed()
 			.setColor(data.color)
 			.setAuthor(data.author, data.authorURL)
@@ -278,7 +281,7 @@ export default class LojaCommand extends Command {
 		if(reaction) {
 			const name = reaction._emoji.name || reaction._emoji.id;
 
-			if(name === '⤴️') return await this.sendItens(sentMsg, item.type, user, item.position > 2 ? Math.floor(item.position / 3) * 3 : 0);
+			if(name === '⤴️') return await this.sendItens(sentMsg, user, item.category, item.position > 2 ? Math.floor(item.position / 3) * 3 : 0);
 		}
 	}
 
@@ -303,11 +306,12 @@ export default class LojaCommand extends Command {
 		if(reaction) {
 			const name = reaction._emoji.name || reaction._emoji.id;
 
-			if(name === '⤴️') return await this.handleItens(sentMsg, item.type, user, item.position > 2 ? Math.floor(item.position / 3) * 3 : 0);
+			if(name === '⤴️') return await this.sendItens(sentMsg, user, item.category, item.position > 2 ? Math.floor(item.position / 3) * 3 : 0);
 		}
 	}
 
 	async error(msg, user, item, err, tempo) {
+		console.log(err);
 		return await this.sendEmbed(msg, user, {
 			color: '#FF8484',
 			author: 'Cancelado',

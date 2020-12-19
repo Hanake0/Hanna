@@ -79,7 +79,7 @@ export class FirestoreManager {
 			const data = snap.data().data;
 			for (const item in data) {
 				await this.client.sqlite.importThing('itens', data);
-				const itemClass = await this.client.sqlite.getItem(item.id, item.classname);
+				const itemClass = await this.client.inventoryManager.getItem(item.id, item.name);
 				await this.setTimeout(itemClass);
 			}
 		});
@@ -122,7 +122,8 @@ export class FirestoreManager {
 			const remTime = expiringtime - Date.now();
 			if(remTime > 0 && remTime < 86400000) {
 				timeout = this.client.setTimeout(item.expire.bind(item), remTime);
-				await item.timeout(timeout[Symbol.toPrimitive]);
+				const num = timeout[Symbol.toPrimitive]();
+				await item.timeout(num);
 			} else if(remTime <= 0)
 				await item.expire();
 		}

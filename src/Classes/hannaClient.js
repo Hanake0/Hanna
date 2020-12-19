@@ -5,6 +5,7 @@ import { ColorsManager } from './managers/colorsManager.js';
 import { FirestoreManager } from '../firestore/base.js';
 import { SQLiteManager } from '../sqlite/base.js';
 import { Collection } from 'discord.js';
+import { InventoryManager } from './managers/inventoryManager.js';
 
 export class HannaClient extends CommandoClient {
 	constructor(options) {
@@ -18,6 +19,8 @@ export class HannaClient extends CommandoClient {
 			invites: new Collection(),
 			// deletedMessages: new LimitedCollection(200),
 		};
+
+		this.inventory = new InventoryManager(this);
 
 		this.firestore = new FirestoreManager(this, options.db);
 

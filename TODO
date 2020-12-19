@@ -2,7 +2,7 @@
 Migrar db para SQLite:
 	✔ Implementação básica dos inventários, usuários, etc... @done(20-12-16 18:42) -Hanake
 	✔ Refazer client @done(20-12-16 20:23) -Hanake
-	☐ Consertar comandos quebrados
+	✔ Consertar comandos quebrados @done(20-12-18 17:08) -Hanake
 		✔ Loja @done(20-12-16 22:48) -Hanake
 		✔ Carteira @done(20-12-18 16:19) -Hanake
 		✔ SetCoins, gems e invites @done(20-12-18 16:16) -Hanake
@@ -42,6 +42,7 @@ Loja:
 	☐ Criar métodos de compra dos itens ( buy() )
 
 Inventário:
+	☐ Criar métodos de acesso ao inventário
 	☐ Criar as classes dos itens disponíveis na loja
 	☐ Comando para acessar inventário
 	☐ Comando para usar item do inventário

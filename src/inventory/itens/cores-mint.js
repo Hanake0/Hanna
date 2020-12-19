@@ -1,18 +1,17 @@
 import { TemporaryItem } from '../temporaryItem.js';
 
-export default class AlmondColor extends TemporaryItem {
+export default class MintColor extends TemporaryItem {
 	constructor(client, infos) {
 		super(client, {
 			_userID: infos._userID,
-			nome: 'Cor Amêndoa',
-			aliases: ['Amêndoa', 'amendoa', 'amêndoa', 'almond', '740952074069606520'],
+			nome: 'Cor Menta',
+			aliases: ['Menta', 'menta', 'mint', '740951321686966374'],
 			type: 'colors',
-			description: 'Poderá usar a cor <@&740952074069606520> no servidor,\n através do comando `hcor`.',
-			defaultTime: 604800000,
+			description: 'Poderá usar a cor <@&740951321686966374> no servidor,\n através do comando `hcor`.',
 			usable: false,
 		});
 
-		this.roleID = '740952074069606520';
+		this.roleID = '740951321686966374';
 
 		this.expiringTime = infos.expiringTime;
 
@@ -43,8 +42,8 @@ export default class AlmondColor extends TemporaryItem {
 
 	toFirestore() {
 		return {
-			_type: 'AlmondColor',
-			_path: '../Inventário/Items/Colors/almond.js',
+			_type: 'MintColor',
+			_path: '../Inventário/Items/Colors/mint.js',
 			_userID: this._userID,
 			expiringTime: this.expiringTime,
 		};
