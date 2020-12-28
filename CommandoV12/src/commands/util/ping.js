@@ -1,6 +1,6 @@
 import { Command } from '../base.js';
 import Discord from 'discord.js';
-import emojis from '../../../../Assets/JSON/emojis.js';
+import emojis from '../../../../assets/JSON/emojis.js';
 
 export default class PingCommand extends Command {
 	constructor(client) {

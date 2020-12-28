@@ -2,7 +2,7 @@ import { escapeMarkdown } from 'discord.js';
 import { oneLine, stripIndents } from 'common-tags';
 import ArgumentUnionType from '../types/union.js';
 import Discord from 'discord.js';
-import emojis from '../../../Assets/JSON/emojis.js';
+import emojis from '../../../assets/JSON/emojis.js';
 
 /** A fancy argument */
 export class Argument {

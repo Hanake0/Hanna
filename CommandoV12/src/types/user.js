@@ -2,7 +2,7 @@
 import { ArgumentType } from './base.js';
 import { disambiguation } from '../util.js';
 import { escapeMarkdown } from 'discord.js';
-import emojis from '../../../Assets/JSON/emojis.js';
+import emojis from '../../../assets/JSON/emojis.js';
 
 export default class UserArgumentType extends ArgumentType {
 	constructor(client) {

@@ -54,7 +54,7 @@ export const client = new HannaClient({
 		messageDeleteBulk: '779509870579810320',
 		ban: '779509870579810318',
 		channel: '779509870579810323',
-		invites: '779509870972895235',
+		invite: '779509870579810319',
 	},
 
 	db: db,
@@ -71,6 +71,7 @@ client.registry
 		['utilidades', 'Utilidades'],
 		['interação', 'Interação entre Membros'],
 		['singleplayer', 'Jogos Single Player'],
+		['multiplayer', 'Jogos Multiplayer'],
 		['imgs-ia', 'Imagens Geradas com Inteligência Artificial'],
 		['p&i', 'Perfil & Inventário'],
 		['adm', 'Reservados á Staff'],

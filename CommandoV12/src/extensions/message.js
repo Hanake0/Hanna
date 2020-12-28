@@ -3,7 +3,7 @@ import { oneLine } from 'common-tags';
 import { Command } from '../commands/base.js';
 import { FriendlyError } from '../errors/friendly.js';
 import { CommandFormatError } from '../errors/command-format.js';
-import emojis from '../../../Assets/JSON/emojis.js';
+import emojis from '../../../assets/JSON/emojis.js';
 
 export const CommandoMessage = Structures.extend('Message', Message => {
 	/**
