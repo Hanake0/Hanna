@@ -26,9 +26,9 @@ export default class ShopItem {
 		this.emoji = infos.emoji;
 	}
 
-	showName(user, til = false) {
+	showName(user, til = false, emoji = true) {
 		return stripIndents`
-			${this.canBuy(user) === true ? '' : `🚫${til ? '~~' : this.emoji}`}${this.nome}${this.canBuy(user) === true ? '' : `🚫${til ? '~~' : ''}`}`;
+			${this.canBuy(user) === true ? '' : `🚫${til ? '~~' : ''}`}${emoji ? this.emoji : ''}${this.nome}${this.canBuy(user) === true ? '' : `🚫${til ? '~~' : ''}`}`;
 	}
 
 	valor(user, currency = 'coins', tempo = 7) {

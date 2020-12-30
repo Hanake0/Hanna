@@ -541,7 +541,7 @@ export class CommandoRegistry {
 	 * @return {string} Fully-resolved path to the corresponding command file
 	 */
 	resolveCommandPath(group, memberName) {
-		return path.join(this.commandsPath, group, `${memberName}.js`);
+		return `${this.commandsPath}/${group}/${memberName}.js`;
 	}
 }
 

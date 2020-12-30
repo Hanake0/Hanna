@@ -2,7 +2,7 @@
 import { stripIndents, oneLine } from 'common-tags';
 import { Command } from '../base.js';
 import { disambiguation } from '../../util.js';
-import emojis from '../../../../Assets/JSON/emojis.js';
+import emojis from '../../../../assets/JSON/emojis.js';
 
 export default class AjudaCommand extends Command {
 	constructor(client) {

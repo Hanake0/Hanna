@@ -1,5 +1,5 @@
 import { oneLine } from 'common-tags';
-import emojis from '../../../../Assets/JSON/emojis.js';
+import emojis from '../../../../assets/JSON/emojis.js';
 import { Command } from '../base.js';
 
 export default class DisableCommandCommand extends Command {

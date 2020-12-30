@@ -2,36 +2,39 @@ import { Command } from '../../CommandoV12/src/index.js';
 import { readdirSync } from 'fs';
 import { MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { coin, gem } from '../../assets/JSON/emojis.js';
-const emojiss = {
-	coins: `<:hcoin:${coin}>`,
-	gems: `<:hgem:${gem}>`,
-};
-const hanake = '<@!380512056413257729>';
-// const coin = `<:hcoin:${coin}>`;
-// const gem = `<:hgem:${gem}>`;
 
-export default class LojaCommand extends Command {
+export default class InventarioCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'loja',
-			aliases: ['comprar', 'buy'],
+			name: 'inventário',
+			aliases: ['itens', 'inventory'],
 			group: 'p&i',
-			memberName: 'loja',
-			description: 'Abre a loja',
+			memberName: 'inventário',
+			description: 'Mostra os itens que alguém tem',
+			blackListed: ['698678688153206915'],
 			throttling: {
 				usages: 2,
 				duration: 10,
 			},
+			args: [
+				{
+					key: 'usuário',
+					prompt: 'de quem?',
+					type: 'user',
+					default: msg => msg.author,
+					bot: false,
+				},
+				{
+					key: 'item',
+					prompt: 'quer ver que item?',
+					type: 'string',
+					default: '',
+				},
+			],
 		});
-
-		this.itens = [];
-
-		if(client.readyAt) this.importItens();
-		else client.once('ready', () => this.importItens());
 	}
 
-	async run(msg) {
+	async run(msg, { usuário, item }) {
 		return await this.sendCategories(msg, msg.author).then(() => { return null; });
 	}
 
@@ -111,9 +114,9 @@ export default class LojaCommand extends Command {
 	async sendCategories(msg, user) {
 		const emojis = ['782746733096599582', '782746962557403176', '782747106146385960'];
 		const fields = [
-			{ name: '<:misc:782746733096599582>Miscelânea', value: 'Itens Variados', inline: true },
-			{	name: '<:colors:782746962557403176>Cores', value: 'Cores para seu nick', inline: true },
-			{	name: '<:VIPs:782747106146385960>VIPs',	value: 'Cargos com várias vantagens', inline: true },
+			{ name: 'Miscelânea', value: 'Itens Variados', inline: true },
+			{	name: 'Cores', value: 'Cores para seu nick', inline: true },
+			{	name: 'VIPs',	value: 'Cargos com várias vantagens', inline: true },
 		];
 
 		const { reaction, sentMsg } = await this.sendEmbed(msg, user, {
@@ -145,7 +148,7 @@ export default class LojaCommand extends Command {
 		for(const item of itensIndex) {
 			emojis.push(item.emoji);
 			fields.push({
-				name: item.showName(user, true, true),
+				name: item.showName(user, true),
 				value: stripIndents`
 					\*\*${item.temporary ? 'Temporário' : 'Permanente'}\*\*
 					7 dias:
@@ -187,8 +190,8 @@ export default class LojaCommand extends Command {
 			if(item.canBuy(user)) emojis = ['1️⃣', '3️⃣', '7️⃣'];
 			fields = [
 				{ name: '1 dia     ', value: `${emojiss.coins} ${item.valorString(user, 'coins', 1)}\n${emojiss.gems} ${item.valorString(user, 'gems', 1)}`, inline: true },
-				{	name: '3 dias    ', value: `${emojiss.coins} ${item.valorString(user, 'coins', 3)}\n${emojiss.gems} ${item.valorString(user, 'gems', 3)}`, inline: true },
-				{	name: '7 dias    ',	value: `${emojiss.coins} ${item.valorString(user, 'coins', 7)}\n${emojiss.gems} ${item.valorString(user, 'gems', 7)}`, inline: true },
+				{	name: '3 dia     ', value: `${emojiss.coins} ${item.valorString(user, 'coins', 3)}\n${emojiss.gems} ${item.valorString(user, 'gems', 3)}`, inline: true },
+				{	name: '7 dia     ',	value: `${emojiss.coins} ${item.valorString(user, 'coins', 7)}\n${emojiss.gems} ${item.valorString(user, 'gems', 7)}`, inline: true },
 			];
 		} else {
 			if(item.canBuy(user)) emojis = ['782771102102847528'];
@@ -202,7 +205,7 @@ export default class LojaCommand extends Command {
 
 		const { reaction, sentMsg } = await this.sendEmbed(msg, user, {
 			color: item.color,
-			author: `${item.showName(user, false, false)}${item.temporary ? '                                            ' : '                        '} (${item.position + 1}/${itensCat.length})`,
+			author: `${item.showName(user)}${item.temporary ? '                                            ' : '                        '} (${item.position + 1}/${itensCat.length})`,
 			description: item.description,
 			// thumb: item.icon,
 			authorURL: item.icon,
@@ -223,129 +226,4 @@ export default class LojaCommand extends Command {
 		}
 	}
 	// --------------------------------> Navegação <---------------------------------
-
-	// ---------------------------> Compra && Confirmação <--------------------------
-	async confirm(msg, user, item, tempo = 7) {
-		const uDB = await this.client.data.users.resolveUser(user);
-		const [gems, coins] = [await uDB.gems(), await uDB.coins()];
-		if(gems < item.valor(user, 'gems', tempo) && coins < item.valor(user, 'coins', tempo))
-			return await this.reject(msg, user, item, tempo);
-
-		let emojis = [];
-		if(gems >= item.valor(user, 'gems', tempo))	emojis = ['750840705269891112', ...emojis];
-		if(coins >= item.valor(user, 'coins', tempo)) emojis = ['750754664026472549', ...emojis];
-		emojis = ['⤴️', ...emojis];
-
-		const { reaction, sentMsg } = await this.sendEmbed(msg, user, {
-			color: '#FFFD84',
-			author: 'Tem certeza que deseja comprar ?',
-			authorURL: 'https://garticbot.gg/images/icons/alert.png',
-			thumb: item.icon,
-			description: stripIndents`
-			\*\*Nome:\*\* ${item.nome}
-			${item.temporary ? `\n**Validade:** ${tempo} dia${tempo > 1 ? 's' : ''}` : ''}
-			\*\*Valor${item.temporary ? `(${tempo} dia${tempo > 1 ? 's' : ''})` : ''}:\*\*
-				${emojiss.coins} ${item.valorString(user, 'coins', tempo)}  ${emojiss.gems} ${item.valorString(user, 'gems', tempo)}
-		` }, emojis);
-
-		if(reaction) {
-			const name = reaction._emoji.name || reaction._emoji.id;
-
-			if(name === 'hcoin' || name === 'hgem')
-				return await item.buy(user, tempo)
-					.then(async () => await this.success(sentMsg, user, item, `${name.slice(1)}s`, tempo))
-					.catch(async err => await this.error(sentMsg, user, item, err, tempo));
-			else if(name === '⤴️') return await this.sendItens(sentMsg, user, item.category, item.position > 2 ? Math.floor(item.position / 3) * 3 : 0);
-		}
-	}
-	// ---------------------------> Compra && Confirmação <--------------------------
-
-	// ----------------------------------> Assets <----------------------------------
-	async success(msg, user, item, currency, tempo = 7) {
-		const uDB = await this.client.data.users.resolveUser(user);
-		await uDB[currency](`val - ${item.valor(user, currency, tempo)}`);
-
-		const [valorG, valorC] = [item.valorString(user, 'gems', tempo), item.valorString(user, 'coins', tempo)];
-		const { reaction, sentMsg } = await this.sendEmbed(msg, user, {
-			color: '#91FF84',
-			author: 'Concluído',
-			authorURL: 'https://garticbot.gg/images/icons/hit.png',
-			thumb: item.icon,
-			description: stripIndents`
-			O item ${item.nome}${item.temporary ? `(${tempo} dia${tempo > 1 ? 's' : ''})` : ''},\n foi comprado com sucesso !
-
-			\*\*Item:\*\* ${item.nome} ${item.temporary ? `(${tempo} dia${tempo > 1 ? 's' : ''})` : ''}
-			\*\*Valor:\*\* ${emojiss.coins} ${valorC} • ${emojiss.gems} ${valorG}
-		` }, ['⤴️']);
-
-		if(reaction) {
-			const name = reaction._emoji.name || reaction._emoji.id;
-
-			if(name === '⤴️') return await this.sendItens(sentMsg, user, item.category, item.position > 2 ? Math.floor(item.position / 3) * 3 : 0);
-		}
-	}
-
-	async reject(msg, user, item, tempo = 7) {
-		const uDB = await this.client.data.users.resolveUser(user);
-		const [valorG, valorC] = [item.valorString(user, 'gems', tempo), item.valorString(user, 'coins', tempo)];
-		const [gems, coins] = [await uDB.gems(), await uDB.coins()];
-
-		const { reaction, sentMsg } = await this.sendEmbed(msg, user, {
-			color: '#FF8484',
-			author: 'Cancelado',
-			authorURL: 'https://garticbot.gg/images/icons/error.png',
-			thumb: item.icon,
-			description: stripIndents`
-			Infelizmente você não tem coins,\nnem gems suficientes para\ncomprar ${item.nome}${item.temporary ? ` por ${tempo} dia${tempo > 1 ? 's' : ''}` : ''}
-
-			\*\*Item:\*\* ${item.nome} ${item.temporary ? `(${tempo} dia${tempo > 1 ? 's' : ''})` : ''}
-			\*\*Valor:\*\* ${emojiss.coins} ${valorC} • ${emojiss.gems} ${valorG}
-			\*\*Faltam:\*\* ${emojiss.coins} ${item.valor(user, 'coins', tempo) - coins} • ou • ${emojiss.gems} ${item.valor(user, 'gems', tempo) - gems}
-		` }, ['⤴️']);
-
-		if(reaction) {
-			const name = reaction._emoji.name || reaction._emoji.id;
-
-			if(name === '⤴️') return await this.sendItens(sentMsg, user, item.category, item.position > 2 ? Math.floor(item.position / 3) * 3 : 0);
-		}
-	}
-
-	async error(msg, user, item, err, tempo) {
-		console.log(err);
-		return await this.sendEmbed(msg, user, {
-			color: '#FF8484',
-			author: 'Cancelado',
-			authorURL: 'https://garticbot.gg/images/icons/error.png',
-			thumb: item.icon,
-			description: stripIndents`
-			Algo deu errado durante a compra desse item.
-
-			\*\*Item:\*\* ${item.nome} ${item.temporary ? `(${tempo} dia${tempo > 1 ? 's' : ''})` : ''}
-			\*\*Erro:\*\* ${err.name}: \`${err.message}\`
-			${err.fileName ? `     Arquivo: ${err.fileName}` : ''}
-			${err.lineNumber ? `     Linha: ${err.lineNumber}` : ''}
-		` }, undefined, hanake);
-	}
-
-	end(msg) {
-		const embed = msg.embeds[0];
-		return this.sendEmbed(msg, msg.author, {
-			color: embed.color,
-			author: embed.author.name,
-			authorURL: embed.author.iconURL,
-			image: embed.image ? embed.image.url : null,
-			description: embed.description,
-			thumb: msg.embed.thumbnail,
-			fields: embed.fields,
-			footer: 'Tempo esgotado',
-			footerURL: 'https://garticbot.gg/images/icons/time.png',
-		});
-	}
-
-	async wallet(user) {
-		const uDB = await this.client.data.users.resolveUser(user);
-		return `Carteira: 💵 ${await uDB.coins()} • 💎 ${await uDB.gems()}`;
-	}
-	// ----------------------------------> Assets <----------------------------------
-
 }

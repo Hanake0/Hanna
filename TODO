@@ -12,6 +12,12 @@ Migrar db para SQLite:
 	✔ Importar dados do Firestore @started(20-12-17 17:09) @done(20-12-17 18:37) @lasted(1h28m2s) -Hanake
 	✔ Exportar dados para o Firestore @started(20-12-17 13:56) @done(20-12-17 18:37) @lasted(4h41m5s) -Hanake
 
+Problemas:
+	☐ itens não estão sendo importados corretamente do Firestore
+	✔ Loja => Tempo dos itens temporários não está somando @started(20-12-20 13:23) @done(20-12-20 13:40) @lasted(17m57s) -Hanake
+	✔ Loja => dia(s) @started(20-12-20 13:41) @done(20-12-20 13:42) @lasted(1m41s) -Hanake
+	✔ Comando de reload não funciona @started(20-12-21 17:41) @done(20-12-21 18:21) @lasted(40m47s) -Hanake
+
 Economia:
 	☐ Criar comando para pagar as pessoas
 	☐ Criar trabalhos
@@ -26,6 +32,8 @@ Idéias de Comandos:
 	✘ Mensagem de boas vindas @cancelled(20-12-18 10:21) -King
 
 Logs:
+	Resolver erros:
+		✔ logchannel = undefined @started(20-12-20 16:27) @done(20-12-20 16:46) @lasted(19m12s) -Hanake
 	☐ channel
 	☐ emoji
 	☐ ban
@@ -42,7 +50,8 @@ Loja:
 	☐ Criar métodos de compra dos itens ( buy() )
 
 Inventário:
-	☐ Criar métodos de acesso ao inventário
+	✔ Criar métodos de acesso ao inventário @done(20-12-19 18:56) -Hanake & Jonas
+		☐ addItem() => adicionar ocasião pra item temporário ou item já existente
 	☐ Criar as classes dos itens disponíveis na loja
 	☐ Comando para acessar inventário
 	☐ Comando para usar item do inventário

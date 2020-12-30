@@ -3,9 +3,7 @@ import { escapeMarkdown } from 'discord.js';
 import { oneLine, stripIndents } from 'common-tags';
 import { ArgumentCollector } from './collector.js';
 import { permissions } from '../util.js'
-import emojis from '../../../Assets/JSON/emojis.js';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import emojis from '../../../assets/JSON/emojis.js';
 
 /** A command that can be run in a client */
 export class Command {
@@ -464,26 +462,19 @@ export class Command {
 	/**
 	 * Reloads the command
 	 */
-	reload() {
+	async reload() {
 		let cmdPath, cached, newCmd;
 		try {
 			cmdPath = this.client.registry.resolveCommandPath(this.groupID, this.memberName);
-			cached = require.cache[cmdPath];
-			delete require.cache[cmdPath];
-			newCmd = require(cmdPath);
+			newCmd = await import(`../../../${cmdPath}`);
 		} catch(err) {
-			if(cached) require.cache[cmdPath] = cached;
 			try {
-				cmdPath = path.join(__dirname, this.groupID, `${this.memberName}.js`);
-				cached = require.cache[cmdPath];
-				delete require.cache[cmdPath];
-				newCmd = require(cmdPath);
+				cmdPath = path.join('./',this.groupID, `${this.memberName}.js`);
+				newCmd = await import(`./${this.groupID}/${this.memberName}.js`);
 			} catch(err2) {
-				if(cached) require.cache[cmdPath] = cached;
 				if(err2.message.includes('Cannot find module')) throw err; else throw err2;
 			}
 		}
-
 		this.client.registry.reregisterCommand(newCmd, this);
 	}
 
@@ -491,9 +482,6 @@ export class Command {
 	 * Unloads the command
 	 */
 	unload() {
-		const cmdPath = this.client.registry.resolveCommandPath(this.groupID, this.memberName);
-		if(!require.cache[cmdPath]) throw new Error('Command cannot be unloaded.');
-		delete require.cache[cmdPath];
 		this.client.registry.unregisterCommand(this);
 	}
 

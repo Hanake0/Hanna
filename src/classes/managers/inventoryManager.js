@@ -35,7 +35,8 @@ export class InventoryManager {
 		const db = await this.client.sqlite.getItem(id, item.nome);
 		if(!db) return null;
 
-		return new item.constructor(db);
+		console.log(db);
+		return new item.constructor(this.client, db);
 	}
 
 	async addItem(id, alias, data = {}) {

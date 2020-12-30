@@ -2,7 +2,7 @@ import emojis from '../../Assets/JSON/emojis.js';
 import { stripIndents } from 'common-tags';
 
 export default function(client, logChannel, invite) {
-	const convite = client.invitesData.get(invite.code);
+	const convite = client.data.invites.get(invite.code);
 
 	logChannel.send({ embed: {
 		color: emojis.failC,
@@ -19,4 +19,6 @@ export default function(client, logChannel, invite) {
 			text: convite.maxAge != 0 ? 'Válido até: ' : 'Criado:  ',
 		},
 	} });
+
+	client.data.invites.delete(invite.code);
 }

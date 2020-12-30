@@ -123,8 +123,8 @@ export class SQLiteManager {
 
 	async getItem(id, name) {
 		const itens = await this.getItens(id);
-		for(const item in itens)
-			if(item.name === name)
+		for(const item of itens)
+			if(item.name == name)
 				return item;
 	}
 

@@ -19,7 +19,8 @@ export default class AlmondColorLoja extends base {
 	async buy(user, tempo) {
 		const cor = await this.client.inventory.getItem(user.id, 'almond');
 
-		const expiringTime = (cor ? await cor.expiringTime() : Date.now()) + (86400000 * tempo);
+		console.log(cor);
+		const expiringTime = (cor ? await cor.expiringtime() : Date.now()) + (86400000 * tempo);
 
 		await this.client.inventory.addItem(user.id, 'almond', { expiringtime: expiringTime })
 			.then(res => { if(res === false) throw new Error('Algo deu errado...');});
