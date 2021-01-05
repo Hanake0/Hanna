@@ -445,8 +445,6 @@ export default class BatalhaNavalCommand extends Command {
 			{ max: 1, time: 60000, errors: ['time'] })
 		const msg = coll.first();
 
-		console.log(posRegex.exec(msg.content));
-
 		const pos = posRegex.exec(msg.content);
 
 		let x, y;
@@ -455,7 +453,8 @@ export default class BatalhaNavalCommand extends Command {
 		} else {
 			y = this.números[pos[2].toUpperCase()]; x = Number(pos[1]);
 		}
-		const rotated = ['sim', 's', 'yes'].includes(pos[3].toLowerCase()) ? true : false;
+		let rotated = false;
+		if(acceptRotated) rotated = ['sim', 's', 'yes'].includes(pos[3].toLowerCase()) ? true : false;
 
 		return { x, y, rotated };
 	}
@@ -463,10 +462,8 @@ export default class BatalhaNavalCommand extends Command {
 	// Faz a conexão entre dois canais
 	async setListener(tUser, tChannel, lChannel) {
 		do {
-			console.log(this.client.games.get(tChannel.id).name);
-			const coll = await tChannel.awaitMessages(m => m.author.id === tUser.id);
+			const coll = await tChannel.awaitMessages(m => m.author.id === tUser.id, { max: 1 });
 			const msg = coll.first();
-			console.log(msg);
 
 			if (this.client.games.get(tChannel.id).name === 'Batalha-naval') lChannel.send({embed: {
 				author: { name: tUser.tag, url: tUser.avatarURL() },
