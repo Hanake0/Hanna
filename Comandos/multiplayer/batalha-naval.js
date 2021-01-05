@@ -80,16 +80,9 @@ export default class BatalhaNavalCommand extends Command {
 			await this.sendTurn(usuário, msg.author, authorData);
 		} while(!this.verifyWinner(authorData, userData));
 
-		const canvas = Canvas.createCanvas(550, 550);
-		const ctx = canvas.getContext('2d');
-
-		const attachment = new MessageAttachment(canvas.toBuffer(), 'canvas.png');
-		await this.sendEmbed(msg, msg.author, {
-			author: 'Batalha Naval',
-			authorURL: 'https://twemoji.maxcdn.com/2/72x72/2693.png',
-			attachment: attachment,
-			image: 'attachment://canvas.png',
-		})
+		const winner = this.verifyWinner(authorData, userData) === 'author' ? msg.author : usuário;
+		authorCh.send(`${winner} ganhou a partida, parabéns`);
+		usuárioCh.send(`${winner} ganhou a partida, parabéns`);
 
 		this.client.games.delete(authorCh.id);
 		this.client.games.delete(sentMsg.channel.id);
@@ -98,13 +91,13 @@ export default class BatalhaNavalCommand extends Command {
 
 	// -----------------------------------> dados <-----------------------------------
 	verifyWinner(authorData, userData) {
-		const authorM = this.totalUsed(authorData, 'valuesU');
+		const authorM = this.totalUsed(authorData, 'values');
 		const authorU = this.totalUsed(authorData, 'valuesU');
-		if(authorU >= authorM) return 'author';
+		if(authorM >= authorU) return 'author';
 
 		const userM = this.totalUsed(userData, 'values');
-		const userU = this.totalUsed(userData, 'values');
-		if (userU >= userM) return 'user';
+		const userU = this.totalUsed(userData, 'valuesU');
+		if (userM >= userU) return 'user';
 	}
 
 	totalUsed(data, valueName) {
