@@ -67,12 +67,17 @@ export default class BatalhaNavalCommand extends Command {
 		} else return authorCh.send(`${usuário} não respondeu a tempo`);
 
 		// Posiciona os barcos e inicia o chat
-		const authorData = await this.positionShips(msg.author);
-		const userData = 'a'; //await this.positionShips(usuário);
+		const promises = [];
+		promises.push(this.positionShips(msg.author));
+		promises.push(this.positionShips(usuário));
+
+		const [authorData, userData] = await Promise.all(promises);
 
 		// Faz os turnos até que alguém ganhe
 		do {
-
+			await this.sendTurn(msg.author, usuário, userData);
+			if(this.verifyWinner(authorData, userData)) break;
+			await this.sendTurn(usuário, msg.author, authorData);
 		} while(!this.verifyWinner(authorData, userData));
 
 		const canvas = Canvas.createCanvas(550, 550);
