@@ -395,7 +395,7 @@ export default class BatalhaNavalCommand extends Command {
 
 		// Espera o target enviar uma mensagem com uma posição válida
 		let { x, y } = await this.awaitPosition(tUser);
-		while (!data.values[x][y]) {
+		while (data.values[x][y]) {
 			tUser.send('Posição já usada');
 			const newPos = await this.awaitPosition(tUser);
 			x = newPos.x; y = newPos.y;
@@ -466,7 +466,7 @@ export default class BatalhaNavalCommand extends Command {
 			const msg = coll.first();
 
 			if (this.client.games.get(tChannel.id).name === 'Batalha-naval') lChannel.send({embed: {
-				author: { name: tUser.tag, url: tUser.avatarURL() },
+				author: { name: tUser.tag, icon_url: tUser.avatarURL() },
 				description: msg.content,
 				image: msg.attachments.first() ? { url: msg.attachments.first().url } : undefined,
 			}});
