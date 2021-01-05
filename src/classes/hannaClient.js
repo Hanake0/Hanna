@@ -86,7 +86,7 @@ export class HannaClient extends CommandoClient {
 	setLogEmbeds(logChannels) {
 		if(logChannels) {
 			const logCategories = {
-				channel: { channelCreate: null, channelDelete: null, ChannelUpdate: null },
+				channel: { channelCreate: null, channelDelete: null, channelUpdate: null },
 				emoji: { emojiCreate: null, emojiDelete: null, emojiUpdate: null },
 				ban: { guildBanAdd: null, guildBanRemove: null },
 				joinLeave: { guildMemberAdd: null, guildMemberRemove: null },

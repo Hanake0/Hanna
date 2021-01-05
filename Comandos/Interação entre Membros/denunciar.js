@@ -1,6 +1,6 @@
 import { Command } from '../../CommandoV12/src/index.js';
 import Discord from 'discord.js';
-import emojis from '../../Assets/JSON/emojis.js';
+import emojis from '../../assets/JSON/emojis.js';
 
 export default class DenunciarCommand extends Command {
   constructor(client) {

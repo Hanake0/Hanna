@@ -1,6 +1,6 @@
 import { Command } from '../../CommandoV12/src/index.js';
-import emojis from '../../Assets/JSON/emojis.js';
-import catálogo from '../../Assets/JSON/catálogo.js';
+import emojis from '../../assets/JSON/emojis.js';
+import catálogo from '../../assets/JSON/catálogo.js';
 
 export default class SelecionarCorCommand extends Command {
 	constructor(client) {

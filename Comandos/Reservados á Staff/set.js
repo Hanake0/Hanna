@@ -1,5 +1,5 @@
 import { Command } from '../../CommandoV12/src/index.js';
-import emojis from '../../Assets/JSON/emojis.js';
+import emojis from '../../assets/JSON/emojis.js';
 
 export default class SetCoinsCommand extends Command {
 	constructor(client) {

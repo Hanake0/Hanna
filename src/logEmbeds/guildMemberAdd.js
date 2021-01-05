@@ -1,4 +1,4 @@
-import emojis from '../../Assets/JSON/emojis.js';
+import emojis from '../../assets/JSON/emojis.js';
 import { stripIndents } from 'common-tags';
 
 export default async function(client, logChannel, member) {

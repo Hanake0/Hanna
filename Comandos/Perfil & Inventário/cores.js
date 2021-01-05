@@ -1,6 +1,6 @@
 import { Command } from '../../CommandoV12/src/index.js';
 import Discord from 'discord.js';
-import catálogo from '../../Assets/JSON/catálogo.js';
+import catálogo from '../../assets/JSON/catálogo.js';
 
 export default  class CarteiraCommand extends Command {
 	constructor(client) {

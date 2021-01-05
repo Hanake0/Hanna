@@ -2,7 +2,7 @@ import { Command } from '../../CommandoV12/src/index.js';
 import os from 'os';
 import { MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { secondsToString } from '../../Assets/util/util3.js';
+import { secondsToString } from '../../assets/util/util3.js';
 
 export default class DigaCommand extends Command {
 	constructor(client) {

@@ -1,7 +1,7 @@
 import { Command } from '../../CommandoV12/src/index.js';
 import { stripIndents } from 'common-tags';
-import { shuffle, removeDuplicates, verify } from '../../Assets/util/util.js';
-import eventos from '../../Assets/JSON/eventos_hunger-games.js';
+import { shuffle, removeDuplicates, verify } from '../../assets/util/util.js';
+import eventos from '../../assets/JSON/eventos_hunger-games.js';
 
 export default class HungerGamesCommand extends Command {
   constructor(client) {

@@ -35,7 +35,6 @@ const donos = new Set();
 donos.add('380512056413257729');
 donos.add('348664615175192577');
 donos.add('398852531259965440');
-donos.add('755067822086029424');
 donos.add('780210259284328458');
 donos.add('315277337405161472');
 export const client = new HannaClient({

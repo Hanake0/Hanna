@@ -1,7 +1,7 @@
 import { Command } from '../../CommandoV12/src/index.js';
 import Discord from 'discord.js';
-import { data, diff } from '../../Assets/util/util.js';
-import { status, activities} from '../../Assets/util/util2.js';
+import { data, diff } from '../../assets/util/util.js';
+import { status, activities} from '../../assets/util/util2.js';
 
 export default class InfoCommand extends Command {
 	constructor(client) {

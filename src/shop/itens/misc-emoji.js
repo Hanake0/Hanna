@@ -1,5 +1,5 @@
 import ShopItem from '../base.js';
-import emojis from '../../../Assets/JSON/emojis.js';
+import emojis from '../../../assets/JSON/emojis.js';
 
 export default class EmojiLoja extends ShopItem {
 	constructor(client) {

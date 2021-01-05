@@ -1,8 +1,8 @@
 import { stripIndents } from 'common-tags';
 import probe from 'probe-image-size';
-import catálogo from '../Assets/JSON/catálogo.js';
-import emojis from '../Assets/JSON/emojis.js';
-import util2 from '../Assets/util/util2.js';
+import catálogo from '../assets/JSON/catálogo.js';
+import emojis from '../assets/JSON/emojis.js';
+import util2 from '../assets/util/util2.js';
 const { comprar, shopEmbed, question } = util2;
 import { Permissions } from 'discord.js';
 

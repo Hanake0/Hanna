@@ -1,5 +1,5 @@
 import { Command } from '../../CommandoV12/src/index.js';
-import { stripMentions, stripInvites } from '../../Assets/util/util.js';
+import { stripMentions, stripInvites } from '../../assets/util/util.js';
 
 export default class DigaCommand extends Command {
 	constructor(client) {
