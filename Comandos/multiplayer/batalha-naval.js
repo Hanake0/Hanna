@@ -359,13 +359,13 @@ export default class BatalhaNavalCommand extends Command {
 		
 		// Cria o canvas do target
 		let tCanvas = Canvas.createCanvas(550, 550);
-		let tCtx = canvas.getContext('2d');
+		let tCtx = tCanvas.getContext('2d');
 		await this.drawField(tCtx, data, false, true);
 		let tAttachment = new MessageAttachment(tCanvas.toBuffer(), 'tCanvas.png');
 
 		// Cria o canvas do outro usuário
 		let lCanvas = Canvas.createCanvas(550, 550);
-		let lCtx = canvas.getContext('2d');
+		let lCtx = lCanvas.getContext('2d');
 		await this.drawField(lCtx, data, true, true);
 		let lAttachment = new MessageAttachment(lCanvas.toBuffer(), 'lCanvas.png');
 
@@ -403,13 +403,13 @@ export default class BatalhaNavalCommand extends Command {
 
 		// Cria o canvas do target
 		tCanvas = Canvas.createCanvas(550, 550);
-		tCtx = canvas.getContext('2d');
+		tCtx = tCanvas.getContext('2d');
 		await this.drawField(tCtx, data, false, true);
 		tAttachment = new MessageAttachment(tCanvas.toBuffer(), 'tCanvas.png');
 
 		// Cria o canvas do outro usuário
 		lCanvas = Canvas.createCanvas(550, 550);
-		lCtx = canvas.getContext('2d');
+		lCtx = lCanvas.getContext('2d');
 		await this.drawField(lCtx, data, true, true);
 		lAttachment = new MessageAttachment(lCanvas.toBuffer(), 'lCanvas.png');
 
