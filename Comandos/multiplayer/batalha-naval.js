@@ -370,7 +370,7 @@ export default class BatalhaNavalCommand extends Command {
 		let lAttachment = new MessageAttachment(lCanvas.toBuffer(), 'lCanvas.png');
 
 		// Envia o canvas do target
-		await this.sendEmbed({ channel: tUser, author: tUser }, user, {
+		await this.sendEmbed({ channel: tUser, author: tUser }, tUser, {
 			author: 'Batalha Naval',
 			authorURL: 'https://twemoji.maxcdn.com/2/72x72/2693.png',
 			attachment: tAttachment,
@@ -381,7 +381,7 @@ export default class BatalhaNavalCommand extends Command {
 		}, undefined, tUser);
 
 		// Envia o canvas do outro usuário
-		await this.sendEmbed({ channel: lUser, author: lUser }, user, {
+		await this.sendEmbed({ channel: lUser, author: lUser }, lUser, {
 			author: 'Batalha Naval',
 			authorURL: 'https://twemoji.maxcdn.com/2/72x72/2693.png',
 			attachment: lAttachment,
@@ -414,7 +414,7 @@ export default class BatalhaNavalCommand extends Command {
 		lAttachment = new MessageAttachment(lCanvas.toBuffer(), 'lCanvas.png');
 
 		// Envia o canvas do target
-		await this.sendEmbed({ channel: tUser, author: tUser }, user, {
+		await this.sendEmbed({ channel: tUser, author: tUser }, tUser, {
 			author: 'Batalha Naval',
 			authorURL: 'https://twemoji.maxcdn.com/2/72x72/2693.png',
 			attachment: tAttachment,
@@ -425,7 +425,7 @@ export default class BatalhaNavalCommand extends Command {
 		}, undefined, tUser);
 
 		// Envia o canvas do outro usuário
-		await this.sendEmbed({ channel: lUser, author: lUser }, user, {
+		await this.sendEmbed({ channel: lUser, author: lUser }, lUser, {
 			author: 'Batalha Naval',
 			authorURL: 'https://twemoji.maxcdn.com/2/72x72/2693.png',
 			attachment: lAttachment,
