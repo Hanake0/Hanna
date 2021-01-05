@@ -122,7 +122,7 @@ export default class BatalhaNavalCommand extends Command {
 	async positionShips(user) {
 		const nomes = { 2: 'Submarino (2 espaços)', 3: 'Navio de guerra (3 espaços)', 5: 'Porta Aviões (5 espaços)'};
 		const ships = [2, 2, 2, 3, 3, 5];
-		const posRegex = /([0-9](?=[a-jA-J])|[a-jA-J](?=[0-9]))\s*([0-9]|[a-jA-J])\s*(.*)/i;
+		const posRegex = /([0-9](?=[a-jA-J])|[a-jA-J](?=[0-9]))([0-9]|[a-jA-J])\s*(.*)/i;
 
 		// Cria o tabuleiro com as informações
 		const data = { values: {}, valuesU: {}, ships: { 2: [], 3: [], 5: [] } };
@@ -159,14 +159,16 @@ export default class BatalhaNavalCommand extends Command {
 				pos = posRegex.exec(msg.content);
 
 				let x, y;
-				if (Object.values(this.letras).includes(pos[1].toUpperCase())) {
-					y = this.números[pos[1].toUpperCase()]; x = Number(pos[2]);
-				} else {
-					y = this.números[pos[2].toUpperCase()]; x = Number(pos[1]);
-				}
-				const rotated = ['sim', 's', 'yes'].includes(pos[3].toLowerCase()) ? true : false;
+				if(pos) {
+					if (Object.values(this.letras).includes(pos[1].toUpperCase())) {
+						y = this.números[pos[1].toUpperCase()]; x = Number(pos[2]);
+					} else {
+						y = this.números[pos[2].toUpperCase()]; x = Number(pos[1]);
+					}
+					const rotated = ['sim', 's', 'yes'].includes(pos[3].toLowerCase()) ? true : false;
 
-				if (this.setShip(data, ship, x, y, rotated)) break;
+					if (this.setShip(data, ship, x, y, rotated)) break;
+				}
 				msg.say('Posição inválida');
 			} while(true);
 		}
@@ -460,6 +462,7 @@ export default class BatalhaNavalCommand extends Command {
 
 	// Faz a conexão entre dois canais
 	async setListener(tUser, tChannel, lChannel) {
+		console.log('aaaaaaaa', tChannel, lChannel);
 		do {
 			const coll = await tChannel.awaitMessages(m => m.author.id === tUser.id);
 			const msg = coll.first();
