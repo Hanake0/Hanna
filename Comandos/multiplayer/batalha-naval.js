@@ -391,7 +391,7 @@ export default class BatalhaNavalCommand extends Command {
 			description: `Aguarde a jogada de ${tUser}...`,
 			footer: `Aguarde a jogada de ${tUser.tag} • 60 segs`,
 			footerURL: 'https://garticbot.gg/images/icons/time.png',
-		}, undefined, tUser);
+		}, undefined, lUser);
 
 		// Espera o target enviar uma mensagem com uma posição válida
 		let { x, y } = await this.awaitPosition(tUser);
@@ -435,7 +435,7 @@ export default class BatalhaNavalCommand extends Command {
 			description: `${tUser} ${data.valuesU[x][y] ? 'acertou !' : 'errou...'}`,
 			footer: `${this.totalUsed(data, 'values')}/${this.totalUsed(data, 'valuesU')}`,
 			footerURL: 'https://twemoji.maxcdn.com/2/72x72/1f4a5.png',
-		}, undefined, tUser);
+		}, undefined, lUser);
 	}
 
 	async awaitPosition(user, acceptRotated = false) {
@@ -447,7 +447,7 @@ export default class BatalhaNavalCommand extends Command {
 
 		console.log(posRegex.exec(msg.content));
 
-		pos = posRegex.exec(msg.content);
+		const pos = posRegex.exec(msg.content);
 
 		let x, y;
 		if (Object.values(this.letras).includes(pos[1].toUpperCase())) {
@@ -462,10 +462,11 @@ export default class BatalhaNavalCommand extends Command {
 
 	// Faz a conexão entre dois canais
 	async setListener(tUser, tChannel, lChannel) {
-		console.log('aaaaaaaa', tChannel, lChannel);
 		do {
+			console.log(this.client.games.get(tChannel.id).name);
 			const coll = await tChannel.awaitMessages(m => m.author.id === tUser.id);
 			const msg = coll.first();
+			console.log(msg);
 
 			if (this.client.games.get(tChannel.id).name === 'Batalha-naval') lChannel.send({embed: {
 				author: { name: tUser.tag, url: tUser.avatarURL() },
